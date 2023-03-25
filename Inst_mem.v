@@ -4,6 +4,7 @@ module INST_MEM
   	output	[31:0] 	INST
 );
   
+	//bge 3개, beq 3개
 	reg 	[31:0]	INST_r;
 	always @ (ADDR)
   	begin

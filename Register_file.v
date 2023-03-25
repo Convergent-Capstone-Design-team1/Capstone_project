@@ -12,6 +12,7 @@ module REGISTER_FILE
   output  [31:0]  RD2   //to MUX
 );
 
+
   reg [31:0] 	register_file[0:31];
   assign RD1 = register_file[RR1];
   assign RD2 = register_file[RR2];

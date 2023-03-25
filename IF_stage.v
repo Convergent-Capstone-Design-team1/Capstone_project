@@ -1,5 +1,6 @@
 module IF_STAGE
 (   
+    input           branch  ,
     input           clk     ,
     input           rst     ,
     input           PCSrc   ,
@@ -10,27 +11,38 @@ module IF_STAGE
 );
     //PC
     wire   [31:0]   pc;   
-    //PC_controller
+    //Predictor
+    wire   [1:0]    taken;
+
+    PREDICTOR PREDICTOR
+    (   
+        //INPUT
+        .branch(branch)     ,
+        .pc(pc)             ,
+        //OUTPUT
+        .taken(taken)       ,
+    )
+    //BTB
     wire   [31:0]   n_pc;               
 
-    
-    PC_CONTROLLER PC_C
-    (
-        .PCSrc(PCSrc)       ,
-        .t_addr(t_addr)     ,
-        .pc(pc)             ,
-        .n_pc(n_pc)        
-    );
-
     PC PC
-    (
+    (   
+        //INPUT
         .rst(rst)           ,
         .clk(clk)           ,
         .PCWrite(PCWrite)   ,
         .n_pc(n_pc)         ,
+        //OUTPUT
         .pc(pc) 
     );
 
+    BHT BHT
+    (
+        .clk(clk)           ,
+        .rst(rst)           ,
+        .pc(pc)             ,
+        .prediction()
+    )
     INST_MEM INST_MEM
     (
         .ADDR(pc)           ,

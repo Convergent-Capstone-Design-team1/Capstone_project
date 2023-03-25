@@ -99,6 +99,7 @@ module TOPCPU
         .ALU_control(ALU_control)       
     );
 
+    //ID_EX 155 -> 123
     assign ID_EX_D = {ID_control[7:2], IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
     ID_EX ID_EX
     (   
@@ -144,6 +145,7 @@ module TOPCPU
         .zero(zero)      
     );
 
+    //EX_MEM_D = 107 -> 106
     assign EX_MEM_D = {ID_EX_Q[153:149], t_addr, zero, result, F_B, ID_EX_Q[4:0]};
     EX_MEM EX_MEM
     (   
