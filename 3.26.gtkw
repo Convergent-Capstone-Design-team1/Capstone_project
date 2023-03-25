@@ -1,0 +1,138 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Sat Mar 25 17:56:47 2023
+[*]
+[dumpfile] "/home/hyundo/capstone/test.vcd"
+[dumpfile_mtime] "Sat Mar 25 17:10:16 2023"
+[dumpfile_size] 1417685
+[savefile] "/home/hyundo/capstone/3.26.gtkw"
+[timestart] 0
+[size] 1536 801
+[pos] -139 -139
+*-18.001554 304000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_CPU.
+[treeopen] tb_CPU.CPU.
+[treeopen] tb_CPU.CPU.EX_STAGE.
+[sst_width] 253
+[signals_width] 230
+[sst_expanded] 1
+[sst_vpaned_height] 222
+@28
+tb_CPU.clk
+tb_CPU.rst
+@200
+-
+-///   IF_STAGE   ///
+-PC
+@28
+tb_CPU.CPU.IF_STAGE.PC.PCWrite
+@420
+tb_CPU.CPU.IF_STAGE.n_pc[33:0]
+tb_CPU.CPU.IF_STAGE.pc[31:0]
+@200
+-
+-Predictor
+@28
+tb_CPU.CPU.IF_STAGE.PREDICTOR.history[1:0]
+tb_CPU.CPU.IF_STAGE.PREDICTOR.taken[1:0]
+@200
+-
+-BHT
+@28
+tb_CPU.CPU.IF_STAGE.BHT.hit
+tb_CPU.CPU.IF_STAGE.BHT.prediction[1:0]
+tb_CPU.CPU.IF_STAGE.BHT.result[1:0]
+@200
+-
+-BTB
+@420
+tb_CPU.CPU.IF_STAGE.BTB.target[31:0]
+@28
+tb_CPU.CPU.IF_STAGE.BTB.taken[1:0]
+@200
+-
+-INST_MEM
+@24
+tb_CPU.CPU.IF_STAGE.INST_MEM.ADDR[31:0]
+@22
+tb_CPU.CPU.IF_STAGE.INST_MEM.INST[31:0]
+@200
+-
+-///   ID_STAGE   ///
+-ALU control
+@28
+tb_CPU.CPU.ID_STAGE.ALU_CONTROL.ALUOp[1:0]
+@24
+tb_CPU.CPU.ID_STAGE.ALU_CONTROL.ALU_control[3:0]
+@28
+tb_CPU.CPU.ID_STAGE.ALU_CONTROL.funct3[2:0]
+tb_CPU.CPU.ID_STAGE.ALU_CONTROL.funct7
+@200
+-
+-Control
+@28
+tb_CPU.CPU.ID_STAGE.CONTROL.CtrlSrc
+tb_CPU.CPU.ID_STAGE.CONTROL.opcode[6:0]
+@22
+tb_CPU.CPU.ID_STAGE.CONTROL.control[7:0]
+@200
+-
+-Hazard detection Unit
+@28
+tb_CPU.CPU.ID_STAGE.HAZARD_DETECTION.MEMRead
+tb_CPU.CPU.ID_STAGE.HAZARD_DETECTION.stall
+@200
+-
+-Register file
+@28
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.WE
+@22
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.WR[4:0]
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.WD[31:0]
+@200
+-
+-///   EX_STAGE   ///
+-ALU
+@22
+tb_CPU.CPU.EX_STAGE.ALU.ALU_control[3:0]
+@24
+tb_CPU.CPU.EX_STAGE.ALU.A[31:0]
+tb_CPU.CPU.EX_STAGE.ALU.B[31:0]
+@25
+tb_CPU.CPU.EX_STAGE.ALU.result[31:0]
+@28
+tb_CPU.CPU.EX_STAGE.ALU.zero
+@200
+-
+-ALU mux
+@28
+tb_CPU.CPU.EX_STAGE.ALU_MUX.ALUSrc
+@24
+tb_CPU.CPU.EX_STAGE.ALU_MUX.ForwardB_MUX_OUTPUT[31:0]
+@420
+tb_CPU.CPU.EX_STAGE.ALU_MUX.S_INST[31:0]
+@24
+tb_CPU.CPU.EX_STAGE.ALU_MUX.ALU_MUX_OUTPUT[31:0]
+@200
+-
+-Forwrading Unit
+@28
+tb_CPU.CPU.EX_STAGE.FORWARDING_UNIT.EX_MEM_RegWrite
+tb_CPU.CPU.EX_STAGE.FORWARDING_UNIT.MEM_WB_RegWrite
+tb_CPU.CPU.EX_STAGE.FORWARDING_UNIT.ForwardA[1:0]
+tb_CPU.CPU.EX_STAGE.FORWARDING_UNIT.ForwardB[1:0]
+@22
+tb_CPU.CPU.EX_STAGE.FORWARDING_UNIT.RS1[4:0]
+tb_CPU.CPU.EX_STAGE.FORWARDING_UNIT.RS2[4:0]
+tb_CPU.CPU.EX_STAGE.FORWARDING_UNIT.EX_MEM_RD[4:0]
+@200
+-
+-Forwrading mux
+@28
+tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.ForwardA[1:0]
+tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.ForwardB[1:0]
+@24
+tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.A[31:0]
+tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.B[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
