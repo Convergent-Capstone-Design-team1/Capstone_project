@@ -6,25 +6,10 @@ module PREDICTOR
     parameter   [1:0]   N = 2'b00
 )
 (
-    input   [1:0]   branch          ,   // branch 여부
+    input   [1:0]   history         ,   // jump 여부
     input   [31:0]  pc              ,   // 현재 pc 값
     output  [1:0]   taken               // branch를 예측한 결과
 );
-
-    BTB BTB
-    (
-        .pc(pc)                     ,
-        .tag(btb_tag)               ,
-        .data(btb_data)             ,
-        .hit(btb_hit)
-    );
-
-    BHT BHT
-    (
-        .pc(pc)                     ,
-        .index(bht_index)           ,
-        .data(bht_data)
-    );
     
     // Predictor FSM
     reg [1:0] state_r;
@@ -35,7 +20,7 @@ module PREDICTOR
         else begin
             case (state_r)
                 N : begin                // Strongly Not Taken
-                    if (branch[1]) begin
+                    if (history[1]) begin
                         state_r <= 2'bn;
                     end 
                     else begin
@@ -43,7 +28,7 @@ module PREDICTOR
                     end
                 end
                 n : begin                // Weakly Not Taken
-                    if (branch[1]) begin
+                    if (history[1]) begin
                         state_r <= 2'bt;
                     end 
                     else begin
@@ -51,7 +36,7 @@ module PREDICTOR
                     end
                 end
                 t : begin                // Weakly Taken
-                    if (branch[1]) begin
+                    if (history[1]) begin
                         state_r <= 2'bT;
                     end 
                     else begin
@@ -59,7 +44,7 @@ module PREDICTOR
                     end
                 end
                 T : begin                // Strongly Taken
-                    if (branch) begin
+                    if (history) begin
                         state_r <= 2'bT;
                     end 
                     else begin
