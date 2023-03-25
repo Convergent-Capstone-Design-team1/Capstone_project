@@ -17,14 +17,6 @@ module BTB
 );
 
   reg [ENTRY_WIDTH-1:0] btb [NUM_ENTRIES-1:0]; // BTB 메모리
-module BTB (
-  input clk,           // 클럭 입력
-  input rst,           // 리셋 입력
-  input [31:0] pc,     // 현재 명령어 주소
-  input [1:0] taken,   // 분기 예측 결과 (00: not taken, 01: weakly taken, 10: strongly taken, 11: reserved)
-  input [31:0] target, // 분기 목적지 주소
-  output [31:0] next_pc // 다음 명령어 주소
-);
 
   parameter NUM_ENTRIES = 64; // BTB 엔트리 수
   parameter ENTRY_WIDTH = 64; // BTB 엔트리 너비 (주소와 상태 비트)
