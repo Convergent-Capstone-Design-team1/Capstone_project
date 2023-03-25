@@ -48,7 +48,6 @@ module TOPCPU
     IF_STAGE IF_STAGE
     (   
         //INPUT
-        .branch(branch)                 ,
         .t_addr(EX_MEM_Q[102:71])       ,
         .clk(clk)                       ,
         .rst(rst)                       ,
@@ -60,16 +59,6 @@ module TOPCPU
         .pc(PC)                         ,
         .inst(INST)
     );
-
-    Predictor Predictor
-    (
-        //INPUT
-        .history()                 ,
-        .pc(PC)                         ,
-
-        //OUTPUT
-        .taken(history)
-    )
 
     assign IF_ID_D = {PC, INST};
     IF_ID IF_ID
