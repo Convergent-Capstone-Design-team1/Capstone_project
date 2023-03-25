@@ -6,7 +6,7 @@
 
 module BHT
 #(
-    parameter       BHT_SIZE = 1024         ,   // BHT 크기
+    parameter       BHT_SIZE = 256          ,   // BHT 크기
     parameter       HISTORY_LENGTH = 2          // 예측 결과 길이
 )
 (
@@ -21,14 +21,24 @@ module BHT
     reg [HISTORY_LENGTH-1:0] history [0:BHT_SIZE-1];  // 분기 명령어 주소와 예측 결과를 저장하는 레지스터 배열
     reg [1:0] prediction_r;  // 이전 예측 결과를 저장하는 레지스터
 
-    wire index [9:0];  // 인덱스 생성
+    generate
+    genvar  idx;
+    for (idx = 0; idx < 256; idx = idx+1) begin: history_table
+	    wire [7:0] tmp;
+	    assign tmp = history[idx];
+    end
+    endgenerate
+
+    integer i;
+    initial begin
+        for (i = 0; i < 1024; i = i+1)
+            history[i] = 2'b00;
+    end
+
     wire hit;  // BHT에서 검색 결과
 
-    // 인덱스 생성
-    assign index = {pc[9:2], history[pc[9:2]][HISTORY_LENGTH-1:0]};
-
     // BHT에서 검색
-    assign hit = (history[index] == prediction_r);
+    assign hit = (history[pc[9:2]] == prediction_r);
 
     // 예측 결과 출력
     assign result = prediction_r;
@@ -36,11 +46,10 @@ module BHT
     // BHT 갱신
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            history <= '0;
             prediction_r <= 2'b00;
         end 
         else begin
-            history[index] <= {pc[1:0], prediction};
+            history[pc[9:2]] <= {pc[1:0], prediction};
             prediction_r <= hit ? prediction_r : prediction;
         end
     end

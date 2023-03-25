@@ -1,6 +1,5 @@
 module IF_STAGE
 (   
-    input           t_addr  ,
     input           clk     ,
     input           rst     ,
     input           PCSrc   ,
@@ -16,7 +15,7 @@ module IF_STAGE
     //BHT
     wire    [1:0]   taken;
     //BTB
-    wire    [31:0]  n_pc;
+    wire    [33:0]  n_pc;
 
     PC PC
     (   
@@ -24,7 +23,7 @@ module IF_STAGE
         .rst(rst)           ,
         .clk(clk)           ,
         .PCWrite(PCWrite)   ,
-        .n_pc(n_pc)         ,
+        .n_pc(n_pc[33:2])   ,
         //OUTPUT
         .pc(pc) 
     );
@@ -32,10 +31,12 @@ module IF_STAGE
     PREDICTOR PREDICTOR
     (   
         //INPUT
+        .clk(clk)           ,
+        .rst(rst)           ,
         .history(history)   ,
         .pc(pc)             ,
         //OUTPUT
-        .taken(taken)       ,
+        .taken(taken)       
     );
                    
     BHT BHT
@@ -44,7 +45,7 @@ module IF_STAGE
         .clk(clk)           ,
         .rst(rst)           ,
         .pc(pc)             ,
-        .prediction(taken)  .
+        .prediction(taken)  ,
         //OUTPUT
         .result(history)
     );
@@ -52,13 +53,12 @@ module IF_STAGE
     BTB BTB
     (
         //INPUT
-        .clk(clk)           ,
         .rst(rst)           ,
         .pc(pc)             ,
         .taken(history)     ,
         .target(t_addr)     ,
         //OUTPUT
-        .next_pc(n_pc)      ,
+        .next_pc(n_pc)      
     );
 
     INST_MEM INST_MEM

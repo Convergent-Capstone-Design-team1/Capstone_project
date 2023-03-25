@@ -48,7 +48,6 @@ module TOPCPU
     IF_STAGE IF_STAGE
     (   
         //INPUT
-        .t_addr(EX_MEM_Q[102:71])       ,
         .clk(clk)                       ,
         .rst(rst)                       ,
         .PCSrc(branch)                  ,

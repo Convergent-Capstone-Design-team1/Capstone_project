@@ -18,12 +18,12 @@ module CONTROL
 			7'b0110011 : control_r = 8'b00100010;	//R-type : add, sub, xor -> ALUSrc '0'
 			7'b0010011 : control_r = 8'b10100011;	//I-type : addi -> ALUSrc '1'
 			7'b0000011 : control_r = 8'b11110000;	//I-type : lw
-			7'b0100011 : control_r = 8'b1x001000;	//S-type : sw
-			7'b1100011 : control_r = 8'b0x000101;	//SB-type : beg, bge
+			7'b0100011 : control_r = 8'b10001000;	//S-type : sw				//8'b1x001000
+			7'b1100011 : control_r = 8'b0x000101;	//SB-type : beg, bge		//8'b0x000101
 			default    : control_r = 8'bxxxxxxxx;
 		endcase
 	end
 
-	assign control = CtrlSrc ? 8'bxx0x0xxx : control_r;
+	assign control = CtrlSrc ? 8'b0 : control_r;
 
 endmodule
