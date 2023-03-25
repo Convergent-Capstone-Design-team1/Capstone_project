@@ -1,6 +1,6 @@
 module IF_STAGE
 (   
-    input           branch  ,
+    input           t_addr  ,
     input           clk     ,
     input           rst     ,
     input           PCSrc   ,
@@ -10,38 +10,17 @@ module IF_STAGE
     output  [31:0]  inst          
 );
     //PC
-    wire   [31:0]   pc;   
+    wire    [31:0]  pc;   
     //Predictor
-    wire   [1:0]    taken;
-
-    PREDICTOR PREDICTOR
-    (   
-        //INPUT
-        .branch(branch)     ,
-        .pc(pc)             ,
-        //OUTPUT
-        .taken(taken)       ,
-    )
+    wire    [1:0]   history;
+    //BHT
+    wire    [1:0]   taken;
     //BTB
-    wire   [31:0]   n_pc;               
+    wire    [31:0]  n_pc;
 
     PC PC
     (   
         //INPUT
-    //PC_controller
-    wire   [31:0]   n_pc;               
-
-    
-    PC_CONTROLLER PC_C
-    (
-        .PCSrc(PCSrc)       ,
-        .t_addr(t_addr)     ,
-        .pc(pc)             ,
-        .n_pc(n_pc)        
-    );
-
-    PC PC
-    (
         .rst(rst)           ,
         .clk(clk)           ,
         .PCWrite(PCWrite)   ,
@@ -50,14 +29,38 @@ module IF_STAGE
         .pc(pc) 
     );
 
+    PREDICTOR PREDICTOR
+    (   
+        //INPUT
+        .history(history)   ,
+        .pc(pc)             ,
+        //OUTPUT
+        .taken(taken)       ,
+    );
+                   
     BHT BHT
     (
+        //INPUT
         .clk(clk)           ,
         .rst(rst)           ,
         .pc(pc)             ,
-        .prediction()
-    )
+        .prediction(taken)  .
+        //OUTPUT
+        .result(history)
+    );
     
+    BTB BTB
+    (
+        //INPUT
+        .clk(clk)           ,
+        .rst(rst)           ,
+        .pc(pc)             ,
+        .taken(history)     ,
+        .target(t_addr)     ,
+        //OUTPUT
+        .next_pc(n_pc)      ,
+    );
+
     INST_MEM INST_MEM
     (
         .ADDR(pc)           ,

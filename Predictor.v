@@ -6,7 +6,7 @@ module PREDICTOR
     parameter   [1:0]   N = 2'b00
 )
 (
-    input   [1:0]   history         ,   // jump 여부
+    input   [1:0]   history         ,   // branch 여부
     input   [31:0]  pc              ,   // 현재 pc 값
     output  [1:0]   taken               // branch를 예측한 결과
 );
