@@ -47,8 +47,4 @@ module BTB
     end
   end
 
-<<<<<<< HEAD
 endmodule
-=======
-endmodule
->>>>>>> e5d2f7703514f542fa867f26a98e4249739f5857
