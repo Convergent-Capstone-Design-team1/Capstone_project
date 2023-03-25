@@ -28,6 +28,20 @@ module IF_STAGE
     PC PC
     (   
         //INPUT
+    //PC_controller
+    wire   [31:0]   n_pc;               
+
+    
+    PC_CONTROLLER PC_C
+    (
+        .PCSrc(PCSrc)       ,
+        .t_addr(t_addr)     ,
+        .pc(pc)             ,
+        .n_pc(n_pc)        
+    );
+
+    PC PC
+    (
         .rst(rst)           ,
         .clk(clk)           ,
         .PCWrite(PCWrite)   ,
@@ -43,6 +57,7 @@ module IF_STAGE
         .pc(pc)             ,
         .prediction()
     )
+    
     INST_MEM INST_MEM
     (
         .ADDR(pc)           ,

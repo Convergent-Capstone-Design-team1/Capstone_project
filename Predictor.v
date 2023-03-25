@@ -6,6 +6,7 @@ module PREDICTOR
     parameter   [1:0]   N = 2'b00
 )
 (
+<<<<<<< HEAD
     input           branch          ,   // branch 여부
     input   [31:0]  pc              ,   // 현재 pc 값
     output  [1:0]   taken               // branch를 예측한 결과
@@ -25,6 +26,12 @@ module PREDICTOR
         .index(bht_index)           ,
         .data(bht_data)
     );
+=======
+    input   [1:0]   branch          ,   // branch 여부
+    input   [31:0]  pc              ,   // 현재 pc 값
+    output  [1:0]   taken               // branch를 예측한 결과
+);
+>>>>>>> e5d2f7703514f542fa867f26a98e4249739f5857
     
     // Predictor FSM
     reg [1:0] state_r;
@@ -35,7 +42,11 @@ module PREDICTOR
         else begin
             case (state_r)
                 N : begin                // Strongly Not Taken
+<<<<<<< HEAD
                     if (branch) begin
+=======
+                    if (branch[1]) begin
+>>>>>>> e5d2f7703514f542fa867f26a98e4249739f5857
                         state_r <= 2'bn;
                     end 
                     else begin
@@ -43,7 +54,11 @@ module PREDICTOR
                     end
                 end
                 n : begin                // Weakly Not Taken
+<<<<<<< HEAD
                     if (branch) begin
+=======
+                    if (branch[1]) begin
+>>>>>>> e5d2f7703514f542fa867f26a98e4249739f5857
                         state_r <= 2'bt;
                     end 
                     else begin
@@ -51,7 +66,11 @@ module PREDICTOR
                     end
                 end
                 t : begin                // Weakly Taken
+<<<<<<< HEAD
                     if (branch) begin
+=======
+                    if (branch[1]) begin
+>>>>>>> e5d2f7703514f542fa867f26a98e4249739f5857
                         state_r <= 2'bT;
                     end 
                     else begin
@@ -59,7 +78,11 @@ module PREDICTOR
                     end
                 end
                 T : begin                // Strongly Taken
+<<<<<<< HEAD
                     if (branch) begin
+=======
+                    if (branch[1]) begin
+>>>>>>> e5d2f7703514f542fa867f26a98e4249739f5857
                         state_r <= 2'bT;
                     end 
                     else begin
