@@ -1,22 +1,21 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sun Mar 26 13:53:03 2023
+[*] Sun Mar 26 15:52:53 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Sun Mar 26 13:47:41 2023"
-[dumpfile_size] 1412613
+[dumpfile_mtime] "Sun Mar 26 15:48:53 2023"
+[dumpfile_size] 1470394
 [savefile] "/home/hyundo/capstone/3.26.gtkw"
 [timestart] 0
 [size] 1536 801
 [pos] -1 -1
-*-18.001554 124000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-19.001554 2130000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
 [treeopen] tb_CPU.CPU.EX_STAGE.
 [treeopen] tb_CPU.CPU.IF_STAGE.
-[treeopen] tb_CPU.CPU.IF_STAGE.BHT.
 [sst_width] 253
-[signals_width] 264
+[signals_width] 230
 [sst_expanded] 1
 [sst_vpaned_height] 222
 @28
@@ -29,17 +28,19 @@ tb_CPU.rst
 @28
 tb_CPU.CPU.IF_STAGE.PC.PCWrite
 @420
+[color] 3
 tb_CPU.CPU.IF_STAGE.t_addr[31:0]
 tb_CPU.CPU.IF_STAGE.n_pc[31:0]
+[color] 2
 tb_CPU.CPU.IF_STAGE.pc[31:0]
 @200
 -
 -PC_MUX
+@28
+tb_CPU.CPU.IF_STAGE.PC_MUX.sel_mux
 @420
 tb_CPU.CPU.IF_STAGE.PC_MUX.PC_4[31:0]
 tb_CPU.CPU.IF_STAGE.PC_MUX.target_address[31:0]
-@28
-tb_CPU.CPU.IF_STAGE.PC_MUX.sel_mux
 @200
 -
 -Predictor
@@ -57,25 +58,39 @@ tb_CPU.CPU.IF_STAGE.PREDICTOR.taken[1:0]
 tb_CPU.CPU.IF_STAGE.PREDICTOR.b_pc[31:0]
 @200
 -
+@28
+tb_CPU.CPU.IF_STAGE.STALL_COUNTER.en
+@24
+tb_CPU.CPU.IF_STAGE.STALL_COUNTER.D[31:0]
+@25
+tb_CPU.CPU.IF_STAGE.STALL_COUNTER.cnt[1:0]
+@24
+tb_CPU.CPU.IF_STAGE.STALL_COUNTER.Q[31:0]
+@200
 -BHT
 @22
+tb_CPU.CPU.IF_STAGE.BHT.history_table[12].tmp[7:0]
+@28
+tb_CPU.CPU.IF_STAGE.BHT.c_state[1:0]
+tb_CPU.CPU.IF_STAGE.BHT.hit
+@200
+-
+@24
 tb_CPU.CPU.IF_STAGE.BHT.b_pc[31:0]
 @28
 tb_CPU.CPU.IF_STAGE.BHT.prediction[1:0]
-tb_CPU.CPU.IF_STAGE.BHT.hit
 tb_CPU.CPU.IF_STAGE.BHT.result
 @200
 -
 -BTB
 @420
 tb_CPU.CPU.IF_STAGE.BTB.target[31:0]
+@24
+tb_CPU.CPU.IF_STAGE.BTB.branch_target[11].tmp[63:0]
+tb_CPU.CPU.IF_STAGE.BTB.branch_target[12].tmp[63:0]
 @28
 tb_CPU.CPU.IF_STAGE.BTB.branch
 tb_CPU.CPU.IF_STAGE.BTB.taken[1:0]
-@22
-tb_CPU.CPU.IF_STAGE.BTB.branch_target[1].tmp[63:0]
-tb_CPU.CPU.IF_STAGE.BTB.branch_target[2].tmp[63:0]
-tb_CPU.CPU.IF_STAGE.BTB.branch_target[3].tmp[63:0]
 @24
 tb_CPU.CPU.IF_STAGE.BTB.next_pc_r[33:0]
 tb_CPU.CPU.IF_STAGE.BTB.branch_target[0].tmp[63:0]

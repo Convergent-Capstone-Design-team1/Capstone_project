@@ -77,7 +77,7 @@ module IF_STAGE
         //INPUT
         .sel_mux(T_NT)                  ,
         .PC_4(PC_4)                     ,
-        .target_address(next_pc[31:0])  ,
+        .target_address(next_pc[33:2])  ,
 
         //OUTPUT
         .next_pc(n_pc)
@@ -88,7 +88,5 @@ module IF_STAGE
         .ADDR(pc)                       ,
         .INST(inst)
     );
-
-    
 
 endmodule
