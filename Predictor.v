@@ -8,9 +8,13 @@ module PREDICTOR
 (
     input           clk             ,
     input           rst             ,
-    input   [1:0]   history         ,   // jump 여부
+    input   [6:0]   opcode          ,
+    input           history         ,   // jump 여부
     input   [31:0]  pc              ,   // 현재 pc 값
-    output  [1:0]   taken               // branch를 예측한 결과
+    
+    output          branch          ,
+    output  [1:0]   taken           ,   // branch를 예측한 결과
+    output  [31:0]  b_pc;
 );
     
     // Predictor FSM
@@ -22,7 +26,7 @@ module PREDICTOR
         else begin
             case (state_r)
                 N : begin                // Strongly Not Taken
-                    if (history[1]) begin
+                    if (history) begin
                         state_r <= n;
                     end 
                     else begin
@@ -30,7 +34,7 @@ module PREDICTOR
                     end
                 end
                 n : begin                // Weakly Not Taken
-                    if (history[1]) begin
+                    if (history) begin
                         state_r <= t;
                     end 
                     else begin
@@ -38,7 +42,7 @@ module PREDICTOR
                     end
                 end
                 t : begin                // Weakly Taken
-                    if (history[1]) begin
+                    if (history) begin
                         state_r <= T;
                     end 
                     else begin
@@ -59,5 +63,6 @@ module PREDICTOR
 
     // Output taken
     assign taken = state_r;
-
-    endmodule
+    assign branch = (opcode == 7'b1100011) ? 1'b1 : 1'b0;
+    assign b_pc = branch ? pc : 32'b0;
+endmodule
