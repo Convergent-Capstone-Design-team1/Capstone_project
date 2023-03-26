@@ -14,7 +14,7 @@ module IF_STAGE
     wire            T_NT;
     wire    [31:0]  b_pc;
     //BHT
-    wire            taken;
+    wire    [1:0]   taken;
     //BTB
     wire            branch;
     wire    [33:0]  next_pc;
@@ -25,10 +25,10 @@ module IF_STAGE
     PC PC
     (   
         //INPUT
-        .rst(rst)               ,
-        .clk(clk)               ,
-        .PCWrite(PCWrite)       ,
-        .n_pc(n_pc)             ,
+        .rst(rst)                       ,
+        .clk(clk)                       ,
+        .PCWrite(PCWrite)               ,
+        .n_pc(n_pc)                     ,
         //OUTPUT
         .pc(pc) 
     );
@@ -36,24 +36,24 @@ module IF_STAGE
     PREDICTOR PREDICTOR
     (   
         //INPUT
-        .clk(clk)               ,
-        .rst(rst)               ,
-        .opcode(inst[6:0])      ,
-        .history(T_NT)          ,
-        .pc(pc)                 ,
+        .clk(clk)                       ,
+        .rst(rst)                       ,
+        .opcode(inst[6:0])              ,
+        .history(T_NT)                  ,
+        .pc(pc)                         ,
         //OUTPUT
-        .branch(branch)         ,
-        .taken(taken)           ,
+        .branch(branch)                 ,
+        .taken(taken)                   ,
         .b_pc(b_pc)
     );
                    
     BHT BHT
     (
         //INPUT
-        .clk(clk)               ,
-        .rst(rst)               ,
-        .b_pc(b_pc)             ,
-        .prediction(taken)      ,
+        .clk(clk)                       ,
+        .rst(rst)                       ,
+        .b_pc(b_pc)                     ,
+        .prediction(taken)              ,
         //OUTPUT
         .result(T_NT)
     );
@@ -61,30 +61,31 @@ module IF_STAGE
     BTB BTB
     (
         //INPUT
-        .rst(rst)               ,
-        .branch(branch)         ,
-        .pc(pc)                 ,
-        .taken(taken)           ,
-        .target(t_addr)         ,
+        .rst(rst)                       ,
+        .branch(branch)                 ,
+        .pc(pc)                         ,
+        .taken(taken)                   ,
+        .target(t_addr)                 ,
         //OUTPUT
         .next_pc(next_pc)      
     );
 
     assign PC_4 = pc + 32'd4;
+    
     PC_MUX PC_MUX
     (
         //INPUT
-        .sel_MUX(T_NT)       ,
-        .PC_4(PC_4)             ,
-        .target_address(next_pc),
+        .sel_mux(T_NT)                  ,
+        .PC_4(PC_4)                     ,
+        .target_address(next_pc[33:2])  ,
 
         //OUTPUT
-        next_pc(n_pc)
+        .next_pc(n_pc)
     );
 
     INST_MEM INST_MEM
     (
-        .ADDR(pc)               ,
+        .ADDR(pc)                       ,
         .INST(inst)
     );
 
