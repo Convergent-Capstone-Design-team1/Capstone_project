@@ -65,5 +65,4 @@ module PREDICTOR
     assign taken = state_r;
     assign branch = (opcode == 7'b1100011) ? 1'b1 : 1'b0;
     assign b_pc = branch ? pc : 32'b0;
-
-    endmodule
+endmodule
