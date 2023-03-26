@@ -14,7 +14,7 @@ module REGISTER
     always @ (posedge CLK)
     begin
         if      (RST)   Q_r <= 0;
-        else if (EN)    Q_r <= Q;
+        else if (EN)    Q_r <= Q;   //D가 들어가야 하는것 아닌가?
         else            Q_r <= D;
     end
 
