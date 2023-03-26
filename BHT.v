@@ -20,11 +20,11 @@ module BHT
     /******************* for simulation *************************/
 
     generate
-    genvar  idx;
-    for (idx = 0; idx < 256; idx = idx+1) begin: history_table
-	    wire [7:0] tmp;
-	    assign tmp = history[idx];
-    end
+        genvar  idx;
+        for (idx = 0; idx < 256; idx = idx+1) begin: history_table
+            wire [7:0] tmp;
+            assign tmp = history[idx];
+        end
     endgenerate
 
     integer i;

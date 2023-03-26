@@ -22,8 +22,8 @@ module BTB
   generate
     genvar  idx;
     for (idx = 0; idx < 64; idx = idx+1) begin: branch_target
-       wire [63:0] tmp;
-       assign tmp = btb[idx];
+	    wire [63:0] tmp;
+	    assign tmp = btb[idx];
     end
   endgenerate
 
@@ -34,7 +34,6 @@ module BTB
   end
 
   /********************** module start *************************/
-
   reg [ENTRY_WIDTH-1:0] btb [NUM_ENTRIES-1:0];              // BTB 메모리
   reg [33:0]  next_pc_r = 34'b0;
   reg pend = 1'b0;
