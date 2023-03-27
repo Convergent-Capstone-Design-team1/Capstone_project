@@ -5,16 +5,19 @@ module IF_STAGE
     input           PCSrc   ,
     input           PCWrite ,
     input   [31:0]  t_addr  ,
+
+    output          T_NT    ,
     output  [31:0]  pc      ,
     output  [31:0]  inst          
 );
     //PC
     wire    [31:0]  pc; 
     //Predictor
+    wire    [1:0]   taken;
     wire            T_NT;
     wire    [31:0]  b_pc;
     //BHT
-    wire    [1:0]   taken;
+    wire    [1:0]   h_state;
     //BTB
     wire            branch;
     wire    [33:0]  next_pc;
@@ -36,10 +39,8 @@ module IF_STAGE
     PREDICTOR PREDICTOR
     (   
         //INPUT
-        .clk(clk)                       ,
-        .rst(rst)                       ,
         .opcode(inst[6:0])              ,
-        .history(T_NT)                  ,
+        .history(h_state)               ,
         .pc(pc)                         ,
         //OUTPUT
         .branch(branch)                 ,
@@ -53,11 +54,13 @@ module IF_STAGE
         .clk(clk)                       ,
         .rst(rst)                       ,
         .jump(PCSrc)                    ,
-        .branch(branch)                 ,
+        .is_branch(branch)              ,
+        .is_taken(taken[1])             ,
         .b_pc(b_pc)                     ,
         .prediction(taken)              ,
         //OUTPUT
-        .result(T_NT)                        
+        .h_state(h_state)               ,
+        .result(T_NT)                             
     );
     
     BTB BTB
