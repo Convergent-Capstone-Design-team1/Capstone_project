@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Mon Mar 27 12:07:54 2023
+[*] Mon Mar 27 12:59:41 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Mon Mar 27 12:07:09 2023"
-[dumpfile_size] 1459296
+[dumpfile_mtime] "Mon Mar 27 12:33:36 2023"
+[dumpfile_size] 1509359
 [savefile] "/home/hyundo/capstone/3.26.gtkw"
 [timestart] 0
 [size] 1536 801
 [pos] -1 -1
-*-19.001554 199000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-20.001554 923000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
 [treeopen] tb_CPU.CPU.ID_STAGE.
@@ -17,9 +17,9 @@
 [treeopen] tb_CPU.CPU.MEM_STAGE.
 [treeopen] tb_CPU.CPU.MEM_STAGE.DATA_MEM.
 [sst_width] 276
-[signals_width] 230
+[signals_width] 311
 [sst_expanded] 1
-[sst_vpaned_height] 333
+[sst_vpaned_height] 332
 @28
 tb_CPU.clk
 tb_CPU.rst
@@ -42,7 +42,13 @@ tb_CPU.CPU.IF_STAGE.pc[31:0]
 tb_CPU.CPU.IF_STAGE.PC_MUX.sel_mux
 @420
 tb_CPU.CPU.IF_STAGE.PC_MUX.PC_4[31:0]
+@421
 tb_CPU.CPU.IF_STAGE.PC_MUX.target_address[31:0]
+@200
+-
+-ImmGen
+@22
+tb_CPU.CPU.ID_STAGE.IMMGEN.S_INST[31:0]
 @200
 -
 -Predictor
@@ -70,7 +76,6 @@ tb_CPU.CPU.MEM_STAGE.M[2:0]
 -BHT
 @28
 tb_CPU.CPU.IF_STAGE.BHT.cache_hit
-tb_CPU.CPU.IF_STAGE.BHT.c_branch
 @22
 tb_CPU.CPU.IF_STAGE.BHT.history_table[12].tmp[7:0]
 @28
@@ -144,11 +149,9 @@ tb_CPU.CPU.ID_STAGE.REGISTER_FILE.WD[31:0]
 -ALU
 @22
 tb_CPU.CPU.EX_STAGE.ALU.ALU_control[3:0]
-@24
+@420
 tb_CPU.CPU.EX_STAGE.ALU.A[31:0]
-@25
 tb_CPU.CPU.EX_STAGE.ALU.B[31:0]
-@24
 tb_CPU.CPU.EX_STAGE.ALU.result[31:0]
 @28
 tb_CPU.CPU.EX_STAGE.ALU.zero
@@ -161,7 +164,6 @@ tb_CPU.CPU.EX_STAGE.ALU_MUX.ALUSrc
 tb_CPU.CPU.EX_STAGE.ALU_MUX.ForwardB_MUX_OUTPUT[31:0]
 @420
 tb_CPU.CPU.EX_STAGE.ALU_MUX.S_INST[31:0]
-@24
 tb_CPU.CPU.EX_STAGE.ALU_MUX.ALU_MUX_OUTPUT[31:0]
 @200
 -
@@ -181,10 +183,11 @@ tb_CPU.CPU.EX_STAGE.FORWARDING_UNIT.EX_MEM_RD[4:0]
 @28
 tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.ForwardA[1:0]
 tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.ForwardB[1:0]
-@24
+@420
 tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.ALU_result[31:0]
 tb_CPU.CPU.WB_STAGE.WB_OUTPUT[31:0]
 tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.A[31:0]
+@24
 tb_CPU.CPU.EX_STAGE.FORWARDING_MUX.B[31:0]
 @200
 -
@@ -203,8 +206,9 @@ tb_CPU.CPU.IF_STAGE.pc[31:0]
 @28
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.MEMRead
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.MEMWrite
-@24
+@420
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.ADDR[31:0]
+@24
 tb_CPU.CPU.MEM_STAGE.WD[31:0]
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.RD[31:0]
 @200
@@ -214,13 +218,14 @@ tb_CPU.CPU.MEM_STAGE.DATA_MEM.RD[31:0]
 tb_CPU.CPU.WB_STAGE.WB
 @24
 tb_CPU.CPU.WB_STAGE.R_DATA[31:0]
+@420
 tb_CPU.CPU.WB_STAGE.result[31:0]
 tb_CPU.CPU.WB_STAGE.WB_OUTPUT[31:0]
 @200
 -
 -Register file
 -sp
-@24
+@420
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[2].tmp[31:0]
 @200
 -t3, t5
