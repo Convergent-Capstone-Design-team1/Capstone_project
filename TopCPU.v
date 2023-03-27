@@ -8,6 +8,7 @@ module TOPCPU
     wire    [31:0]  target_address;
     wire 	[31:0] 	INST;
     wire            PCWrite;
+    wire            Flush;
     //IF_ID register
     wire    [63:0]  IF_ID_D;
     wire    [63:0]  IF_ID_Q;
@@ -55,6 +56,7 @@ module TOPCPU
         .t_addr(target_address)         ,    
         
         //OUTPUT
+        .T_NT(Flush)                    ,
         .pc(PC)                         ,
         .inst(INST)
     );
@@ -85,7 +87,7 @@ module TOPCPU
         .WD(WB_OUTPUT)                  ,     
         .RegWrite(MEM_WB_Q[69])         ,
         .MEMRead(ID_EX_Q[150])          ,      
-        
+ 
         //OUTPUT 
         //Hazard Detecting Unit
         .stall(stall)                   ,

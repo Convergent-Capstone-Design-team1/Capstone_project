@@ -1,20 +1,20 @@
 [*]
-[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Mon Mar 27 13:02:38 2023
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Mon Mar 27 16:36:26 2023
 [*]
-[dumpfile] "/home/dox/Capstone_project/test.vcd"
-[dumpfile_mtime] "Mon Mar 27 13:00:31 2023"
-[dumpfile_size] 1439285
-[savefile] "/home/dox/Capstone_project/3.26.gtkw"
-[timestart] 1725000
+[dumpfile] "/home/hyundo/capstone/test.vcd"
+[dumpfile_mtime] "Mon Mar 27 16:36:16 2023"
+[dumpfile_size] 1528209
+[savefile] "/home/hyundo/capstone/3.26.gtkw"
+[timestart] 7257000
 [size] 1536 801
 [pos] -1 -1
-*-20.001554 923000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-19.001553 7306000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
-[treeopen] tb_CPU.CPU.ID_STAGE.
 [treeopen] tb_CPU.CPU.IF_STAGE.
-[sst_width] 215
+[treeopen] tb_CPU.CPU.IF_STAGE.BHT.valid_table[12].
+[sst_width] 276
 [signals_width] 311
 [sst_expanded] 1
 [sst_vpaned_height] 332
@@ -23,6 +23,9 @@ tb_CPU.clk
 tb_CPU.rst
 @200
 -
+@29
+tb_CPU.CPU.Flush
+@200
 -///   IF_STAGE   ///
 -PC
 @28
@@ -50,17 +53,12 @@ tb_CPU.CPU.ID_STAGE.IMMGEN.S_INST[31:0]
 -
 -Predictor
 @28
-tb_CPU.CPU.IF_STAGE.PREDICTOR.opcode[6:0]
-tb_CPU.CPU.IF_STAGE.PREDICTOR.history
-@24
-tb_CPU.CPU.IF_STAGE.PREDICTOR.pc[31:0]
-@200
--
-@28
 tb_CPU.CPU.IF_STAGE.PREDICTOR.branch
-tb_CPU.CPU.IF_STAGE.PREDICTOR.taken[1:0]
+tb_CPU.CPU.IF_STAGE.PREDICTOR.history[1:0]
+tb_CPU.CPU.IF_STAGE.PREDICTOR.opcode[6:0]
 @24
-tb_CPU.CPU.IF_STAGE.PREDICTOR.b_pc[31:0]
+[color] 3
+tb_CPU.CPU.IF_STAGE.PREDICTOR.pc[31:0]
 @200
 -
 -branch result
@@ -72,22 +70,41 @@ tb_CPU.CPU.MEM_STAGE.M[2:0]
 -
 -BHT
 @28
-tb_CPU.CPU.IF_STAGE.BHT.cache_hit
-@29
-tb_CPU.CPU.IF_STAGE.BHT.c_state[1:0]
+tb_CPU.CPU.IF_STAGE.BHT.jump
+@420
+tb_CPU.CPU.IF_STAGE.BHT.b_pc[31:0]
 @28
 tb_CPU.CPU.IF_STAGE.BHT.prediction[1:0]
-@22
-tb_CPU.CPU.IF_STAGE.BHT.history_table[12].tmp[7:0]
+@200
+-
 @28
-tb_CPU.CPU.IF_STAGE.BHT.c_state[1:0]
+tb_CPU.CPU.IF_STAGE.BHT.h_state[1:0]
+tb_CPU.CPU.IF_STAGE.BHT.result
+@200
+-
+-valid[13] : 52
+@28
+tb_CPU.CPU.IF_STAGE.BHT.valid_table[13].temp
+@200
+-valid[17] : 68
+@28
+[color] 2
+tb_CPU.CPU.IF_STAGE.BHT.valid_table[17].temp
+@200
+-history[13] : 52
+@28
+tb_CPU.CPU.IF_STAGE.BHT.history_table[13].tmp[1:0]
+@200
+-history[17] : 68
+@28
+[color] 2
+tb_CPU.CPU.IF_STAGE.BHT.history_table[17].tmp[1:0]
 @200
 -
 @24
 tb_CPU.CPU.IF_STAGE.BHT.b_pc[31:0]
 @28
 tb_CPU.CPU.IF_STAGE.BHT.prediction[1:0]
-tb_CPU.CPU.IF_STAGE.BHT.result
 @200
 -
 -BTB
@@ -246,6 +263,7 @@ tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[11].tmp[31:0]
 @200
 -s3, s4
 @24
+[color] 2
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[19].tmp[31:0]
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[20].tmp[31:0]
 @200

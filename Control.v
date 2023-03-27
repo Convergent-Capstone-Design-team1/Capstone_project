@@ -11,7 +11,7 @@ module CONTROL
 	/*opcode[1:0] = ALUOp                                                      */ 
 	/***************************************************************************/
 
-	reg [6:0] control_r;
+	reg [7:0] control_r;
 	always @ (opcode) 
 	begin
 		casex (opcode)
