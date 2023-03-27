@@ -19,8 +19,8 @@ module TOPCPU
     wire 	[3:0] 	ALU_control;
     wire            stall;
     //ID_EX register
-    wire    [154:0] ID_EX_D;
-    wire    [154:0] ID_EX_Q;
+    wire    [152:0] ID_EX_D;
+    wire    [152:0] ID_EX_Q;
     //EX_stage
     wire    [31:0]  t_addr;
     wire    [31:0]  result;
@@ -59,6 +59,7 @@ module TOPCPU
         .inst(INST)
     );
 
+    //IF_ID => 64bit 
     assign IF_ID_D = {PC, INST};
     IF_ID IF_ID
     (
@@ -98,8 +99,9 @@ module TOPCPU
         //ALU control
         .ALU_control(ALU_control)       
     );
-
-    //ID_EX 155 -> 123
+                // ALUSrc                MR  MW  B         ALUOP
+    //ID_EX 155 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
+                     //   106  105      104  103 102
     assign ID_EX_D = {ID_control[7:2], IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
     ID_EX ID_EX
     (   
@@ -116,10 +118,10 @@ module TOPCPU
     (
         //INPUT
         //Control
-        .EX(ID_EX_Q[154])               ,
+        .EX(ID_EX_Q[152])               ,
         //target address adder
         .pc(ID_EX_Q[146:115])           ,
-        
+
         /**************ALU**************/
         //IMMGen output
         .S_INST(ID_EX_Q[114:83])        ,
@@ -146,7 +148,7 @@ module TOPCPU
     );
 
     //EX_MEM_D = 107
-    assign EX_MEM_D = {ID_EX_Q[153:149], t_addr, zero, result, F_B, ID_EX_Q[4:0]};
+    assign EX_MEM_D = {ID_EX_Q[151:147], t_addr, zero, result, F_B, ID_EX_Q[4:0]};
     EX_MEM EX_MEM
     (   
         //INPUT

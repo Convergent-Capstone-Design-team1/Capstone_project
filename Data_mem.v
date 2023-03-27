@@ -51,6 +51,6 @@ module DATA_MEM
   end
 
   /* read */
-  assign RD = MEMRead ? 32'hz : mem_cell[$unsigned(word_addr)];
+  assign RD = MEMRead ? mem_cell[$unsigned(word_addr)] : 32'hz;
 
 endmodule

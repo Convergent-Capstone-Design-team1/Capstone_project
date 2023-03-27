@@ -13,7 +13,8 @@ module BTB
   input   [31:0]  pc        ,   // 현재 명령어 주소
   input   [1:0]   taken     ,   // 분기 예측 결과 (00: not taken, 01: weakly taken, 10: strongly taken, 11: reserved)
   input   [31:0]  target    ,   // 분기 목적지 주소
-  output  [33:0]  next_pc       // 다음 명령어 주소
+
+  output  [33:0]  next_pc      // 다음 명령어 주소
 );
 
   
@@ -38,6 +39,7 @@ module BTB
   reg [33:0]  next_pc_r = 34'b0;
   reg pend = 1'b0;
   reg [1:0] cnt = 2'b00;
+  reg c_branch_r;
 
   always @(*) begin
     if(branch) begin
@@ -66,5 +68,5 @@ module BTB
   end
     
   assign next_pc = next_pc_r;
-
+  
 endmodule

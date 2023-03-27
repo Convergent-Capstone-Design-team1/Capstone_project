@@ -6,15 +6,21 @@
 
 module BHT
 #(
-    parameter       BHT_SIZE = 256          ,   // BHT 크기
-    parameter       HISTORY_LENGTH = 2          // 예측 결과 길이
+    parameter           BHT_SIZE = 256          ,   // BHT 크기
+    parameter           HISTORY_LENGTH = 2      ,   // 예측 결과 길이
+    parameter   [1:0]   T = 2'b11               ,
+    parameter   [1:0]   t = 2'b10               ,
+    parameter   [1:0]   n = 2'b01               ,
+    parameter   [1:0]   N = 2'b00
 )
 (
     input           clk                     ,
     input           rst                     ,
+    input           branch                  ,
     input   [31:0]  b_pc                    ,
     input   [1:0]   prediction              ,   // Predictor의 taken ( T, t, n, N )
-    
+    input           c_branch                ,
+
     output          result                      // mux의 select 신호로 들어감
 );  
     /******************* for simulation *************************/
@@ -29,29 +35,39 @@ module BHT
 
     integer i;
     initial begin
-        for (i = 0; i < 256; i = i+1)
+        for (i = 0; i < 256; i = i+1) begin
             history[i] = 2'b00;
+            valid[i] = 1'b0;
+        end
     end
 
     /********************** module start *************************/
 
     reg [HISTORY_LENGTH-1:0] history [0:BHT_SIZE-1];            // 이전 상태를 저장하는 레지스터
     reg [1:0] c_state;                                          // 현재 상태를 저장하는 레지스터
+    reg                       valid  [0:BHT_SIZE-1];
 
-    wire hit;  // BHT에서 검색 결과
-
-    // BHT에서 검색
-    assign hit = (history[b_pc[9:2]][1] == c_state[1]);         // Taken or Not Taken 여부가 같을 때 hit 
-
+    
+    // BHT에서 검색 결과
+    reg cache_hit = 1'b0;
+    always @ (*) begin            
+        if(valid[b_pc[9:2]] && (history[b_pc[9:2]][1] == c_state[1]))   
+            cache_hit = 1'b1;
+        else
+            cache_hit = 1'b0;
+    end
 
     // BHT 갱신
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             c_state <= 2'b00;
         end 
-        else begin
+        else if (valid[b_pc[9:2]] == 1'b0) begin
             history[b_pc[9:2]] <= prediction;
-            c_state <= hit ? c_state : prediction;
+            valid[b_pc[9:2]] <= 1'b1;
+        end
+        else begin
+            c_state <= cache_hit ? c_state : prediction;
         end
     end
 
