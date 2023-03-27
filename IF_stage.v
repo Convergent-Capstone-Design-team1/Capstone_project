@@ -55,7 +55,6 @@ module IF_STAGE
         .branch(PCSrc)                  ,
         .b_pc(b_pc)                     ,
         .prediction(taken)              ,
-        .c_branch(c_branch)             ,
         //OUTPUT
         .result(T_NT)                        
     );

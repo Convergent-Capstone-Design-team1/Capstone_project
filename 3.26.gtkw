@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Mon Mar 27 11:55:15 2023
+[*] Mon Mar 27 12:07:54 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Mon Mar 27 11:47:30 2023"
-[dumpfile_size] 1439226
+[dumpfile_mtime] "Mon Mar 27 12:07:09 2023"
+[dumpfile_size] 1459296
 [savefile] "/home/hyundo/capstone/3.26.gtkw"
 [timestart] 0
 [size] 1536 801
 [pos] -1 -1
-*-24.001554 12930000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-19.001554 199000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
 [treeopen] tb_CPU.CPU.ID_STAGE.
@@ -17,7 +17,7 @@
 [treeopen] tb_CPU.CPU.MEM_STAGE.
 [treeopen] tb_CPU.CPU.MEM_STAGE.DATA_MEM.
 [sst_width] 276
-[signals_width] 272
+[signals_width] 230
 [sst_expanded] 1
 [sst_vpaned_height] 333
 @28
@@ -146,7 +146,9 @@ tb_CPU.CPU.ID_STAGE.REGISTER_FILE.WD[31:0]
 tb_CPU.CPU.EX_STAGE.ALU.ALU_control[3:0]
 @24
 tb_CPU.CPU.EX_STAGE.ALU.A[31:0]
+@25
 tb_CPU.CPU.EX_STAGE.ALU.B[31:0]
+@24
 tb_CPU.CPU.EX_STAGE.ALU.result[31:0]
 @28
 tb_CPU.CPU.EX_STAGE.ALU.zero
@@ -243,7 +245,7 @@ tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[20].tmp[31:0]
 @200
 -
 -bubblesort data
-@25
+@24
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[0].tmp[31:0]
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[1].tmp[31:0]
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[2].tmp[31:0]

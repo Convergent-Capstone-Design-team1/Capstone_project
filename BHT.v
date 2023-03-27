@@ -19,7 +19,6 @@ module BHT
     input           branch                  ,
     input   [31:0]  b_pc                    ,
     input   [1:0]   prediction              ,   // Predictor의 taken ( T, t, n, N )
-    input           c_branch                ,
 
     output          result                      // mux의 select 신호로 들어감
 );  
