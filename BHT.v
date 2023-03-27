@@ -16,6 +16,7 @@ module BHT
 (
     input           clk                     ,
     input           rst                     ,
+    input           jump                    ,   //PCSrc
     input           branch                  ,
     input   [31:0]  b_pc                    ,
     input   [1:0]   prediction              ,   // Predictor의 taken ( T, t, n, N )
@@ -51,9 +52,9 @@ module BHT
     reg cache_hit = 1'b0;
     always @ (*) begin            
         if(valid[b_pc[9:2]] && (history[b_pc[9:2]][1] == c_state[1]))   
-            cache_hit = 1'b1;
+            cache_hit <= 1'b1;
         else
-            cache_hit = 1'b0;
+            cache_hit <= 1'b0;
     end
 
     // BHT 갱신
@@ -63,14 +64,16 @@ module BHT
         end 
         else if (valid[b_pc[9:2]] == 1'b0) begin
             history[b_pc[9:2]] <= prediction;
-            valid[b_pc[9:2]] <= 1'b1;
+            if (branch) begin
+                valid[b_pc[9:2]] <= 1'b1;
+            end
         end
         else begin
             c_state <= cache_hit ? c_state : prediction;
         end
     end
-    
+
     // 예측 결과 출력
-    assign result = branch ? 1'b1 : c_state[1];                             // result 분기할지 안할지 결정 -> mux의 select 신호로 들어감
+    assign result = jump ? 1'b1 : c_state[1];                  // result 분기할지 안할지 결정 -> mux의 select 신호로 들어감
 
 endmodule

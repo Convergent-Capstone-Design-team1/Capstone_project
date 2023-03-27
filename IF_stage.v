@@ -52,7 +52,8 @@ module IF_STAGE
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
-        .branch(PCSrc)                  ,
+        .jump(PCSrc)                    ,
+        .branch(branch)                 ,
         .b_pc(b_pc)                     ,
         .prediction(taken)              ,
         //OUTPUT
