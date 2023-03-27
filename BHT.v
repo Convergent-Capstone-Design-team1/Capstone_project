@@ -70,8 +70,8 @@ module BHT
             c_state <= cache_hit ? c_state : prediction;
         end
     end
-
+    
     // 예측 결과 출력
-    assign result = c_state[1];                                 // result 분기할지 안할지 결정 -> mux의 select 신호로 들어감
+    assign result = branch ? 1'b1 : c_state[1];                             // result 분기할지 안할지 결정 -> mux의 select 신호로 들어감
 
 endmodule

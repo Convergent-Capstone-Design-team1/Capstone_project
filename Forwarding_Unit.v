@@ -24,7 +24,7 @@ module FORWARDING_UNIT
             ForwardA_r = 2'b10;
         end 
         //MEM Hazard   
-        else if ({MEM_WB_RegWrite && (MEM_WB_RD != 5'd0) && (MEM_WB_RD == RS1)}) begin
+        else if (MEM_WB_RegWrite && (MEM_WB_RD != 5'd0) && (MEM_WB_RD == RS1)) begin
             ForwardA_r = 2'b01;    
         end
     end

@@ -1,25 +1,25 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sun Mar 26 21:01:59 2023
+[*] Mon Mar 27 11:55:15 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Sun Mar 26 20:13:40 2023"
-[dumpfile_size] 1411411
+[dumpfile_mtime] "Mon Mar 27 11:47:30 2023"
+[dumpfile_size] 1439226
 [savefile] "/home/hyundo/capstone/3.26.gtkw"
 [timestart] 0
 [size] 1536 801
 [pos] -1 -1
-*-18.001554 304000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-24.001554 12930000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
 [treeopen] tb_CPU.CPU.ID_STAGE.
-[treeopen] tb_CPU.CPU.ID_STAGE.REGISTER_FILE.
 [treeopen] tb_CPU.CPU.IF_STAGE.BHT.
 [treeopen] tb_CPU.CPU.MEM_STAGE.
-[sst_width] 253
-[signals_width] 277
+[treeopen] tb_CPU.CPU.MEM_STAGE.DATA_MEM.
+[sst_width] 276
+[signals_width] 272
 [sst_expanded] 1
-[sst_vpaned_height] 222
+[sst_vpaned_height] 333
 @28
 tb_CPU.clk
 tb_CPU.rst
@@ -85,8 +85,6 @@ tb_CPU.CPU.IF_STAGE.BHT.result
 @200
 -
 -BTB
-@28
-tb_CPU.CPU.IF_STAGE.BTB.c_branch
 @420
 tb_CPU.CPU.IF_STAGE.BTB.target[31:0]
 @24
@@ -136,9 +134,8 @@ tb_CPU.CPU.ID_STAGE.HAZARD_DETECTION.stall
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.WE
 @22
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.WR[4:0]
-@421
-tb_CPU.CPU.ID_STAGE.REGISTER_FILE.RD1[31:0]
 @420
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.RD1[31:0]
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.RD2[31:0]
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.WD[31:0]
 @200
@@ -220,6 +217,10 @@ tb_CPU.CPU.WB_STAGE.WB_OUTPUT[31:0]
 @200
 -
 -Register file
+-sp
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[2].tmp[31:0]
+@200
 -t3, t5
 @24
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[28].tmp[31:0]
@@ -232,10 +233,26 @@ tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[10].tmp[31:0]
 -a11
 @24
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[11].tmp[31:0]
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[10].tmp[31:0]
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[11].tmp[31:0]
 @200
 -s3, s4
 @24
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[19].tmp[31:0]
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[20].tmp[31:0]
+@200
+-
+-bubblesort data
+@25
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[0].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[1].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[2].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[3].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[4].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[5].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[6].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[7].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[8].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[9].tmp[31:0]
 [pattern_trace] 1
 [pattern_trace] 0

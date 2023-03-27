@@ -100,7 +100,7 @@ module TOPCPU
         .ALU_control(ALU_control)       
     );
                 // ALUSrc                MR  MW  B         ALUOP
-    //ID_EX 155 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
+    //ID_EX 153 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
                      //   106  105      104  103 102
     assign ID_EX_D = {ID_control[7:2], IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
     ID_EX ID_EX
