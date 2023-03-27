@@ -16,10 +16,10 @@ module BHT
 (
     input           clk                     ,
     input           rst                     ,
+    input           jump                    ,   //PCSrc
     input           branch                  ,
     input   [31:0]  b_pc                    ,
     input   [1:0]   prediction              ,   // Predictor의 taken ( T, t, n, N )
-    input           c_branch                ,
 
     output          result                      // mux의 select 신호로 들어감
 );  
@@ -43,8 +43,8 @@ module BHT
 
     /********************** module start *************************/
 
-    reg [HISTORY_LENGTH-1:0] history [0:BHT_SIZE-1];            // 이전 상태를 저장하는 레지스터
-    reg [1:0] c_state;                                          // 현재 상태를 저장하는 레지스터
+    reg [HISTORY_LENGTH-1:0]  history [0:BHT_SIZE-1];            // 이전 상태를 저장하는 레지스터
+    reg [1:0]                 c_state;                           // 현재 상태를 저장하는 레지스터
     reg                       valid  [0:BHT_SIZE-1];
 
     
@@ -52,26 +52,28 @@ module BHT
     reg cache_hit = 1'b0;
     always @ (*) begin            
         if(valid[b_pc[9:2]] && (history[b_pc[9:2]][1] == c_state[1]))   
-            cache_hit = 1'b1;
+            cache_hit <= 1'b1;                                  // JUMP를 할지 말지가 일치함-> 그대로 시행.
         else
-            cache_hit = 1'b0;
+            cache_hit <= 1'b0;                                  // JUMP를 할지 말지가 상이함-> 예측기에 따라 동작?
     end
 
     // BHT 갱신
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            c_state <= 2'b00;
-        end 
-        else if (valid[b_pc[9:2]] == 1'b0) begin
-            history[b_pc[9:2]] <= prediction;
-            valid[b_pc[9:2]] <= 1'b1;
+            c_state <= N;
         end
-        else begin
+        else if (branch && (valid[b_pc[9:2]] == 1'b0)) begin    // 처음 만난 branch. 입력 필요
+            history[b_pc[9:2]] <= n;                            // 일단 점프 안할꺼라고 판단
+            valid[b_pc[9:2]] == 1'b1;                           // 한번 만난거니 valid 입력.
+        end
+        else if (branch && (valid[b_pc[9:2]] == 1'b1)) begin    // 이전에 만난 branch. 현재상태를 결정함       
             c_state <= cache_hit ? c_state : prediction;
         end
+        else begin
+            c_state <= c_state;
+        end
     end
-    
-    // 예측 결과 출력
-    assign result = branch ? 1'b1 : c_state[1];                             // result 분기할지 안할지 결정 -> mux의 select 신호로 들어감
+
+    assign result = c_state[1];                                 // result 분기할지 안할지 결정 -> mux의 select 신호로 들어감
 
 endmodule

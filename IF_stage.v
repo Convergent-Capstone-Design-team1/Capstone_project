@@ -32,30 +32,16 @@ module IF_STAGE
         //OUTPUT
         .pc(pc) 
     );
-
-    PREDICTOR PREDICTOR
-    (   
-        //INPUT
-        .clk(clk)                       ,
-        .rst(rst)                       ,
-        .opcode(inst[6:0])              ,
-        .history(T_NT)                  ,
-        .pc(pc)                         ,
-        //OUTPUT
-        .branch(branch)                 ,
-        .taken(taken)                   ,
-        .b_pc(b_pc)
-    );
                    
     BHT BHT
     (
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
-        .branch(PCSrc)                  ,
-        .b_pc(b_pc)                     ,
-        .prediction(taken)              ,
-        .c_branch(c_branch)             ,
+        .PC_IF(pc)
+        .is_br_EX(PCSrc)
+        .br_EX(branch)
+        .PC_EX()                        
         //OUTPUT
         .result(T_NT)                        
     );
