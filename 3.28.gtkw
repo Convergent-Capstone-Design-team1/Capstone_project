@@ -1,37 +1,39 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Tue Mar 28 14:48:34 2023
+[*] Tue Mar 28 15:36:23 2023
 [*]
 [dumpfile] "/home/dox/Capstone_project/test.vcd"
-[dumpfile_mtime] "Tue Mar 28 14:44:03 2023"
-[dumpfile_size] 1924862
+[dumpfile_mtime] "Tue Mar 28 15:35:50 2023"
+[dumpfile_size] 1924979
 [savefile] "/home/dox/Capstone_project/3.28.gtkw"
-[timestart] 947000
-[size] 1508 600
+[timestart] 0
+[size] 1508 587
 [pos] -1 -1
-*-19.567905 3655000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-19.567905 2751000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
 [treeopen] tb_CPU.CPU.IF_STAGE.
-[treeopen] tb_CPU.CPU.IF_STAGE.BTB.
 [sst_width] 214
-[signals_width] 156
+[signals_width] 202
 [sst_expanded] 1
-[sst_vpaned_height] 291
+[sst_vpaned_height] 159
 @28
 tb_CPU.CPU.IF_STAGE.PC.clk
+@421
+tb_CPU.CPU.IF_STAGE.t_addr[31:0]
 @24
 tb_CPU.CPU.IF_STAGE.PC.pc[31:0]
 @200
 -
 -BHT
 @24
-tb_CPU.CPU.IF_STAGE.BHT.b_pc[31:0]
 tb_CPU.CPU.IF_STAGE.BHT.is_branch
 tb_CPU.CPU.IF_STAGE.BHT.jump
 tb_CPU.CPU.IF_STAGE.BHT.result
+tb_CPU.CPU.IF_STAGE.BHT.b_pc[31:0]
 @28
 tb_CPU.CPU.IF_STAGE.BHT.state[1:0]
+tb_CPU.CPU.IF_STAGE.PC_MUX.sel_mux
 @200
 -
 -BTB data
@@ -47,7 +49,7 @@ tb_CPU.CPU.IF_STAGE.BTB.branch_target[17].tmp[63:0]
 -BTB
 @28
 tb_CPU.CPU.IF_STAGE.BTB.taken
-@23
+@420
 tb_CPU.CPU.IF_STAGE.BTB.next_pc_r[31:0]
 @24
 tb_CPU.CPU.IF_STAGE.BTB.pend

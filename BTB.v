@@ -14,7 +14,7 @@ module BTB
   input           taken     ,   // 앞에서 결정하기를, 점프를 해야 한다. 그럼 테이블에 있는지 찾아보자.
   input   [31:0]  target    ,   // 분기 목적지 주소
 
-  output  [33:0]  next_pc      // 다음 명령어 주소
+  output  [33:0]  next_pc       // 다음 명령어 주소
 );
 
   

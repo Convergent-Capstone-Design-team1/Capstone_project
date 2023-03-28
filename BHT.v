@@ -57,7 +57,7 @@ module BHT
 
 
     // BHT 갱신
-    always @(*)
+    always @(posedge clk)
     begin
         if (rst) begin
                 for (i = 0; i < 256; i = i + 1) begin
@@ -65,6 +65,7 @@ module BHT
                     valid[i] = 1'b0;
                 end    
         end
+
         else begin                               //branch신호가 들어왔음. State 이동 단계  --> 사용하는게 아니다!
             case (history[b_pc[9:2]])                           //BHT 내부의 검색단계
                 N : begin
@@ -106,8 +107,8 @@ module BHT
         end
     end
 
-    // 예측 결과 출력
-    assign result = history[b_pc[9:2]][1];
+
+    assign result = (history[b_pc[9:2]][1] || jump);        //JUMP할지 말지에 대한 결정
     assign state = history[b_pc[9:2]];
 
 endmodule

@@ -67,8 +67,8 @@ module IF_STAGE
         .pc(b_pc)                       ,
         .taken(branch)                  ,
         .target(t_addr)                 ,
-        //OUTPUT
-        .next_pc(next_pc)       
+        //OUTPUT                        
+        .next_pc(next_pc)               
     );
 
     assign PC_4 = pc + 32'd4;
@@ -76,8 +76,8 @@ module IF_STAGE
     PC_MUX PC_MUX
     (
         //INPUT
-        .sel_mux(T_NT)                  ,
-        .PC_4(PC_4)                     ,
+        .sel_mux(T_NT)                               ,
+        .PC_4(PC_4)                                  ,
         .target_address(next_pc[31:0])  ,
 
         //OUTPUT
