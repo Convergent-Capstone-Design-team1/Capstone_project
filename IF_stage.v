@@ -24,7 +24,7 @@ module IF_STAGE
     //PC_MUX
     wire    [31:0]  PC_4;
     wire    [31:0]  n_pc;
-    
+
     PC PC
     (   
         //INPUT
@@ -44,7 +44,6 @@ module IF_STAGE
         .pc(pc)                         ,
         //OUTPUT
         .branch(branch)                 ,
-        .taken(taken)                   ,
         .b_pc(b_pc)
     );
                    
@@ -66,10 +65,10 @@ module IF_STAGE
     BTB BTB
     (
         //INPUT
-        .rst(rst)                       ,
+        .clk_3(clk_3)                   ,
         .branch(branch)                 ,
-        .pc(pc)                         ,
-        .taken(taken)                   ,
+        .pc(b_pc)                       ,
+        .taken(T_NT)                    ,
         .target(t_addr)                 ,
         //OUTPUT
         .next_pc(next_pc)       

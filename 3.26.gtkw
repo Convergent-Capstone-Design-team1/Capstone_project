@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Mon Mar 27 16:36:26 2023
+[*] Tue Mar 28 14:43:58 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Mon Mar 27 16:36:16 2023"
-[dumpfile_size] 1528209
+[dumpfile_mtime] "Tue Mar 28 14:43:29 2023"
+[dumpfile_size] 1433367
 [savefile] "/home/hyundo/capstone/3.26.gtkw"
-[timestart] 7257000
-[size] 1536 801
+[timestart] 0
+[size] 1399 715
 [pos] -1 -1
-*-19.001553 7306000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-19.001553 501000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
 [treeopen] tb_CPU.CPU.IF_STAGE.
@@ -17,13 +17,13 @@
 [sst_width] 276
 [signals_width] 311
 [sst_expanded] 1
-[sst_vpaned_height] 332
+[sst_vpaned_height] 405
 @28
 tb_CPU.clk
 tb_CPU.rst
 @200
 -
-@29
+@28
 tb_CPU.CPU.Flush
 @200
 -///   IF_STAGE   ///
@@ -46,6 +46,7 @@ tb_CPU.CPU.IF_STAGE.PC_MUX.PC_4[31:0]
 tb_CPU.CPU.IF_STAGE.PC_MUX.target_address[31:0]
 @200
 -
+@201
 -ImmGen
 @22
 tb_CPU.CPU.ID_STAGE.IMMGEN.S_INST[31:0]
@@ -82,6 +83,11 @@ tb_CPU.CPU.IF_STAGE.BHT.h_state[1:0]
 tb_CPU.CPU.IF_STAGE.BHT.result
 @200
 -
+@28
+tb_CPU.CPU.IF_STAGE.COUNTER_3.is_branch
+tb_CPU.CPU.IF_STAGE.COUNTER_3.b_cnt[1:0]
+tb_CPU.CPU.IF_STAGE.COUNTER_3.clk_3_r
+@200
 -valid[13] : 52
 @28
 tb_CPU.CPU.IF_STAGE.BHT.valid_table[13].temp
@@ -115,9 +121,7 @@ tb_CPU.CPU.IF_STAGE.BTB.branch_target[11].tmp[63:0]
 tb_CPU.CPU.IF_STAGE.BTB.branch_target[12].tmp[63:0]
 @28
 tb_CPU.CPU.IF_STAGE.BTB.branch
-tb_CPU.CPU.IF_STAGE.BTB.taken[1:0]
 @24
-tb_CPU.CPU.IF_STAGE.BTB.next_pc_r[33:0]
 tb_CPU.CPU.IF_STAGE.BTB.branch_target[0].tmp[63:0]
 tb_CPU.CPU.IF_STAGE.BTB.next_pc[33:0]
 @200
