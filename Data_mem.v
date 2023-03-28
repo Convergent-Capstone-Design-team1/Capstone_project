@@ -1,6 +1,5 @@
 module DATA_MEM
 (
-  input           CLK       ,
   input           MEMRead   ,
   input           MEMWrite  ,  
   input   [31:0]  ADDR      ,
@@ -43,7 +42,7 @@ module DATA_MEM
   endgenerate
 
   /* write */
-  always @ (posedge CLK)
+  always @ (*)
   begin
 	  if (ADDR <1024)
 	    if (MEMWrite)

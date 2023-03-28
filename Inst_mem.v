@@ -19,8 +19,8 @@ module INST_MEM
 			28: INST_r = 32'h01312023; 		//	      sw s3, 0(sp)      #int i *
 			32: INST_r = 32'h00400993; 		//	      addi s3, zero, 4  #i = 1
 			36: INST_r = 32'h00000a13; 		//	      addi s4, zero, 0  #j = 0
-			40: INST_r = 32'h00000513; 		//Loop 1: addi a0, s1-> 0, 0    #download base addr of arry[] at a0 -> 0
-			44: INST_r = 32'h02800613; 		//	      addi a2, s2-> 40, 0     #download size of arry[](=n) at a2 -> 10 * 4 
+			40: INST_r = 32'h00000513; 		//Loop 1: addi a0, s1, 0, 0    #download base addr of arry[] at a0 -> 0
+			44: INST_r = 32'h02800613; 		//	      addi a2, s2, 40, 0     #download size of arry[](=n) at a2 -> 10 * 4 
 			48: INST_r = 32'h00050293; 		//	      addi t0, a0, 0     #copy of a0
 			52: INST_r = 32'h04c9d863; 		//	      bge s3, a2, Exit   #j is bigger than n or equal
 			56: INST_r = 32'h00000e33; 		//	      add t3, zero, zero #tmp reset

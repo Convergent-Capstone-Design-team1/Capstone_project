@@ -1,6 +1,5 @@
 module REGISTER_FILE
 (
-  input           CLK   ,
   input           RST   ,   
   input   [4:0]   RR1   ,  //Read register1
   input   [4:0]   RR2   ,  //Read register2
@@ -27,7 +26,7 @@ module REGISTER_FILE
     end
   endgenerate
 
-  always @(posedge CLK) begin
+  always @(*) begin
 	  if (RST)
 	  begin
 	    for (i = 0; i < 32; i = i + 1)
