@@ -12,8 +12,7 @@ module PREDICTOR
     // Predictor FSM
     
     // Output taken
-    assign taken = history; //BTB로 감
-    assign branch = (opcode == 7'b1100011) ? 1'b1 : 1'b0;
-    assign b_pc = branch ? pc : 32'b0;
+    assign branch = (opcode == 7'b1100011) ? 1'b1 : 1'b0;       // 출력해줌. 이번 명령어는 branch이다!
+    assign b_pc = branch ? pc : 32'b0;                          // hashing에 맞게 pc를 변형시킴.
 
 endmodule

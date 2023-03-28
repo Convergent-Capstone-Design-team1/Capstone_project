@@ -17,7 +17,7 @@ module IF_STAGE
     wire            T_NT;
     wire    [31:0]  b_pc;
     //BHT
-    wire    [1:0]   h_state;
+    wire    [1:0]   state;
     //BTB
     wire            branch;
     wire    [33:0]  next_pc;
@@ -40,11 +40,9 @@ module IF_STAGE
     (   
         //INPUT
         .opcode(inst[6:0])              ,
-        .history(h_state)               ,
         .pc(pc)                         ,
         //OUTPUT
-        .branch(branch)                 ,
-        .taken(taken)                   ,
+        .branch(branch)                 ,       //명령어가 branch임을 알려주는 신호
         .b_pc(b_pc)
     );
                    
@@ -55,12 +53,10 @@ module IF_STAGE
         .rst(rst)                       ,
         .jump(PCSrc)                    ,
         .is_branch(branch)              ,
-        .is_taken(taken[1])             ,
         .b_pc(b_pc)                     ,
-        .prediction(taken)              ,
         //OUTPUT
-        .h_state(h_state)               ,
-        .result(T_NT)                             
+        .result(T_NT)                   ,
+        .state(state)          
     );
     
     BTB BTB
@@ -68,8 +64,8 @@ module IF_STAGE
         //INPUT
         .rst(rst)                       ,
         .branch(branch)                 ,
-        .pc(pc)                         ,
-        .taken(taken)                   ,
+        .pc(b_pc)                       ,
+        .taken(branch)                  ,
         .target(t_addr)                 ,
         //OUTPUT
         .next_pc(next_pc)       

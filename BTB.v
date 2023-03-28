@@ -9,9 +9,9 @@ module BTB
 )
 (
   input           rst       ,   // 리셋 입력
-  input           branch    ,
+  input           branch    ,   // BRANCH가 아니면 테이블에 쓰지 마라.
   input   [31:0]  pc        ,   // 현재 명령어 주소
-  input   [1:0]   taken     ,   // 분기 예측 결과 (00: not taken, 01: weakly taken, 10: strongly taken, 11: reserved)
+  input           taken     ,   // 앞에서 결정하기를, 점프를 해야 한다. 그럼 테이블에 있는지 찾아보자.
   input   [31:0]  target    ,   // 분기 목적지 주소
 
   output  [33:0]  next_pc      // 다음 명령어 주소
@@ -36,37 +36,45 @@ module BTB
 
   /********************** module start *************************/
   reg [ENTRY_WIDTH-1:0] btb [NUM_ENTRIES-1:0];              // BTB 메모리
-  reg [33:0]  next_pc_r = 34'b0;
-  reg pend = 1'b0;
-  reg [1:0] cnt = 2'b00;
-  reg c_branch_r;
+  reg [31:0]            next_pc_r = 32'b0;
+  reg [1:0]             cnt = 2'b00;
+  reg [31:0]            pend_pc = 32'b0;
+  reg                   pend = 1'b0;
+  wire[31:0]            pend_pc_w;
 
   always @(*) begin
-    if(branch) begin
-      next_pc_r = target;                                   //104로 들어가게 해야함 
-      if (btb[pc[9:2]][63:34] == pc[31:2]) begin            // 테이블에서 지금 pc를 발견함
-        pend = 1'b0;
-        if (taken == 2'b10 || taken == 2'b11) begin         // 분기를 예측한 경우
-            next_pc_r = btb[pc[9:2]][31:0];                 // 분기 목적지 주소로 점프
-          end
-        btb[pc[9:2]] <= {pc[31:2], taken, target[31:0]};  // BTB 엔트리 업데이트
+    if(branch) begin                                        // Branch에서만 쓰기/읽기를 함.
+      if (btb[pc[9:2]][63:32] == pc[31:0]) begin            // 테이블에서 지금 pc를 발견함. 이 주소로 갈까요?
+
+        if (taken) begin                                    // 앞에서 말하기를, 점프 해야하는 경우
+          next_pc_r = btb[pc[9:2]][31:0];                   // 저장되어있던, 분기 목적지 주소로 세팅해줌
+        end
+        else begin                                          // 만약 찾았더라도 점프 하지 말라고 지시받았으면, 그대로 가라.
+          next_pc_r = next_pc_r;
+        end
       end
-      else begin
+
+      else begin                                            // Branch이긴 한데, 테이블에 없는 경우, 작성을 위해 pend해서 기다려야함.
         pend = 1'b1;
+        pend_pc[31:0] = pc[31:0] - 4;
       end
     end
-    else if(pend) begin
+
+    else if (pend) begin                                     // 3사이클 기다리고, 점프할 주소가 계산되어 이제 써줘야함.
       if(cnt == 2'b11) begin
         next_pc_r = target;
         pend = 1'b0;
         cnt = 2'b00;
+        btb[pend_pc[9:2]] = {pend_pc[31:0], target[31:0]};  // 처음 만난 branch는 계산 끝에 점프할 주소를 BTB에 써줌.
       end
       else begin
         cnt = cnt + 1'b1;
       end
     end
   end
+
     
   assign next_pc = next_pc_r;
+  assign pend_pc_w = pend_pc;
   
 endmodule
