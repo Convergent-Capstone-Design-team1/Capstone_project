@@ -164,7 +164,6 @@ module TOPCPU
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
-        //.flush(Flush)                   ,
         .D(EX_MEM_D)                    ,
         
         //OUTPUT

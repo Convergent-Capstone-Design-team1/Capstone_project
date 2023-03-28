@@ -5,7 +5,6 @@ module EX_MEM
 (
     input           clk     ,
     input           rst     ,
-    //input           flush   ,
     input   [W-1:0] D       ,
     output  [W-1:0] Q
 );
