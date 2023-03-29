@@ -13,7 +13,7 @@ module EX_MEM
     (
         .CLK(clk)   ,
         .RST(rst)   ,
-        .EN(1'b0)   ,
+        .EN(1'b0)  ,
         .D(D)       ,
         .Q(Q)
     );

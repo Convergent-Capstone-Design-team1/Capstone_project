@@ -69,6 +69,7 @@ module BHT
         else begin                               //branch신호가 들어왔음. State 이동 단계  --> 사용하는게 아니다!
             case (history[b_pc[9:2]])                           //BHT 내부의 검색단계
                 N : begin
+                    //valid[b_pc[9:2]] <= 1'b1;
                     if (jump) begin                        //valid하며, history[1]의 값(jump)했을 경우
                         history[b_pc[9:2]] <= n;                //n으로 state를 이동시킴
                     end     
@@ -107,8 +108,8 @@ module BHT
         end
     end
 
-
-    assign result = (history[b_pc[9:2]][1] || jump);        //JUMP할지 말지에 대한 결정
+    // 예측 결과 출력
+    assign result = (history[b_pc[9:2]][1] || jump);
     assign state = history[b_pc[9:2]];
 
 endmodule

@@ -1,7 +1,6 @@
 module PREDICTOR
 (   
     input   [6:0]   opcode          ,
-    input   [1:0]   history         ,   // jump 여부
     input   [31:0]  pc              ,   // 현재 pc 값
     
     output          branch          ,

@@ -5,7 +5,9 @@ module EX_STAGE
     /*******************************/
     
     //Control
-    input           EX              ,
+    input           flush           ,
+    input   [4:0]   EX_control      ,
+    input           ALUSrc          ,
     //target address adder
     input   [31:0]  pc              ,
     /**************ALU**************/
@@ -36,7 +38,9 @@ module EX_STAGE
     output  [31:0]  result          ,
     //ForwardB MUX output
     output  [31:0]  F_B             ,
-    output          zero            
+    output          zero            ,
+    output  [4:0]   f_ex_ctrl   
+
 );
     //Forwarding Unit output
     wire    [1:0]   ForwardA;
@@ -53,6 +57,7 @@ module EX_STAGE
         .A(A)                               ,
         .B(ALU_MUX_OUTPUT)                  ,
         .ALU_control(ALU_control)           ,
+        
         //OUTPUT
         .zero(zero)                         ,
         .result(result) 
@@ -63,7 +68,8 @@ module EX_STAGE
         //INPUT
         .ForwardB_MUX_OUTPUT(B)             ,
         .S_INST(S_INST)                     ,
-        .ALUSrc(EX)                         ,
+        .ALUSrc(ALUSrc)                     ,
+        
         //OUTPUT
         .ALU_MUX_OUTPUT(ALU_MUX_OUTPUT)
     );
@@ -77,6 +83,7 @@ module EX_STAGE
         .MEM_WB_RD(MEM_WB_RD)               ,
         .RS1(RS1)                           ,
         .RS2(RS2)                           ,
+        
         //OUTPUT
         .ForwardA(ForwardA)                 ,
         .ForwardB(ForwardB)
@@ -91,11 +98,22 @@ module EX_STAGE
 	    .WB_OUTPUT(WB_OUTPUT)	            ,
 	    .RD1(RD1)				            ,
 	    .RD2(RD2)				            ,
+        
         //OUTPUT
 	    .A(A)				                ,
 	    .B(B)
-);
+    );
     
+    EX_MEM_FLUSH EX_MEM_FLUSH
+    (
+        //INPUT
+        .flush(flush)                       ,
+        .ex_mem_ctrl(EX_control)            ,
+
+        //OUTPUT
+        .ex_mem_f_ctrl(f_ex_ctrl)   
+    );
+
     assign F_B = B;
     assign t_addr = pc + (S_INST << 1);
     
