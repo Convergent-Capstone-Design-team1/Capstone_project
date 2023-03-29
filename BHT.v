@@ -20,7 +20,7 @@ module BHT
     input           is_branch               ,   // 명령어가 branch인지를 입력받음
     input   [31:0]  b_pc                    ,
 
-    output          result                  ,   // mux의 select 신호로 들어감, BTB에게 serach를 요구
+    output          T_NT                    ,   // mux의 select 신호로 들어감, BTB에게 serach를 요구
     output  [1:0]   state
 );  
     /******************* for simulation *************************/
@@ -57,7 +57,7 @@ module BHT
 
 
     // BHT 갱신
-    always @(posedge clk)
+    always @(*)
     begin
         if (rst) begin
                 for (i = 0; i < 256; i = i + 1) begin
@@ -65,7 +65,6 @@ module BHT
                     valid[i] = 1'b0;
                 end    
         end
-
         else begin                               //branch신호가 들어왔음. State 이동 단계  --> 사용하는게 아니다!
             case (history[b_pc[9:2]])                           //BHT 내부의 검색단계
                 N : begin

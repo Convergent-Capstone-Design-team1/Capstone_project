@@ -55,17 +55,18 @@ module IF_STAGE
         .is_branch(branch)              ,
         .b_pc(b_pc)                     ,
         //OUTPUT
-        .result(T_NT)                   ,
+        .T_NT(T_NT)                     ,
         .state(state)          
     );
     
     BTB BTB
     (
         //INPUT
+        .clk(clk)                       ,
         .rst(rst)                       ,
         .branch(branch)                 ,
         .pc(b_pc)                       ,
-        .taken(branch)                  ,
+        .taken(T_NT)                  ,
         .target(t_addr)                 ,
         //OUTPUT                        
         .next_pc(next_pc)               
