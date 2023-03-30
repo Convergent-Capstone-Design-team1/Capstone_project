@@ -4,9 +4,12 @@ module IF_STAGE
     input           rst     ,
     input           PCSrc   ,
     input           PCWrite ,
+    input           mem_is_taken,
+    input   [31:0]  mem_pc      ,
     input   [31:0]  t_addr  ,
 
     output          T_NT    ,
+    output          hit     ,
     output  [31:0]  pc      ,
     output  [31:0]  inst          
 );
@@ -18,6 +21,7 @@ module IF_STAGE
     wire    [31:0]  b_pc;
     //BHT
     wire    [1:0]   state;
+    wire            hit;
     //BTB
     wire            branch;
     wire    [33:0]  next_pc;
@@ -54,6 +58,7 @@ module IF_STAGE
         .jump(PCSrc)                    ,
         .is_branch(branch)              ,
         .b_pc(b_pc)                     ,
+        .hit(hit)                       ,
         //OUTPUT
         .T_NT(T_NT)                     ,
         .state(state)          
@@ -62,14 +67,21 @@ module IF_STAGE
     BTB BTB
     (
         //INPUT
-        .clk(clk)                       ,
+        //.clk(clk)                       ,
         .rst(rst)                       ,
-        .branch(branch)                 ,
+        .is_branch(is_branch)           ,
         .pc(b_pc)                       ,
-        .taken(T_NT)                  ,
+        .mem_pc(mem_pc)                 ,
+        .is_taken(T_NT)                 ,
         .target(t_addr)                 ,
-        //OUTPUT                        
-        .next_pc(next_pc)               
+        .state(state)                   ,
+        .b_valid(b_valid)               ,
+        .m_valid(m_valid)               ,
+        .PCSrc(PCSrc)                   ,
+        
+        //OUTPUT
+        .hit(hit)                       ,
+        .next_pc(next_pc)       
     );
 
     assign PC_4 = pc + 32'd4;

@@ -6,6 +6,7 @@ module EX_STAGE
     
     //Control
     input           flush           ,
+    input           hit             ,
     input   [4:0]   EX_control      ,
     input           ALUSrc          ,
     //target address adder
@@ -108,6 +109,7 @@ module EX_STAGE
     (
         //INPUT
         .flush(flush)                       ,
+        .hit(hit)                           ,
         .ex_mem_ctrl(EX_control)            ,
 
         //OUTPUT

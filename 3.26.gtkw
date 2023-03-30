@@ -1,23 +1,83 @@
 [*]
-[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Tue Mar 28 21:14:44 2023
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Thu Mar 30 10:29:06 2023
 [*]
-[dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Tue Mar 28 21:14:40 2023"
-[dumpfile_size] 2149251
-[savefile] "/home/hyundo/capstone/3.26.gtkw"
-[timestart] 770000
-[size] 1399 767
-[pos] -1 -1
-*-23.614784 20100000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[dumpfile] "/home/dox/Capstone_project/test.vcd"
+[dumpfile_mtime] "Thu Mar 30 09:43:22 2023"
+[dumpfile_size] 711974
+[savefile] "/home/dox/Capstone_project/3.26.gtkw"
+[timestart] 346000
+[size] 1536 801
+[pos] -11 -215
+*-19.614784 7500000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
+[treeopen] tb_CPU.CPU.IF_STAGE.
 [treeopen] tb_CPU.CPU.IF_STAGE.BHT.valid_table[12].
 [treeopen] tb_CPU.CPU.MEM_STAGE.
 [sst_width] 276
 [signals_width] 230
 [sst_expanded] 1
 [sst_vpaned_height] 209
+@24
+tb_CPU.CPU.IF_STAGE.PC.clk
+tb_CPU.CPU.IF_STAGE.PC.pc[31:0]
+@200
+-
+-BHT
+@24
+tb_CPU.CPU.IF_STAGE.BHT.is_branch
+@28
+tb_CPU.CPU.IF_STAGE.BHT.T_NT
+@24
+tb_CPU.CPU.IF_STAGE.BHT.b_pc[31:0]
+[color] 3
+tb_CPU.CPU.IF_STAGE.BHT.prev_pc1[31:0]
+[color] 3
+tb_CPU.CPU.IF_STAGE.BHT.prev_pc2[31:0]
+[color] 3
+tb_CPU.CPU.IF_STAGE.BHT.prev_pc3[31:0]
+@28
+[color] 2
+tb_CPU.CPU.IF_STAGE.BHT.state[1:0]
+@24
+[color] 7
+tb_CPU.CPU.IF_STAGE.BHT.pcin[31:0]
+@28
+[color] 7
+tb_CPU.CPU.IF_STAGE.BHT.casein[1:0]
+@24
+[color] 2
+tb_CPU.CPU.IF_STAGE.BHT.jump
+@28
+tb_CPU.CPU.IF_STAGE.BHT.nstate[1:0]
+@420
+tb_CPU.CPU.IF_STAGE.BHT.changed_pc[31:0]
+@28
+tb_CPU.CPU.IF_STAGE.BHT.changed_st[1:0]
+@200
+-
+-BTB
+@28
+tb_CPU.CPU.IF_STAGE.BTB.taken
+@24
+tb_CPU.CPU.IF_STAGE.BTB.target[31:0]
+tb_CPU.CPU.IF_STAGE.BTB.addr_input[31:0]
+@28
+tb_CPU.CPU.IF_STAGE.BTB.pend
+@24
+tb_CPU.CPU.IF_STAGE.BTB.next_pc[33:0]
+tb_CPU.CPU.IF_STAGE.BTB.check_addr[31:0]
+tb_CPU.CPU.IF_STAGE.BTB.check_target[31:0]
+@200
+-
+-PC_MUX
+@28
+tb_CPU.CPU.IF_STAGE.PC_MUX.sel_mux
+@24
+tb_CPU.CPU.IF_STAGE.PC_MUX.target_address[31:0]
+@200
+-
 @28
 tb_CPU.clk
 tb_CPU.rst
@@ -39,7 +99,6 @@ tb_CPU.CPU.IF_STAGE.pc[31:0]
 tb_CPU.CPU.ID_STAGE.f_id_ctrl[5:0]
 tb_CPU.CPU.EX_STAGE.f_ex_ctrl[4:0]
 tb_CPU.CPU.MEM_STAGE.MEM_control[4:0]
-@29
 tb_CPU.CPU.WB_STAGE.WB
 @200
 -
@@ -81,9 +140,6 @@ tb_CPU.CPU.IF_STAGE.BHT.b_pc[31:0]
 tb_CPU.CPU.IF_STAGE.BHT.state[1:0]
 @200
 -
-@28
-tb_CPU.CPU.IF_STAGE.BHT.result
-@200
 -
 -valid[13] : 52
 @28
@@ -112,9 +168,6 @@ tb_CPU.CPU.IF_STAGE.BTB.target[31:0]
 @24
 tb_CPU.CPU.IF_STAGE.BTB.branch_target[11].tmp[63:0]
 tb_CPU.CPU.IF_STAGE.BTB.branch_target[12].tmp[63:0]
-@28
-tb_CPU.CPU.IF_STAGE.BTB.branch
-@24
 tb_CPU.CPU.IF_STAGE.BTB.branch_target[0].tmp[63:0]
 tb_CPU.CPU.IF_STAGE.BTB.next_pc[33:0]
 @200

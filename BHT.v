@@ -16,9 +16,12 @@ module BHT
 (
     input           clk                     ,
     input           rst                     ,
+    input           hit                     ,
     input           jump                    ,   // PCSrc (MEMstage의 output에서 받아옴) = 나중에 보니까 점프 했더라
     input           is_branch               ,   // 명령어가 branch인지를 입력받음
     input   [31:0]  b_pc                    ,
+    input           mem_is_taken            ,
+    input   [31:0]  mem_pc                  ,
 
     output          T_NT                    ,   // mux의 select 신호로 들어감, BTB에게 serach를 요구
     output  [1:0]   state
@@ -53,62 +56,90 @@ module BHT
 
     reg [HISTORY_LENGTH-1:0] history [0:BHT_SIZE-1];            // 이전 상태를 저장하는 레지스터
     reg                        valid [0:BHT_SIZE-1];            // 해당 데이터의 valid
-    wire[31:0]                            pend_pc_w;
-
+    reg [31:0]                             prev_pc1;
+    reg [31:0]                             prev_pc2;
+    reg [31:0]                             prev_pc3;
+    reg [31:0]                             prev_pc4;
+    reg [31:0]                             pcin;
+    reg [1:0]                                nstate;
+    wire [1:0]                               changed_st;
+    wire [31:0]                               changed_pc;
+    reg [1:0]                               casein;
 
     // BHT 갱신
-    always @(*)
-    begin
-        if (rst) begin
-                for (i = 0; i < 256; i = i + 1) begin
-                    history[i] = 2'b01;
-                    valid[i] = 1'b0;
-                end    
-        end
-        else begin                               //branch신호가 들어왔음. State 이동 단계  --> 사용하는게 아니다!
-            case (history[b_pc[9:2]])                           //BHT 내부의 검색단계
-                N : begin
-                    //valid[b_pc[9:2]] <= 1'b1;
-                    if (jump) begin                        //valid하며, history[1]의 값(jump)했을 경우
-                        history[b_pc[9:2]] <= n;                //n으로 state를 이동시킴
-                    end     
-                    else begin                                  //valid하며, jump하지 않은 경우
-                        history[b_pc[9:2]] <= N;                //N으로 state 유지함
-                    end
-                end
 
-                n : begin
-                    if (jump) begin
-                        history[b_pc[9:2]] <= t;
-                    end     
-                    else begin
-                        history[b_pc[9:2]] <= N;
-                    end
+    always @ (*) begin
+        pcin <= prev_pc3;
+        casein <= history[prev_pc3[9:2]];
+        case (history[prev_pc3[9:2]])                   //BHT 내부의 검색단계
+            N : begin
+                if (jump) begin                         //valid하며, history[1]의 값(jump)했을 경우
+                    nstate <= n;                        //n으로 state를 이동시킴
+                end     
+                else begin                              //valid하며, jump하지 않은 경우
+                    nstate <= N;                        //N으로 state 유지함
                 end
+            end
 
-                t : begin
-                    if (jump) begin
-                        history[b_pc[9:2]] <= T;
-                    end     
-                    else begin
-                        history[b_pc[9:2]] <= n;
-                    end
+            n : begin
+                if (jump) begin
+                    nstate <= t;
+                end     
+                else begin
+                    nstate <= N;
                 end
+            end
 
-                T : begin
-                    if (jump) begin
-                        history[b_pc[9:2]] <= T;
-                    end     
-                    else begin
-                        history[b_pc[9:2]] <= t;
-                    end
+            t : begin
+                if (jump) begin
+                    nstate <= T;
+                end     
+                else begin
+                    nstate <= n;
                 end
-            endcase
-        end
+            end
+
+            T : begin
+                if (jump) begin
+                    nstate <= T;
+                end     
+                else begin
+                    nstate <= t;
+                end
+            end
+        endcase
     end
 
-    // 예측 결과 출력
-    assign result = (history[b_pc[9:2]][1] || jump);
+    always @ (posedge clk or posedge rst) begin
+
+        if (rst) begin
+            for (i = 0; i < 256; i = i + 1) begin
+                history[i] = 2'b00;
+                valid[i] = 1'b0;
+            end
+            nstate <= n;
+            prev_pc1 <= 32'b0;
+            prev_pc2 <= 32'b0;
+            prev_pc3 <= 32'b0;
+            prev_pc4 <= 32'b0;
+        end
+
+        else begin
+            
+            history[prev_pc3[9:2]] <= nstate;
+        end
+
+        prev_pc1 <= b_pc;
+        prev_pc2 <= prev_pc1;
+        prev_pc3 <= prev_pc2;
+        prev_pc4 <= prev_pc3;
+    end
+
+    // 예측 결과 출력  
+
+    assign T_NT = ((jump && !hit && !mem_is_taken)) ? 1'b1 : history[b_pc[9:2]][1];
     assign state = history[b_pc[9:2]];
+    assign changed_pc = prev_pc4;
+    assign changed_st = history[prev_pc4[9:2]];
 
 endmodule

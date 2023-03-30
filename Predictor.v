@@ -4,7 +4,6 @@ module PREDICTOR
     input   [31:0]  pc              ,   // 현재 pc 값
     
     output          branch          ,
-    output  [1:0]   taken           ,   // branch를 예측한 결과
     output  [31:0]  b_pc            
 );
     
