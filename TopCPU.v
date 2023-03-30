@@ -9,9 +9,12 @@ module TOPCPU
     wire 	[31:0] 	INST;
     wire            PCWrite;
     wire            Flush;
+    wire            hit;
+
     //IF_ID register
-    wire    [63:0]  IF_ID_D;
-    wire    [63:0]  IF_ID_Q;
+    wire    [64:0]  IF_ID_D;
+    wire    [64:0]  IF_ID_Q;
+
     //ID stage
     wire 	[31:0] 	RD1;
 	wire	[31:0] 	RD2;
@@ -20,25 +23,31 @@ module TOPCPU
     wire    [5:0]   ID_control;
     wire 	[3:0] 	ALU_control;
     wire            stall;
+
     //ID_EX register
-    wire    [152:0] ID_EX_D;
-    wire    [152:0] ID_EX_Q;
+    wire    [153:0] ID_EX_D;
+    wire    [153:0] ID_EX_Q;
+
     //EX_stage
     wire    [31:0]  t_addr;
     wire    [31:0]  result;
     wire    [31:0]  F_B;
     wire    [4:0]   EX_control;
     wire            zero;
+
     //EX_MEM register
-    wire    [106:0] EX_MEM_D;
-    wire    [106:0] EX_MEM_Q;    
+    wire    [139:0] EX_MEM_D;
+    wire    [139:0] EX_MEM_Q;    
+
     //MEM stage
     wire            branch;
     wire    [1:0]   MEM_control;
     wire    [31:0]  R_DATA;
+
     //MEM_WB register
     wire    [70:0]  MEM_WB_D;
     wire    [70:0]  MEM_WB_Q;
+    
     //WB stage
     wire    [31:0]  WB_OUTPUT;
 
@@ -47,7 +56,8 @@ module TOPCPU
     /*******************************/
 
     assign target_address = EX_MEM_Q[101:70];
-
+    
+    
     IF_STAGE IF_STAGE
     (   
         //INPUT
@@ -55,17 +65,20 @@ module TOPCPU
         .rst(rst)                       ,
         .PCSrc(branch)                  ,
         .PCWrite(stall)                 ,  
-        .t_addr(target_address)         ,    
+        .mem_pc(EX_MEM_Q[138:107])      ,
+        .t_addr(target_address)         , 
+        .mem_is_taken(EX_MEM_Q[139])    ,
         
         //OUTPUT
         .T_NT(Flush)                    ,
+        .hit(hit)                       ,
         .pc(PC)                         ,
         .inst(INST)
     );
 
     //IF_ID => 64bit 
-    assign f_INST = Flush ? 32'h00000013 : INST;
-    assign IF_ID_D = {PC, f_INST};
+    assign f_INST = (Flush && !hit) ? 32'h00000013 : INST;
+    assign IF_ID_D = {hit, PC, f_INST};
     IF_ID IF_ID
     (
         //INPUT
@@ -90,7 +103,8 @@ module TOPCPU
         .WD(WB_OUTPUT)                  ,     
         .RegWrite(MEM_WB_Q[69])         ,
         .MEMRead(ID_EX_Q[150])          ,   
-        .flush(Flush)                   ,   
+        .flush(Flush)                   , 
+        .hit(hit)                       ,  
  
         //OUTPUT 
         //Hazard Detecting Unit
@@ -108,7 +122,7 @@ module TOPCPU
                 // ALUSrc                MR  MW  B         ALUOP
     //ID_EX 153 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
                      //   106  105      104  103 102
-    assign ID_EX_D = {ID_control, IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
+    assign ID_EX_D = {IF_ID_Q[64], ID_control, IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
     ID_EX ID_EX
     (   
         //INPUT
@@ -126,6 +140,7 @@ module TOPCPU
         //INPUT
         //Control
         .flush(Flush)                   ,
+        .hit(hit)                       ,
         .EX_control(ID_EX_Q[151:147])   ,
         .ALUSrc(ID_EX_Q[152])           ,
         //target address adder
@@ -157,8 +172,8 @@ module TOPCPU
         .f_ex_ctrl(EX_control)          
     );
 
-    //EX_MEM_D = 107
-    assign EX_MEM_D = {EX_control, t_addr, zero, result, F_B, ID_EX_Q[4:0]};
+    //EX_MEM_D = 107 + 32 = 139 + 1 = 140
+    assign EX_MEM_D = {ID_EX_Q[153], ID_EX_Q[146:115], EX_control, t_addr, zero, result, F_B, ID_EX_Q[4:0]};
     EX_MEM EX_MEM
     (   
         //INPUT

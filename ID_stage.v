@@ -9,6 +9,7 @@ module ID_STAGE
     input           RegWrite        ,
     input           MEMRead         ,
     input           flush           ,
+    input           hit             ,
     
     output          stall           ,
     output  [31:0]  RD1             ,
@@ -70,6 +71,7 @@ module ID_STAGE
     (
         //INPUT
         .flush(flush)               ,
+        .hit(hit)                   ,
         .id_ex_ctrl(control[7:2])   ,
         //OUTPUT
         .id_ex_f_ctrl(f_id_ctrl)    

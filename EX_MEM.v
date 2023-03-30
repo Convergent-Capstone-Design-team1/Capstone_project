@@ -1,6 +1,6 @@
 module EX_MEM
 #(
-    parameter  W = 107
+    parameter  W = 140
 )
 (
     input           clk     ,

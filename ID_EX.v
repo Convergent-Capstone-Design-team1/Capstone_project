@@ -1,6 +1,6 @@
 module ID_EX
 #(
-    parameter  W = 153
+    parameter  W = 154
 )
 (
     input           clk     ,
