@@ -5,8 +5,10 @@ module TOPCPU
 );
     //IF stage
     wire    [31:0]  PC;
+    wire    [31:0]  PC_4;
     wire    [31:0]  target_address;
     wire 	[31:0] 	INST;
+    wire            miss_predict;
     wire            PCWrite;
     wire            Flush;
     wire            hit;
@@ -43,6 +45,7 @@ module TOPCPU
     wire            branch;
     wire    [1:0]   MEM_control;
     wire    [31:0]  R_DATA;
+    wire    [31:0]  mem_pc;
 
     //MEM_WB register
     wire    [70:0]  MEM_WB_D;
@@ -65,7 +68,7 @@ module TOPCPU
         .rst(rst)                       ,
         .PCSrc(branch)                  ,
         .PCWrite(stall)                 ,  
-        .mem_pc(EX_MEM_Q[138:107])      ,
+        .mem_pc(mem_pc)                 ,
         .t_addr(target_address)         , 
         .mem_is_taken(EX_MEM_Q[139])    ,
         
@@ -73,11 +76,14 @@ module TOPCPU
         .T_NT(Flush)                    ,
         .hit(hit)                       ,
         .pc(PC)                         ,
-        .inst(INST)
+        .inst(INST)                     ,
+        .PC_4(PC_4)                     ,
+        .miss_predict(miss_predict)     
     );
 
     //IF_ID => 64bit 
     assign f_INST = (Flush && !hit) ? 32'h00000013 : INST;
+    //assign f_PC = miss_predict ? PC_4 : PC;
     assign IF_ID_D = {hit, PC, f_INST};
     IF_ID IF_ID
     (
@@ -185,7 +191,7 @@ module TOPCPU
         .Q(EX_MEM_Q)                
     );
 
-    MEM_STAGE MEM_STAGE
+    MEM_STAGE MEM_STAGE //EX_MEM_Q[138:107]
     (   
         //INPUT
         //branch
@@ -193,11 +199,13 @@ module TOPCPU
         .zero(EX_MEM_Q[69])             ,
         //data memory
         .result(EX_MEM_Q[68:37])        ,
-        .WD(EX_MEM_Q[36:5])             ,  
+        .WD(EX_MEM_Q[36:5])             ,
+        .mem_pc(EX_MEM_Q[138:107])      ,
 
         //OUTPUT
         .branch(branch)                 ,
-        .R_DATA(R_DATA)                 
+        .R_DATA(R_DATA)                 ,
+        .mem_pc_o(mem_pc)               
     );
 
     assign MEM_WB_D = {EX_MEM_Q[106:105], R_DATA, EX_MEM_Q[68:37], EX_MEM_Q[4:0]};

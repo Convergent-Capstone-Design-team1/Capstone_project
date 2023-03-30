@@ -4,13 +4,16 @@ module MEM_STAGE
     input           zero                ,
     input   [31:0]  result              ,
     input   [31:0]  WD                  ,
+    input   [31:0]  mem_pc              ,
 
     output          branch              ,
-    output  [31:0]  R_DATA              
+    output  [31:0]  R_DATA              ,
+    output  [31:0]  mem_pc_o            
 );
 
     assign branch = MEM_control[0] & zero;
-
+    assign mem_pc_o = mem_pc;
+    
     DATA_MEM DATA_MEM
     (   
         //INPUT

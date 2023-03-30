@@ -11,15 +11,17 @@ module IF_STAGE
     output          T_NT        ,
     output          hit         ,
     output  [31:0]  pc          ,
-    output  [31:0]  inst          
+    output  [31:0]  inst        ,
+    output  [31:0]  PC_4        ,
+    output          miss_predict         
 );
     //PC
     wire    [31:0]  pc; 
     //Predictor
-    wire    [1:0]   p_state;
     wire    [31:0]  b_pc;  
     //BHT
     wire    [1:0]   state;
+    wire    [1:0]   m_state;
     wire            T_NT;
     wire            b_valid;
     wire            m_valid;
@@ -50,10 +52,9 @@ module IF_STAGE
         .pc(pc)                         ,
         //OUTPUT
         .is_branch(is_branch)           ,       //명령어가 branch임을 알려주는 신호
-        .p_state(p_state)               ,
         .b_pc(b_pc)
     );
-                   
+
     BHT BHT
     (
         //INPUT
@@ -65,14 +66,14 @@ module IF_STAGE
         .is_branch(is_branch)           ,
         .b_pc(b_pc)                     ,
         .mem_pc(mem_pc)                 ,
-        .p_state(p_state)               ,
         
         //OUTPUT
         .T_NT(T_NT)                     ,
         .state(state)                   ,
         .miss_predict(miss_predict)     ,
         .b_valid(b_valid)               ,
-        .m_valid(m_valid)   
+        .m_valid(m_valid)               ,
+        .m_state(m_state)
     );
     
     BTB BTB
