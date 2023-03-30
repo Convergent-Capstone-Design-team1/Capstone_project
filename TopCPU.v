@@ -201,7 +201,7 @@ module TOPCPU
         .result(EX_MEM_Q[68:37])        ,
         .WD(EX_MEM_Q[36:5])             ,
         .mem_pc(EX_MEM_Q[138:107])      ,
-
+        .hit(EX_MEM_Q[139])             ,
         //OUTPUT
         .branch(branch)                 ,
         .R_DATA(R_DATA)                 ,

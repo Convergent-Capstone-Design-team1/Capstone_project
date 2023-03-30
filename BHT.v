@@ -110,8 +110,8 @@ module BHT
                 end
                 else if (is_taken) begin
                     history[b_pc[9:2]] <= T;
+                    miss_predict_r = 1'b0; 
                 end
-       
             end
         endcase
     end  
