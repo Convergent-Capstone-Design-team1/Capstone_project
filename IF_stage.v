@@ -21,10 +21,8 @@ module IF_STAGE
     wire    [31:0]  b_pc;  
     //BHT
     wire    [1:0]   state;
-    wire    [1:0]   m_state;
     wire            T_NT;
     wire            b_valid;
-    wire            m_valid;
     wire            miss_predict;
     //BTB
     wire            is_branch;
@@ -40,6 +38,7 @@ module IF_STAGE
         .clk(clk)                       ,
         .PCWrite(PCWrite)               ,
         .n_pc(n_pc)                     ,
+        
         //OUTPUT
         .pc(pc) 
     );
@@ -50,6 +49,7 @@ module IF_STAGE
         .state(state)                   ,
         .opcode(inst[6:0])              ,
         .pc(pc)                         ,
+        
         //OUTPUT
         .is_branch(is_branch)           ,       //명령어가 branch임을 알려주는 신호
         .b_pc(b_pc)
@@ -63,7 +63,6 @@ module IF_STAGE
         .is_taken(hit)                  ,
         .mem_is_taken(mem_is_taken)     ,
         .PCSrc(PCSrc)                   ,
-        .is_branch(is_branch)           ,
         .b_pc(b_pc)                     ,
         .mem_pc(mem_pc)                 ,
         
@@ -71,16 +70,12 @@ module IF_STAGE
         .T_NT(T_NT)                     ,
         .state(state)                   ,
         .miss_predict(miss_predict)     ,
-        .b_valid(b_valid)               ,
-        .m_valid(m_valid)               ,
-        .m_state(m_state)
+        .b_valid(b_valid)               
     );
     
     BTB BTB
     (
         //INPUT
-        //.clk(clk)                       ,
-        .rst(rst)                       ,
         .is_branch(is_branch)           ,
         .pc(b_pc)                       ,
         .mem_pc(mem_pc)                 ,
@@ -88,7 +83,6 @@ module IF_STAGE
         .target(t_addr)                 ,
         .state(state)                   ,
         .b_valid(b_valid)               ,
-        .m_valid(m_valid)               ,
         .PCSrc(PCSrc)                   ,
         
         //OUTPUT

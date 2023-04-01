@@ -8,19 +8,16 @@ module BTB
   parameter ENTRY_WIDTH = 64    // BTB 엔트리 너비 (주소와 상태 비트) 
 )
 (
-  input           clk       ,
-  input           rst       ,   // 리셋 입력
   input           is_branch ,   // BRANCH가 아니면 테이블에 쓰지 마라.
   input   [31:0]  pc        ,
   input   [31:0]  mem_pc    ,   // 현재 명령어 주소
-  input           is_taken  ,   // 앞에서 결정하기를, 점프를 해야 한다. 그럼 테이블에 있는지 찾아보자.
   input   [31:0]  target    ,   // 분기 목적지 주소
   input   [1:0]   state     ,
+  input           is_taken  ,   // 앞에서 결정하기를, 점프를 해야 한다. 그럼 테이블에 있는지 찾아보자.
   input           b_valid   ,
-  input           m_valid   ,
-  input           PCSrc ,
+  input           PCSrc     ,
   
-  output  reg     hit       ,
+  output          hit       ,
   output  [31:0]  next_pc       // 다음 명령어 주소
 );
 
@@ -46,19 +43,20 @@ module BTB
   reg [ENTRY_WIDTH-1:0] btb [NUM_ENTRIES-1:0];              // BTB 메모리
   reg [1:0]           valid [NUM_ENTRIES-1:0];
   reg [31:0]                next_pc_r = 32'b0;
+  reg hit_r;
 
   //Write
   always @ (*) begin
-    hit = 0;
+    hit_r = 0;
     if (~b_valid && is_taken) begin
       next_pc_r = target;
       btb[mem_pc[9:2]] = {mem_pc, target};
     end
     else if(is_branch && !PCSrc) begin
-      if ((btb[pc[9:2]][63:32] == pc[31:0])) begin            // 테이블에서 지금 pc를 발견함. 이 주소로 갈까요?
-        if (is_taken) begin                                    // 앞에서 말하기를, 점프 해야하는 경우
+      if ((btb[pc[9:2]][63:32] == pc[31:0])) begin          // 테이블에서 지금 pc를 발견함. 이 주소로 갈까요?
+        if (is_taken) begin                                 // 앞에서 말하기를, 점프 해야하는 경우
           next_pc_r = btb[pc[9:2]][31:0];                   // 저장되어있던, 분기 목적지 주소로 세팅해줌
-          hit = 1;
+          hit_r = 1;
         end
         else begin                                          // 만약 찾았더라도 점프 하지 말라고 지시받았으면, 그대로 가라.
           next_pc_r = next_pc_r;
@@ -68,5 +66,6 @@ module BTB
   end
 
   assign next_pc = next_pc_r;
+  assign hit = hit_r;
   
 endmodule

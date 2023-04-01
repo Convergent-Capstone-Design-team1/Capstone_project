@@ -83,7 +83,6 @@ module TOPCPU
 
     //IF_ID => 64bit 
     assign f_INST = (Flush && !hit) ? 32'h00000013 : INST;
-    //assign f_PC = miss_predict ? PC_4 : PC;
     assign IF_ID_D = {hit, PC, f_INST};
     IF_ID IF_ID
     (
@@ -202,6 +201,7 @@ module TOPCPU
         .WD(EX_MEM_Q[36:5])             ,
         .mem_pc(EX_MEM_Q[138:107])      ,
         .hit(EX_MEM_Q[139])             ,
+        
         //OUTPUT
         .branch(branch)                 ,
         .R_DATA(R_DATA)                 ,
