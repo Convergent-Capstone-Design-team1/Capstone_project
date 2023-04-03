@@ -7,7 +7,9 @@ module IF_STAGE
     input   [31:0]  mem_pc      ,
     input   [31:0]  t_addr      ,
     input           mem_is_taken,
+    input           ex_is_branch,
 
+    output          is_branch   ,
     output          T_NT        ,
     output          hit         ,
     output  [31:0]  pc          ,
@@ -25,7 +27,6 @@ module IF_STAGE
     wire            b_valid;
     wire            miss_predict;
     //BTB
-    wire            is_branch;
     wire    [31:0]  next_pc;
     //PC_MUX
     wire    [31:0]  PC_4;
@@ -63,6 +64,7 @@ module IF_STAGE
         .is_taken(hit)                  ,
         .mem_is_taken(mem_is_taken)     ,
         .PCSrc(PCSrc)                   ,
+        .ex_is_branch(ex_is_branch)     ,
         .b_pc(b_pc)                     ,
         .mem_pc(mem_pc)                 ,
         
@@ -84,6 +86,7 @@ module IF_STAGE
         .state(state)                   ,
         .b_valid(b_valid)               ,
         .PCSrc(PCSrc)                   ,
+        .miss_predict(miss_predict)     ,
         
         //OUTPUT
         .hit(hit)                       ,

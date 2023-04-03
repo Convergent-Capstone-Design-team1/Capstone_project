@@ -12,7 +12,7 @@ module MEM_STAGE
     output  [31:0]  mem_pc_o            
 );
 
-    assign branch = MEM_control[0] & zero & !hit;
+    assign branch = MEM_control[0] & zero; //& !hit;
     assign mem_pc_o = mem_pc;
 
     DATA_MEM DATA_MEM

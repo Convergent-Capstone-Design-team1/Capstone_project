@@ -12,10 +12,11 @@ module TOPCPU
     wire            PCWrite;
     wire            Flush;
     wire            hit;
+    wire            is_branch;
 
     //IF_ID register
-    wire    [64:0]  IF_ID_D;
-    wire    [64:0]  IF_ID_Q;
+    wire    [65:0]  IF_ID_D;
+    wire    [65:0]  IF_ID_Q;
 
     //ID stage
     wire 	[31:0] 	RD1;
@@ -27,8 +28,8 @@ module TOPCPU
     wire            stall;
 
     //ID_EX register
-    wire    [153:0] ID_EX_D;
-    wire    [153:0] ID_EX_Q;
+    wire    [154:0] ID_EX_D;
+    wire    [154:0] ID_EX_Q;
 
     //EX_stage
     wire    [31:0]  t_addr;
@@ -71,8 +72,10 @@ module TOPCPU
         .mem_pc(mem_pc)                 ,
         .t_addr(target_address)         , 
         .mem_is_taken(EX_MEM_Q[139])    ,
+        .ex_is_branch(ID_EX_Q[154])     ,
         
         //OUTPUT
+        .is_branch(is_branch)           ,
         .T_NT(Flush)                    ,
         .hit(hit)                       ,
         .pc(PC)                         ,
@@ -81,9 +84,9 @@ module TOPCPU
         .miss_predict(miss_predict)     
     );
 
-    //IF_ID => 64bit 
+    //IF_ID => 66bit 
     assign f_INST = (Flush && !hit) ? 32'h00000013 : INST;
-    assign IF_ID_D = {hit, PC, f_INST};
+    assign IF_ID_D = {is_branch, hit, PC, f_INST};
     IF_ID IF_ID
     (
         //INPUT
@@ -127,12 +130,13 @@ module TOPCPU
                 // ALUSrc                MR  MW  B         ALUOP
     //ID_EX 153 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
                      //   106  105      104  103 102
-    assign ID_EX_D = {IF_ID_Q[64], ID_control, IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
+    assign ID_EX_D = {IF_ID_Q[65], IF_ID_Q[64], ID_control, IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
     ID_EX ID_EX
     (   
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
+        .EN(1'b0)                       ,
         .flush(Flush)                   ,
         .D(ID_EX_D)                     ,
         
@@ -184,6 +188,7 @@ module TOPCPU
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
+        .EN(1'b0)                       ,
         .D(EX_MEM_D)                    ,
         
         //OUTPUT

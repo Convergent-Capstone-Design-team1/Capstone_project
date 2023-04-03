@@ -4,21 +4,22 @@
 
 module BTB 
 #(
-  parameter NUM_ENTRIES = 64,   // BTB 엔트리 수
-  parameter ENTRY_WIDTH = 64    // BTB 엔트리 너비 (주소와 상태 비트) 
+  parameter NUM_ENTRIES = 64  ,   // BTB 엔트리 수
+  parameter ENTRY_WIDTH = 64      // BTB 엔트리 너비 (주소와 상태 비트) 
 )
 (
-  input           is_branch ,   // BRANCH가 아니면 테이블에 쓰지 마라.
-  input   [31:0]  pc        ,
-  input   [31:0]  mem_pc    ,   // 현재 명령어 주소
-  input   [31:0]  target    ,   // 분기 목적지 주소
-  input   [1:0]   state     ,
-  input           is_taken  ,   // 앞에서 결정하기를, 점프를 해야 한다. 그럼 테이블에 있는지 찾아보자.
-  input           b_valid   ,
-  input           PCSrc     ,
+  input           is_branch   ,   // branch 명령어인지?
+  input   [31:0]  pc          ,   // 현재 명령어 주소
+  input   [31:0]  mem_pc      ,   // mem stage의 pc값 
+  input   [31:0]  target      ,   // 분기 목적지 주소
+  input   [1:0]   state       ,   // BHT state
+  input           is_taken    ,   // 앞에서 결정하기를, 점프를 해야 한다. 그럼 테이블에 있는지 찾아보자.
+  input           b_valid     ,
+  input           PCSrc       ,
+  input           miss_predict,
   
-  output          hit       ,
-  output  [31:0]  next_pc       // 다음 명령어 주소
+  output          hit         ,
+  output  [31:0]  next_pc         // 다음 명령어 주소
 );
 
   
@@ -45,12 +46,14 @@ module BTB
   reg [31:0]                next_pc_r = 32'b0;
   reg hit_r;
 
-  //Write
   always @ (*) begin
     hit_r = 0;
-    if (~b_valid && is_taken) begin
+    if (~b_valid && is_taken && PCSrc) begin
       next_pc_r = target;
       btb[mem_pc[9:2]] = {mem_pc, target};
+    end
+    else if(miss_predict) begin
+      next_pc_r = mem_pc + 32'd4;
     end
     else if(is_branch && !PCSrc) begin
       if ((btb[pc[9:2]][63:32] == pc[31:0])) begin          // 테이블에서 지금 pc를 발견함. 이 주소로 갈까요?
