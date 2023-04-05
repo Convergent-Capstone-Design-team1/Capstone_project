@@ -6,7 +6,7 @@ module tb_CPU();
 	
   	TOPCPU CPU 
 	(
-		.clk(clk)	,
+		.clk(clk)			,
 		.rst(rst)	
 	);
 
@@ -16,9 +16,11 @@ module tb_CPU();
 	begin
 		$dumpfile("test.vcd");
 		$dumpvars(0, tb_CPU);
-
+		
+		clk = 0;
+		rst = 0;
+		#150
 		rst = 1;
-		clk = 1;
 		#50
 		rst = 0;
 		

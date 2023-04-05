@@ -61,7 +61,7 @@ module BHT
     reg miss_predict_r;
     
     // BHT 갱신
-    always @(posedge clk)
+    always @(posedge clk or posedge rst)
     begin                                                       // N, n 상태는 3clk 이후 결과를 알 수 있으므로 mem stage에서의 pc값을 가져옴
         //miss_predict_r = 1'b0;
         case (history[mem_pc[9:2]])                            
