@@ -1,6 +1,6 @@
 module ALU_CONTROL
 (
-	input	     funct7			,
+	input  [1:0] funct7			,
 	input  [2:0] funct3			,
 	input  [1:0] ALUOp			,
 
@@ -21,9 +21,10 @@ module ALU_CONTROL
 		end 
 		else if (ALUOp == 2'b10) begin
 			case ({funct7, funct3})		
-				0 : ALU_control_r = 2;   	//add
-				4 : ALU_control_r = 4;   	//xor
-				8 : ALU_control_r = 6;  	//sub
+				5'b00000 : ALU_control_r = 2;   	//add
+				5'b00100 : ALU_control_r = 4;   	//xor
+				5'b10000 : ALU_control_r = 6;  		//sub
+				5'b01000 : ALU_control_r = 1;  		//mult
 			endcase
 		end 
 		else if (ALUOp == 2'b11) begin 		//addi
