@@ -1,6 +1,7 @@
 module IF_STAGE
 (   
     input           clk         ,
+    input           clk_50      ,
     input           rst         ,
     input           PCSrc       ,
     input           PCWrite     ,
@@ -108,6 +109,8 @@ module IF_STAGE
 
     INST_MEM INST_MEM
     (
+        .clk_50(clk_50)                 ,
+        .rst(rst)                       ,
         .ADDR(pc)                       ,
         .INST(inst)
     );

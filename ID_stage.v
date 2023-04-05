@@ -46,7 +46,8 @@ module ID_STAGE
     REGISTER_FILE REGISTER_FILE
     (
         //INPUT
-        .RST(rst)                   ,
+        .clk(clk)                   ,
+        .rst(rst)                   ,
         .RR1(INST[19:15])           ,
         .RR2(INST[24:20])           ,
         .WR(WR)                     ,
@@ -70,7 +71,7 @@ module ID_STAGE
     ALU_CONTROL ALU_CONTROL
     (
         //INPUT
-        .funct7(INST[30])           , 
+        .funct7({INST[30],INST[25]}), 
         .funct3(INST[14:12])        , 
         .ALUOp(control[1:0])        , 
         

@@ -1,5 +1,7 @@
 module MEM_STAGE
 (
+    input           clk_50              ,
+    input           rst                 ,
     input   [4:0]   MEM_control         ,
     input           zero                ,
     input   [31:0]  result              ,
@@ -18,6 +20,7 @@ module MEM_STAGE
     DATA_MEM DATA_MEM
     (   
         //INPUT
+        .clk_50(clk_50)                 ,
         .MEMRead(MEM_control[2])        ,
         .MEMWrite(MEM_control[1])       ,
         .ADDR(result)                   ,

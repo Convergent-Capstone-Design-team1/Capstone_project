@@ -15,7 +15,7 @@ module CONTROL
 	always @ (opcode) 
 	begin
 		casex (opcode)
-			7'b0110011 : control_r = 8'b00100010;	//R-type : add, sub, xor -> ALUSrc '0'
+			7'b0110011 : control_r = 8'b00100010;	//R-type : add, sub, xor, mult -> ALUSrc '0'
 			7'b0010011 : control_r = 8'b10110011;	//I-type : addi -> ALUSrc '1'
 			7'b0000011 : control_r = 8'b11110000;	//I-type : lw
 			7'b0100011 : control_r = 8'b10001000;	//S-type : sw			//8'b1x001000

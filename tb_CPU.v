@@ -11,14 +11,16 @@ module tb_CPU();
 	);
 
 	always #50 clk = ~clk;
-
+	
 	initial 
 	begin
 		$dumpfile("test.vcd");
 		$dumpvars(0, tb_CPU);
 
+		rst = 0;
+		clk = 0;
+		#50
 		rst = 1;
-		clk = 1;
 		#50
 		rst = 0;
 		

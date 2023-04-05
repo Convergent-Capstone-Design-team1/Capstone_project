@@ -1,6 +1,7 @@
 module REGISTER_FILE
 (
-  input           RST   ,   
+  input           clk   ,
+  input           rst   ,   
   input   [4:0]   RR1   ,  //Read register1
   input   [4:0]   RR2   ,  //Read register2
   input   [4:0]   WR    ,   //write register
@@ -26,8 +27,8 @@ module REGISTER_FILE
     end
   endgenerate
 
-  always @(*) begin
-	  if (RST)
+  always @(posedge clk or posedge rst) begin
+	  if (rst)
 	  begin
 	    for (i = 0; i < 32; i = i + 1)
 	      register_file[i] = i;

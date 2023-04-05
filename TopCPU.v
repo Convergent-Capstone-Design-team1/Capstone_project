@@ -1,6 +1,6 @@
 module TOPCPU
 (
-	input           clk,
+	input           clk ,
 	input           rst   
 );
     //IF stage
@@ -55,6 +55,8 @@ module TOPCPU
     //WB stage
     wire    [31:0]  WB_OUTPUT;
 
+    //fall_detected
+    wire            clk_50;
     /*******************************/
     /*     Module Instatiation     */
     /*******************************/
@@ -66,6 +68,7 @@ module TOPCPU
     (   
         //INPUT
         .clk(clk)                       ,
+        .clk_50(clk_50)                 ,
         .rst(rst)                       ,
         .PCSrc(branch)                  ,
         .PCWrite(stall)                 ,  
@@ -199,6 +202,8 @@ module TOPCPU
     (   
         //INPUT
         //branch
+        .clk_50(clk_50)                 ,
+        .rst(rst)                       ,
         .MEM_control(EX_MEM_Q[106:102]) ,
         .zero(EX_MEM_Q[69])             ,
         //data memory
@@ -234,6 +239,16 @@ module TOPCPU
         
         //OUTPUT
         .WB_OUTPUT(WB_OUTPUT)
+    );
+
+    FALLING_EDGE_DETECTOR FALLING_EDGE_DETECTOR
+    (   
+        //INPUT
+        .clk(clk)                       ,
+        .rst(rst)                       ,
+        
+        //OUTPUT
+        .fall_detected(clk_50)          
     );
 
 endmodule 

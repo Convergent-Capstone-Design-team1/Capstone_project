@@ -9,6 +9,7 @@ module ALU
  
 	reg  		   		zero_r;
 	reg			[31:0] 	result_r;
+	reg			[63:0] 	result_mult;
 
 	always @ (A, B, ALU_control) 
 	begin
@@ -32,6 +33,12 @@ module ALU
 			//result_r = 32'b0;
 			zero_r = (A != B) ? 0 : 1;
 		end
+		else if (ALU_control == 1) begin	//mult
+			result_mult = A * B;
+			result_r = result_mult[31:0];
+			zero_r = 0;
+		end
+		
 	end
 
 	assign zero = zero_r;
