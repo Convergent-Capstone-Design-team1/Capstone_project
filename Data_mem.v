@@ -1,19 +1,39 @@
 module DATA_MEM
 (
+  input           clk_50    ,
+  input           rst       ,
   input           MEMRead   ,
   input           MEMWrite  ,  
   input   [31:0]  ADDR      ,
   input   [31:0]  WD        ,
-  output  [31:0]  RD
+
+  output  [31:0]  RD        
+
 );
 
   wire    [9:0]   word_addr;
   reg     [31:0]  mem_cell [0:1023];
 
   assign word_addr = ADDR [11:2];
-  
+/*
   initial
   begin
+    mem_cell[0] = 3;
+    mem_cell[1] = 8;
+    mem_cell[2] = 2;
+    mem_cell[3] = 9;
+    mem_cell[4] = 6;
+    mem_cell[5] = 1;
+    mem_cell[6] = 7;
+    mem_cell[7] = 11;
+    mem_cell[8] = 4;
+    mem_cell[9] = 10;
+    mem_cell[10] = 5;
+  end
+*/
+  initial
+  begin
+    // Put your initial data 
     mem_cell[0] = 1;
     mem_cell[1] = 9;
     mem_cell[2] = 2;
@@ -25,7 +45,7 @@ module DATA_MEM
     mem_cell[8] = 4;
     mem_cell[9] = 8;
   end
-
+  
   //예를 들어 output 10bit만들어주면
   //if mem_cell[0] == 1, then led[0] = 1; 
   //if led[9] == 1, then done = 1; 
@@ -42,14 +62,25 @@ module DATA_MEM
   endgenerate
 
   /* write */
-  always @ (*)
+  always @ (posedge clk_50)
   begin
-	  if (ADDR <1024)
-	    if (MEMWrite)
-        mem_cell[$unsigned(word_addr)] = WD;
+	  if (MEMWrite)
+      mem_cell[$unsigned(word_addr)] = WD;
   end
 
   /* read */
-  assign RD = MEMRead ? mem_cell[$unsigned(word_addr)] : 32'hz;
+  reg [31:0]  RD_r;
+  always @ (posedge clk_50 or posedge rst)
+  begin
+    if (rst)
+      RD_r <= 0;
+    else if (MEMRead) 
+      RD_r <= mem_cell[$unsigned(word_addr)];
+    else
+      RD_r <= 32'hz;
+  end
+
+  assign RD = RD_r;
+
 
 endmodule

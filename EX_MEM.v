@@ -5,6 +5,7 @@ module EX_MEM
 (
     input           clk     ,
     input           rst     ,
+    input           EN      ,
     input   [W-1:0] D       ,
     output  [W-1:0] Q
 );
@@ -13,7 +14,7 @@ module EX_MEM
     (
         .CLK(clk)   ,
         .RST(rst)   ,
-        .EN(1'b0)  ,
+        .EN(EN)     ,
         .D(D)       ,
         .Q(Q)
     );

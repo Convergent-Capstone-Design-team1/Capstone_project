@@ -10,13 +10,13 @@ module ALU_CONTROL
 	reg [3:0] ALU_control_r;
 	always @ (funct7, funct3 ,ALUOp) 
 	begin
-		if (ALUOp == 2'b01) begin  			//beq, bge
+		if (ALUOp == 2'b01) begin  					//beq, bge
 			case (funct3)
-				0 :  ALU_control_r = 5;  	//beq
-				5 :  ALU_control_r = 7;   	//bge 
+				0 :  ALU_control_r = 5;  			//beq
+				5 :  ALU_control_r = 7;   			//bge 
 			endcase 
 		end 
-		else if (ALUOp == 2'b00) begin 		//lw, sw 
+		else if (ALUOp == 2'b00) begin 				//lw, sw 
 			ALU_control_r = 2;				
 		end 
 		else if (ALUOp == 2'b10) begin
@@ -27,7 +27,7 @@ module ALU_CONTROL
 				5'b01000 : ALU_control_r = 1;  		//mult
 			endcase
 		end 
-		else if (ALUOp == 2'b11) begin 		//addi
+		else if (ALUOp == 2'b11) begin 				//addi
 			ALU_control_r = 2;
 		end
 	end	

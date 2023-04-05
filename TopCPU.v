@@ -1,19 +1,22 @@
 module TOPCPU
 (
-	input           clk,
+	input           clk ,
 	input           rst   
 );
     //IF stage
     wire    [31:0]  PC;
+    wire    [31:0]  PC_4;
     wire    [31:0]  target_address;
     wire 	[31:0] 	INST;
+    wire            miss_predict;
     wire            PCWrite;
     wire            Flush;
     wire            hit;
+    wire            is_branch;
 
     //IF_ID register
-    wire    [64:0]  IF_ID_D;
-    wire    [64:0]  IF_ID_Q;
+    wire    [65:0]  IF_ID_D;
+    wire    [65:0]  IF_ID_Q;
 
     //ID stage
     wire 	[31:0] 	RD1;
@@ -23,55 +26,70 @@ module TOPCPU
     wire    [5:0]   ID_control;
     wire 	[3:0] 	ALU_control;
     wire            stall;
+
     //ID_EX register
-    wire    [153:0] ID_EX_D;
-    wire    [153:0] ID_EX_Q;
+    wire    [154:0] ID_EX_D;
+    wire    [154:0] ID_EX_Q;
+
     //EX_stage
     wire    [31:0]  t_addr;
     wire    [31:0]  result;
     wire    [31:0]  F_B;
     wire    [4:0]   EX_control;
     wire            zero;
+
     //EX_MEM register
     wire    [139:0] EX_MEM_D;
     wire    [139:0] EX_MEM_Q;    
+
     //MEM stage
     wire            branch;
     wire    [1:0]   MEM_control;
     wire    [31:0]  R_DATA;
+    wire    [31:0]  mem_pc;
+
     //MEM_WB register
     wire    [70:0]  MEM_WB_D;
     wire    [70:0]  MEM_WB_Q;
+    
     //WB stage
     wire    [31:0]  WB_OUTPUT;
 
+    //fall_detected
+    wire            clk_50;
     /*******************************/
     /*     Module Instatiation     */
     /*******************************/
 
     assign target_address = EX_MEM_Q[101:70];
-
+    
+    
     IF_STAGE IF_STAGE
     (   
         //INPUT
         .clk(clk)                       ,
+        .clk_50(clk_50)                 ,
         .rst(rst)                       ,
         .PCSrc(branch)                  ,
-        .PCWrite(stall)                 ,
-        .mem_pc(EX_MEM_Q[138:107])      ,  
-        .t_addr(target_address)         ,
-        .mem_is_taken(EX_MEM_Q[139])    ,    
+        .PCWrite(stall)                 ,  
+        .mem_pc(mem_pc)                 ,
+        .t_addr(target_address)         , 
+        .mem_is_taken(EX_MEM_Q[139])    ,
+        .ex_is_branch(ID_EX_Q[154])     ,
         
         //OUTPUT
+        .is_branch(is_branch)           ,
         .T_NT(Flush)                    ,
         .hit(hit)                       ,
         .pc(PC)                         ,
-        .inst(INST)
+        .inst(INST)                     ,
+        .PC_4(PC_4)                     ,
+        .miss_predict(miss_predict)     
     );
 
-    //IF_ID => 64bit 
+    //IF_ID => 66bit 
     assign f_INST = (Flush && !hit) ? 32'h00000013 : INST;
-    assign IF_ID_D = {hit, PC, f_INST};
+    assign IF_ID_D = {is_branch, hit, PC, f_INST};
     IF_ID IF_ID
     (
         //INPUT
@@ -96,8 +114,8 @@ module TOPCPU
         .WD(WB_OUTPUT)                  ,     
         .RegWrite(MEM_WB_Q[69])         ,
         .MEMRead(ID_EX_Q[150])          ,   
-        .flush(Flush)                   ,
-        .hit(hit)                       ,   
+        .flush(Flush)                   , 
+        .hit(hit)                       ,  
  
         //OUTPUT 
         //Hazard Detecting Unit
@@ -115,12 +133,13 @@ module TOPCPU
                 // ALUSrc                MR  MW  B         ALUOP
     //ID_EX 153 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
                      //   106  105      104  103 102
-    assign ID_EX_D = {IF_ID_Q[64], ID_control, IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
+    assign ID_EX_D = {IF_ID_Q[65], IF_ID_Q[64], ID_control, IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
     ID_EX ID_EX
     (   
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
+        .EN(1'b0)                       ,
         .flush(Flush)                   ,
         .D(ID_EX_D)                     ,
         
@@ -165,32 +184,38 @@ module TOPCPU
         .f_ex_ctrl(EX_control)          
     );
 
-    //EX_MEM_D = 107
+    //EX_MEM_D = 107 + 32 = 139 + 1 = 140
     assign EX_MEM_D = {ID_EX_Q[153], ID_EX_Q[146:115], EX_control, t_addr, zero, result, F_B, ID_EX_Q[4:0]};
     EX_MEM EX_MEM
     (   
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
+        .EN(1'b0)                       ,
         .D(EX_MEM_D)                    ,
         
         //OUTPUT
         .Q(EX_MEM_Q)                
     );
 
-    MEM_STAGE MEM_STAGE
+    MEM_STAGE MEM_STAGE //EX_MEM_Q[138:107]
     (   
         //INPUT
         //branch
+        .clk_50(clk_50)                 ,
+        .rst(rst)                       ,
         .MEM_control(EX_MEM_Q[106:102]) ,
         .zero(EX_MEM_Q[69])             ,
         //data memory
         .result(EX_MEM_Q[68:37])        ,
-        .WD(EX_MEM_Q[36:5])             ,  
-
+        .WD(EX_MEM_Q[36:5])             ,
+        .mem_pc(EX_MEM_Q[138:107])      ,
+        .hit(EX_MEM_Q[139])             ,
+        
         //OUTPUT
         .branch(branch)                 ,
-        .R_DATA(R_DATA)                 
+        .R_DATA(R_DATA)                 ,
+        .mem_pc_o(mem_pc)               
     );
 
     assign MEM_WB_D = {EX_MEM_Q[106:105], R_DATA, EX_MEM_Q[68:37], EX_MEM_Q[4:0]};
@@ -214,6 +239,16 @@ module TOPCPU
         
         //OUTPUT
         .WB_OUTPUT(WB_OUTPUT)
+    );
+
+    FALLING_EDGE_DETECTOR FALLING_EDGE_DETECTOR
+    (   
+        //INPUT
+        .clk(clk)                       ,
+        .rst(rst)                       ,
+        
+        //OUTPUT
+        .fall_detected(clk_50)          
     );
 
 endmodule 

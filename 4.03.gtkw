@@ -1,11 +1,11 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Mon Apr  3 13:01:01 2023
+[*] Mon Apr  3 13:01:08 2023
 [*]
 [dumpfile] "/home/dox/Capstone_project/test.vcd"
 [dumpfile_mtime] "Mon Apr  3 12:54:40 2023"
 [dumpfile_size] 163711052
-[savefile] "/home/dox/Capstone_project/3.26.gtkw"
+[savefile] "/home/dox/Capstone_project/4.03.gtkw"
 [timestart] 0
 [size] 1536 801
 [pos] -1 -1

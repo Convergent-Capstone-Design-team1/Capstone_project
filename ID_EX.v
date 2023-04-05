@@ -1,10 +1,11 @@
 module ID_EX
 #(
-    parameter  W = 154
+    parameter  W = 155
 )
 (
     input           clk     ,
     input           rst     ,
+    input           EN      ,
     input           flush   ,
     input   [W-1:0] D       ,
     output  [W-1:0] Q
@@ -14,7 +15,7 @@ module ID_EX
     (
         .CLK(clk)   ,
         .RST(rst)   ,
-        .EN(1'b0)   ,
+        .EN(EN)     ,
         .D(D)       ,
         .Q(Q)
     );

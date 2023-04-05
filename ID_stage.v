@@ -47,7 +47,7 @@ module ID_STAGE
     (
         //INPUT
         .clk(clk)                   ,
-        .RST(rst)                   ,
+        .rst(rst)                   ,
         .RR1(INST[19:15])           ,
         .RR2(INST[24:20])           ,
         .WR(WR)                     ,

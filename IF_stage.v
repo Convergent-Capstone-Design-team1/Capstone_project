@@ -1,30 +1,34 @@
 module IF_STAGE
 (   
-    input           clk     ,
-    input           rst     ,
-    input           PCSrc   ,
-    input           PCWrite ,
-    input           mem_is_taken,
+    input           clk         ,
+    input           clk_50      ,
+    input           rst         ,
+    input           PCSrc       ,
+    input           PCWrite     ,
     input   [31:0]  mem_pc      ,
-    input   [31:0]  t_addr  ,
+    input   [31:0]  t_addr      ,
+    input           mem_is_taken,
+    input           ex_is_branch,
 
-    output          T_NT    ,
-    output          hit     ,
-    output  [31:0]  pc      ,
-    output  [31:0]  inst          
+    output          is_branch   ,
+    output          T_NT        ,
+    output          hit         ,
+    output  [31:0]  pc          ,
+    output  [31:0]  inst        ,
+    output  [31:0]  PC_4        ,
+    output          miss_predict         
 );
     //PC
     wire    [31:0]  pc; 
     //Predictor
-    wire    [1:0]   taken;
-    wire            T_NT;
-    wire    [31:0]  b_pc;
+    wire    [31:0]  b_pc;  
     //BHT
     wire    [1:0]   state;
-    wire            hit;
+    wire            T_NT;
+    wire            b_valid;
+    wire            miss_predict;
     //BTB
-    wire            branch;
-    wire    [33:0]  next_pc;
+    wire    [31:0]  next_pc;
     //PC_MUX
     wire    [31:0]  PC_4;
     wire    [31:0]  n_pc;
@@ -36,6 +40,7 @@ module IF_STAGE
         .clk(clk)                       ,
         .PCWrite(PCWrite)               ,
         .n_pc(n_pc)                     ,
+        
         //OUTPUT
         .pc(pc) 
     );
@@ -43,32 +48,37 @@ module IF_STAGE
     PREDICTOR PREDICTOR
     (   
         //INPUT
+        .state(state)                   ,
         .opcode(inst[6:0])              ,
         .pc(pc)                         ,
+        
         //OUTPUT
-        .branch(branch)                 ,       //명령어가 branch임을 알려주는 신호
+        .is_branch(is_branch)           ,       //명령어가 branch임을 알려주는 신호
         .b_pc(b_pc)
     );
-                   
+
     BHT BHT
     (
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
-        .jump(PCSrc)                    ,
-        .is_branch(branch)              ,
+        .is_taken(hit)                  ,
+        .mem_is_taken(mem_is_taken)     ,
+        .PCSrc(PCSrc)                   ,
+        .ex_is_branch(ex_is_branch)     ,
         .b_pc(b_pc)                     ,
-        .hit(hit)                       ,
+        .mem_pc(mem_pc)                 ,
+        
         //OUTPUT
         .T_NT(T_NT)                     ,
-        .state(state)          
+        .state(state)                   ,
+        .miss_predict(miss_predict)     ,
+        .b_valid(b_valid)               
     );
     
     BTB BTB
     (
         //INPUT
-        //.clk(clk)                       ,
-        .rst(rst)                       ,
         .is_branch(is_branch)           ,
         .pc(b_pc)                       ,
         .mem_pc(mem_pc)                 ,
@@ -76,8 +86,8 @@ module IF_STAGE
         .target(t_addr)                 ,
         .state(state)                   ,
         .b_valid(b_valid)               ,
-        .m_valid(m_valid)               ,
         .PCSrc(PCSrc)                   ,
+        .miss_predict(miss_predict)     ,
         
         //OUTPUT
         .hit(hit)                       ,
@@ -89,8 +99,8 @@ module IF_STAGE
     PC_MUX PC_MUX
     (
         //INPUT
-        .sel_mux(T_NT)                               ,
-        .PC_4(PC_4)                                  ,
+        .sel_mux(T_NT)                  ,
+        .PC_4(PC_4)                     ,
         .target_address(next_pc[31:0])  ,
 
         //OUTPUT
@@ -99,6 +109,8 @@ module IF_STAGE
 
     INST_MEM INST_MEM
     (
+        .clk_50(clk_50)                 ,
+        .rst(rst)                       ,
         .ADDR(pc)                       ,
         .INST(inst)
     );

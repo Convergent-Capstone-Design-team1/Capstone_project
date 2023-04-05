@@ -6,140 +6,117 @@
 
 module BHT
 #(
-    parameter           BHT_SIZE = 256          ,   // BHT 크기
-    parameter           HISTORY_LENGTH = 2      ,   // 예측 결과 길이
-    parameter   [1:0]   T = 2'b11               ,
-    parameter   [1:0]   t = 2'b10               ,
-    parameter   [1:0]   n = 2'b01               ,
+    parameter           BHT_SIZE = 256      ,   // BHT 크기
+    parameter           HISTORY_LENGTH = 2  ,   // 예측 결과 길이
+    parameter   [1:0]   T = 2'b11           ,
+    parameter   [1:0]   t = 2'b10           ,
+    parameter   [1:0]   n = 2'b01           ,
     parameter   [1:0]   N = 2'b00
 )
 (
     input           clk                     ,
     input           rst                     ,
-    input           hit                     ,
-    input           jump                    ,   // PCSrc (MEMstage의 output에서 받아옴) = 나중에 보니까 점프 했더라
-    input           is_branch               ,   // 명령어가 branch인지를 입력받음
+    input           is_taken                ,   // BTB의 hit
+    input           mem_is_taken            ,   // mem stage에서 가져온 hit
+    input           PCSrc                   ,   
+    input           ex_is_branch            ,
     input   [31:0]  b_pc                    ,
-    input           mem_is_taken            ,
     input   [31:0]  mem_pc                  ,
 
     output          T_NT                    ,   // mux의 select 신호로 들어감, BTB에게 serach를 요구
-    output  [1:0]   state
+    output          b_valid                 ,   
+    output          miss_predict            ,
+    output  [1:0]   state                 
 );  
     /******************* for simulation *************************/
 
     generate
         genvar  idx;
         for (idx = 0; idx < 256; idx = idx+1) begin: history_table
-            wire [1:0] tmp;
-            assign tmp = history[idx];
+            wire [1:0] t_state;
+            assign t_state = history[idx];
         end
     endgenerate
 
     generate
         genvar  idz;
         for (idz = 0; idz < 256; idz = idz+1) begin: valid_table
-            wire temp;
-            assign temp = valid[idz];
+            wire t_valid;
+            assign t_valid = valid[idz];
         end
     endgenerate
 
     integer i;
-    /* initial begin
+    initial begin
         for (i = 0; i < 256; i = i+1) begin
             history[i] = 2'b00;
             valid[i] = 1'b0;
         end
-    end */
+    end 
 
     /********************** module start *************************/
 
     reg [HISTORY_LENGTH-1:0] history [0:BHT_SIZE-1];            // 이전 상태를 저장하는 레지스터
     reg                        valid [0:BHT_SIZE-1];            // 해당 데이터의 valid
-    reg [31:0]                             prev_pc1;
-    reg [31:0]                             prev_pc2;
-    reg [31:0]                             prev_pc3;
-    reg [31:0]                             prev_pc4;
-    reg [31:0]                             pcin;
-    reg [1:0]                                nstate;
-    wire [1:0]                               changed_st;
-    wire [31:0]                               changed_pc;
-    reg [1:0]                               casein;
-
+    reg miss_predict_r;
+    
     // BHT 갱신
-
-    always @ (*) begin
-        pcin <= prev_pc3;
-        casein <= history[prev_pc3[9:2]];
-        case (history[prev_pc3[9:2]])                   //BHT 내부의 검색단계
-            N : begin
-                if (jump) begin                         //valid하며, history[1]의 값(jump)했을 경우
-                    nstate <= n;                        //n으로 state를 이동시킴
+    always @(posedge clk)
+    begin                                                       // N, n 상태는 3clk 이후 결과를 알 수 있으므로 mem stage에서의 pc값을 가져옴
+        //miss_predict_r = 1'b0;
+        case (history[mem_pc[9:2]])                            
+            N : begin                                        
+                if (PCSrc) begin                                // PCSrc가 1일 때 jump 
+                    history[mem_pc[9:2]] = n;                  // n으로 state를 이동
                 end     
-                else begin                              //valid하며, jump하지 않은 경우
-                    nstate <= N;                        //N으로 state 유지함
+                else begin                                      
+                    history[mem_pc[9:2]] = N;                  //N으로 state 유지함
                 end
             end
 
             n : begin
-                if (jump) begin
-                    nstate <= t;
+                valid[mem_pc[9:2]] = 1'b1;
+                if (PCSrc) begin                                // PCSrc가 1일 때 jump
+                    history[mem_pc[9:2]] = t;                  // t으로 state를 이동
                 end     
                 else begin
-                    nstate <= N;
+                    history[mem_pc[9:2]] = N;                  //N으로 state 떨어짐
                 end
             end
 
             t : begin
-                if (jump) begin
-                    nstate <= T;
-                end     
-                else begin
-                    nstate <= n;
+                if (history[mem_pc[9:2]][1] != PCSrc) begin
+                    //miss_predict_r = 1'b1;                              // 3clk이후 PCSrc가 1이면 의도하지 않은 점프 -> miss predict 
+                    history[mem_pc[9:2]] = n;                     // miss 나면 아래 state로 내려줌    
+                end 
+                else if (is_taken) begin                        // 
+                    history[b_pc[9:2]] = T;
                 end
             end
 
             T : begin
-                if (jump) begin
-                    nstate <= T;
-                end     
-                else begin
-                    nstate <= t;
+                if (history[mem_pc[9:2]][1] != PCSrc) begin
+                    //miss_predict_r = 1'b1;                              // 3clk이후 PCSrc가 1이면 의도하지 않은 점프 -> miss predict                  
+                    history[mem_pc[9:2]] = t;                     // miss 나면 아래 state로 내려줌
+                end
+                else if (is_taken) begin
+                    history[b_pc[9:2]] = T;
                 end
             end
         endcase
+    end 
+
+    always @ (mem_pc or PCSrc) begin
+        miss_predict_r = 1'b0;
+        if (history[mem_pc[9:2]][1] != PCSrc) begin
+            miss_predict_r = 1'b1;                              // 3clk이후 PCSrc가 1이면 의도하지 않은 점프 -> miss predict   
+        end
     end
 
-    always @ (posedge clk or posedge rst) begin
-
-        if (rst) begin
-            for (i = 0; i < 256; i = i + 1) begin
-                history[i] = 2'b00;
-                valid[i] = 1'b0;
-            end
-            nstate <= n;
-            prev_pc1 <= 32'b0;
-            prev_pc2 <= 32'b0;
-            prev_pc3 <= 32'b0;
-            prev_pc4 <= 32'b0;
-        end
-
-        else begin
-            
-            history[prev_pc3[9:2]] <= nstate;
-        end
-
-        prev_pc1 <= b_pc;
-        prev_pc2 <= prev_pc1;
-        prev_pc3 <= prev_pc2;
-        prev_pc4 <= prev_pc3;
-    end
-
-    // 예측 결과 출력  
-
-    assign T_NT = ((jump && !hit && !mem_is_taken)) ? 1'b1 : history[b_pc[9:2]][1];
+    // 예측 결과 출력
+    assign miss_predict = miss_predict_r;
+    assign T_NT = ((PCSrc && !is_taken && !mem_is_taken) || miss_predict) ? 1'b1 : (history[b_pc[9:2]][1] && ex_is_branch) ? 1'b0 : history[b_pc[9:2]][1];
     assign state = history[b_pc[9:2]];
-    assign changed_pc = prev_pc4;
-    assign changed_st = history[prev_pc4[9:2]];
+    assign b_valid = valid[b_pc[9:2]];
 
 endmodule
