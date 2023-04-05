@@ -11,7 +11,7 @@ module REGISTER
 );
 
     reg     [W-1:0] Q_r;
-    always @ (posedge CLK or posedge RST)
+    always @ (posedge CLK)
     begin
         if      (RST)   Q_r <= 0;
         else if (EN)    Q_r <= Q;   //D가 들어가야 하는것 아닌가?

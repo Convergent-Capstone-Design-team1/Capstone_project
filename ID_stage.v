@@ -46,8 +46,7 @@ module ID_STAGE
     REGISTER_FILE REGISTER_FILE
     (
         //INPUT
-        .clk(clk)                   ,
-        .rst(rst)                   ,
+        .RST(rst)                   ,
         .RR1(INST[19:15])           ,
         .RR2(INST[24:20])           ,
         .WR(WR)                     ,

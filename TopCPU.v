@@ -1,9 +1,8 @@
 module TOPCPU
 (
-	input           clk     ,
+	input           clk,
 	input           rst   
 );
-    //wire            clk_50;
     //IF stage
     wire    [31:0]  PC;
     wire    [31:0]  PC_4;
@@ -61,13 +60,13 @@ module TOPCPU
     /*******************************/
 
     assign target_address = EX_MEM_Q[101:70];
-    //assign clk_50 = ~clk;
+    
     
     IF_STAGE IF_STAGE
     (   
         //INPUT
         .clk(clk)                       ,
-        //.clk_50(clk_50)                 ,
+        .rst(rst)                       ,
         .PCSrc(branch)                  ,
         .PCWrite(stall)                 ,  
         .mem_pc(mem_pc)                 ,
@@ -129,7 +128,7 @@ module TOPCPU
         .ALU_control(ALU_control)       
     );
                 // ALUSrc                MR  MW  B         ALUOP
-    //ID_EX 155 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
+    //ID_EX 153 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
                      //   106  105      104  103 102
     assign ID_EX_D = {IF_ID_Q[65], IF_ID_Q[64], ID_control, IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
     ID_EX ID_EX
@@ -199,14 +198,14 @@ module TOPCPU
     MEM_STAGE MEM_STAGE //EX_MEM_Q[138:107]
     (   
         //INPUT
-        .clk(clk_50)                    ,
-        .rst(rst)                       ,
+        //branch
         .MEM_control(EX_MEM_Q[106:102]) ,
         .zero(EX_MEM_Q[69])             ,
         //data memory
         .result(EX_MEM_Q[68:37])        ,
         .WD(EX_MEM_Q[36:5])             ,
         .mem_pc(EX_MEM_Q[138:107])      ,
+        .hit(EX_MEM_Q[139])             ,
         
         //OUTPUT
         .branch(branch)                 ,
@@ -237,4 +236,4 @@ module TOPCPU
         .WB_OUTPUT(WB_OUTPUT)
     );
 
-endmodule
+endmodule 
