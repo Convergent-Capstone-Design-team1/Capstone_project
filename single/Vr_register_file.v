@@ -30,7 +30,7 @@ module Vr_register_file
 	  if (RST)
 	  begin
 	    for (i = 0; i < 32; i = i + 1)
-	      register_file[i] = i;
+	      register_file[i] = 0;
 	  end
 	  else if (WE)
 	    register_file[WR] = WD;

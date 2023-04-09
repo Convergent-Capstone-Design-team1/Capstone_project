@@ -38,6 +38,10 @@ module ALU
 			result_r = result_mult[31:0];
 			zero_r = 0;
 		end
+		else if (ALU_control == 3) begin	//slli
+			result_r = A << 2;
+			zero_r = 0;
+		end 
 		
 	end
 

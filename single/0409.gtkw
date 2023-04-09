@@ -1,97 +1,22 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Sun Apr  9 07:04:18 2023
+[*] Sun Apr  9 06:53:28 2023
 [*]
 [dumpfile] "/home/dox/Capstone_project/single/test.vcd"
 [dumpfile_mtime] "Sun Apr  9 06:50:58 2023"
 [dumpfile_size] 346217
-[savefile] "/home/dox/Capstone_project/4.08.gtkw"
+[savefile] "/home/dox/Capstone_project/single/0409.gtkw"
 [timestart] 0
 [size] 1536 801
 [pos] -113 -113
-*-20.000000 1866000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-23.000000 20710000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_Vr_CPU.
 [treeopen] tb_Vr_CPU.U0.
-[treeopen] tb_Vr_CPU.U0.RF.
+[treeopen] tb_Vr_CPU.U0.DM.
 [sst_width] 214
-[signals_width] 254
+[signals_width] 102
 [sst_expanded] 1
-[sst_vpaned_height] 335
-@200
--Registers
--t0
-@420
-tb_Vr_CPU.U0.RF.register[5].tmp[31:0]
-@600
--t1
-@420
-tb_Vr_CPU.U0.RF.register[6].tmp[31:0]
-@200
--t2
-@420
-tb_Vr_CPU.U0.RF.register[7].tmp[31:0]
-@600
--t3
-@420
-tb_Vr_CPU.U0.RF.register[28].tmp[31:0]
-@600
--t4
-@420
-tb_Vr_CPU.U0.RF.register[29].tmp[31:0]
-@600
--t5
-@421
-tb_Vr_CPU.U0.RF.register[30].tmp[31:0]
-@600
--t6
-@420
-tb_Vr_CPU.U0.RF.register[31].tmp[31:0]
-@600
--a0
-@420
-tb_Vr_CPU.U0.RF.register[10].tmp[31:0]
-@600
--a1
-@420
-tb_Vr_CPU.U0.RF.register[11].tmp[31:0]
-@600
--a2
-@420
-tb_Vr_CPU.U0.RF.register[12].tmp[31:0]
-@600
--a3
-@420
-tb_Vr_CPU.U0.RF.register[13].tmp[31:0]
-@600
--S1 <<>>
-@420
-tb_Vr_CPU.U0.RF.register[9].tmp[31:0]
-@600
--s2
-@420
-tb_Vr_CPU.U0.RF.register[18].tmp[31:0]
-@600
--s3
-@420
-tb_Vr_CPU.U0.RF.register[19].tmp[31:0]
-@600
--s4
-@420
-tb_Vr_CPU.U0.RF.register[20].tmp[31:0]
-@600
--s5
-@420
-tb_Vr_CPU.U0.RF.register[21].tmp[31:0]
-@600
--s6
-@420
-tb_Vr_CPU.U0.RF.register[22].tmp[31:0]
-@600
--s7
-@22
-tb_Vr_CPU.U0.RF.register[23].tmp[31:0]
-@200
--MatA
+[sst_vpaned_height] 223
 @420
 tb_Vr_CPU.U0.DM.datamem[0].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[1].tmp[31:0]
@@ -102,10 +27,6 @@ tb_Vr_CPU.U0.DM.datamem[5].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[6].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[7].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[8].tmp[31:0]
-@600
--
--MatB
-@420
 tb_Vr_CPU.U0.DM.datamem[9].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[10].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[11].tmp[31:0]
@@ -115,10 +36,6 @@ tb_Vr_CPU.U0.DM.datamem[14].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[15].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[16].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[17].tmp[31:0]
-@600
--
--MatC
-@420
 tb_Vr_CPU.U0.DM.datamem[18].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[19].tmp[31:0]
 tb_Vr_CPU.U0.DM.datamem[20].tmp[31:0]

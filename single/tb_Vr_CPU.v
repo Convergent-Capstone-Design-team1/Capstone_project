@@ -18,7 +18,7 @@ module tb_Vr_CPU();
 		#100
 		rst = 0;
 		
-		#50000
+		#200000
 		rst = 1; 
 		$finish;
 	end

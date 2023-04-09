@@ -27,8 +27,12 @@ module ALU_CONTROL
 				5'b01000 : ALU_control_r = 1;  		//mult
 			endcase
 		end 
-		else if (ALUOp == 2'b11) begin 				//addi
-			ALU_control_r = 2;
+		else if (ALUOp == 2'b11) begin 		
+			case (funct3)
+				1 :  ALU_control_r = 3;  	//slli
+				0 :  ALU_control_r = 2;		//addi
+			endcase
+			
 		end
 	end	
 	

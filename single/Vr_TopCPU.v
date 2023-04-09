@@ -75,7 +75,7 @@ module Vr_TopCPU
 
 	Vr_ALU_control AC 
     (
-        .funct7(INST[30])           , 
+        .funct7({INST[30], INST[25]}) , 
         .funct3(INST[14:12])        , 
         .ALUOp(control[1:0])        , 
         .ALU_control(ALU_control)

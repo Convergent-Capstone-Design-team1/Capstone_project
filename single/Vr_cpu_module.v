@@ -67,6 +67,14 @@ module Vr_ALU
 			r_ALU_output = A ^ B;
 			r_zero = 1;
 		end 
+		else if (ALU_control == 1) begin	//mul
+			r_ALU_output = A * B;
+			r_zero = 1;
+		end 
+		else if (ALU_control == 3) begin	//slli
+			r_ALU_output = A << 2;
+			r_zero = 1;
+		end 
 		else if (ALU_control == 7) begin	//bge
 			r_ALU_output = 32'b0;
 			r_zero = (A < B) ? 0 : 1;
@@ -103,7 +111,7 @@ endmodule
 //ALU Control
 module Vr_ALU_control
 (
-	input	     funct7			,
+	input  [1:0] funct7			,
 	input  [2:0] funct3			,
 	input  [1:0] ALUOp			,
 	output [3:0] ALU_control
@@ -122,13 +130,18 @@ module Vr_ALU_control
 		end 
 		else if (ALUOp == 2'b10) begin
 			case ({funct7, funct3})		
-				0 : r_ALU_control = 2;   	//add
-				4 : r_ALU_control = 4;   	//xor
-				8 : r_ALU_control = 6;  	//sub
+				5'b00000 : r_ALU_control = 2;   	//add
+				5'b00100 : r_ALU_control = 4;   	//xor
+				5'b10000 : r_ALU_control = 6;  		//sub
+				5'b01000 : r_ALU_control = 1;  		//mult
 			endcase
 		end 
-		else if (ALUOp == 2'b11) begin 		//addi
-			r_ALU_control = 2;
+		else if (ALUOp == 2'b11) begin 		
+			case (funct3)
+				1 :  r_ALU_control = 3;  	//slli
+				0 :  r_ALU_control = 2;		//addi
+			endcase
+			
 		end
 	end	
 	
