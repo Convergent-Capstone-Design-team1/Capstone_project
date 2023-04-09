@@ -15,35 +15,37 @@ module DATA_MEM
   reg     [31:0]  mem_cell [0:1023];
 
   assign word_addr = ADDR [11:2];
-/*
-  initial
-  begin
-    mem_cell[0] = 3;
-    mem_cell[1] = 8;
-    mem_cell[2] = 2;
-    mem_cell[3] = 9;
-    mem_cell[4] = 6;
-    mem_cell[5] = 1;
-    mem_cell[6] = 7;
-    mem_cell[7] = 11;
-    mem_cell[8] = 4;
-    mem_cell[9] = 10;
-    mem_cell[10] = 5;
-  end
-*/
+
   initial
   begin
     // Put your initial data 
     mem_cell[0] = 1;
-    mem_cell[1] = 9;
-    mem_cell[2] = 2;
-    mem_cell[3] = 3;
+    mem_cell[1] = 2;
+    mem_cell[2] = 3;
+    mem_cell[3] = 4;
     mem_cell[4] = 5;
-    mem_cell[5] = 10;
+    mem_cell[5] = 6;
     mem_cell[6] = 7;
-    mem_cell[7] = 6;
-    mem_cell[8] = 4;
-    mem_cell[9] = 8;
+    mem_cell[7] = 8;
+    mem_cell[8] = 9;
+    mem_cell[9] = 1;
+    mem_cell[10] = 2;
+    mem_cell[11] = 3;
+    mem_cell[12] = 4;
+    mem_cell[13] = 5;
+    mem_cell[14] = 6;
+    mem_cell[15] = 7;
+    mem_cell[16] = 8;
+    mem_cell[17] = 9;
+    mem_cell[18] = 0;
+    mem_cell[19] = 0;
+    mem_cell[20] = 0;
+    mem_cell[21] = 0;
+    mem_cell[22] = 0;
+    mem_cell[23] = 0;
+    mem_cell[24] = 0;
+    mem_cell[25] = 0;
+    mem_cell[26] = 0;    
   end
   
   //예를 들어 output 10bit만들어주면

@@ -47,12 +47,13 @@ module BHT
     endgenerate
 
     integer i;
+    
     initial begin
         for (i = 0; i < 256; i = i+1) begin
             history[i] = 2'b00;
             valid[i] = 1'b0;
         end
-    end 
+    end
 
     /********************** module start *************************/
 
