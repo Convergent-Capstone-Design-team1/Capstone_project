@@ -8,9 +8,10 @@ module IMMGEN
 	always @ (INST) 
 	begin
 		case (INST[6:0])
-			7'b0010011, 7'b0000011 : INST_r = {{20{INST[31]}}, INST[31:20]};									//addi, lw
-			7'b0100011 		       : INST_r = {{20{INST[31]}}, INST[31:25], INST[11:7]};						//sw
-			7'b1100011			   : INST_r = {{20{INST[31]}}, INST[31], INST[7], INST[30:25], INST[11:8]};	//beq, bge
+			7'b0010011, 7'b0000011 	: INST_r = {{20{INST[31]}}, INST[31:20]};									//addi, lw
+			7'b0100011 		       	: INST_r = {{20{INST[31]}}, INST[31:25], INST[11:7]};						//sw
+			7'b1100011			   	: INST_r = {{20{INST[31]}}, INST[31], INST[7], INST[30:25], INST[11:8]};	//beq, bge
+			default 			 	: INST_r = 32'b0;
 		endcase
 	end
 

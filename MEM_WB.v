@@ -1,6 +1,6 @@
 module MEM_WB
 #(
-    parameter  W = 71
+    parameter  W = 103
 )
 (
     input           clk     ,

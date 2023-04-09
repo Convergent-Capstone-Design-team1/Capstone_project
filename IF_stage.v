@@ -8,29 +8,27 @@ module IF_STAGE
     input   [31:0]  mem_pc      ,
     input   [31:0]  t_addr      ,
     input           mem_is_taken,
-    input           ex_is_branch,
+    input           mem_is_branch,
 
     output          is_branch   ,
-    output          T_NT        ,
+    output          sel_mux     ,
     output          hit         ,
     output  [31:0]  pc          ,
     output  [31:0]  inst        ,
     output  [31:0]  PC_4        ,
-    output          miss_predict         
+    output          miss_predict,
+    output          hs          ,
+    output          n_jump
 );
-    //PC
-    wire    [31:0]  pc; 
+
     //Predictor
     wire    [31:0]  b_pc;  
     //BHT
-    wire    [1:0]   state;
-    wire            T_NT;
     wire            b_valid;
-    wire            miss_predict;
+    wire            n_jump;
     //BTB
     wire    [31:0]  next_pc;
     //PC_MUX
-    wire    [31:0]  PC_4;
     wire    [31:0]  n_pc;
     
     PC PC
@@ -48,7 +46,11 @@ module IF_STAGE
     PREDICTOR PREDICTOR
     (   
         //INPUT
-        .state(state)                   ,
+        .clk(clk)                       ,
+        .PCSrc(PCSrc)                   ,
+        .is_taken(hit)                  ,
+        //.state(state)                   ,
+
         .opcode(inst[6:0])              ,
         .pc(pc)                         ,
         
@@ -65,41 +67,42 @@ module IF_STAGE
         .is_taken(hit)                  ,
         .mem_is_taken(mem_is_taken)     ,
         .PCSrc(PCSrc)                   ,
-        .ex_is_branch(ex_is_branch)     ,
+        .mem_is_branch(mem_is_branch)     ,
         .b_pc(b_pc)                     ,
         .mem_pc(mem_pc)                 ,
+        .hs(hs)                         ,
         
         //OUTPUT
         .T_NT(T_NT)                     ,
-        .state(state)                   ,
-        .miss_predict(miss_predict)     ,
-        .b_valid(b_valid)               
+        .miss_predict(miss_predict)     
     );
     
     BTB BTB
     (
         //INPUT
+        .clk(clk)                       ,
+        //.rst(rst)                       ,
         .is_branch(is_branch)           ,
         .pc(b_pc)                       ,
         .mem_pc(mem_pc)                 ,
         .is_taken(T_NT)                 ,
         .target(t_addr)                 ,
-        .state(state)                   ,
-        .b_valid(b_valid)               ,
         .PCSrc(PCSrc)                   ,
         .miss_predict(miss_predict)     ,
         
         //OUTPUT
+        .hs(hs)                         ,
         .hit(hit)                       ,
         .next_pc(next_pc)       
     );
 
     assign PC_4 = pc + 32'd4;
     
+    assign sel_mux = (T_NT && !(next_pc[31:0] == 32'b0));
     PC_MUX PC_MUX
     (
         //INPUT
-        .sel_mux(T_NT)                  ,
+        .sel_mux(sel_mux)               ,
         .PC_4(PC_4)                     ,
         .target_address(next_pc[31:0])  ,
 
@@ -110,7 +113,6 @@ module IF_STAGE
     INST_MEM INST_MEM
     (
         .clk_50(clk_50)                 ,
-        .rst(rst)                       ,
         .ADDR(pc)                       ,
         .INST(inst)
     );

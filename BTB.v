@@ -4,20 +4,21 @@
 
 module BTB 
 #(
-  parameter NUM_ENTRIES = 64  ,   // BTB 엔트리 수
-  parameter ENTRY_WIDTH = 64      // BTB 엔트리 너비 (주소와 상태 비트) 
+  parameter NUM_ENTRIES = 256  ,   // BTB 엔트리 수
+  parameter ENTRY_WIDTH = 40      // BTB 엔트리 너비 (주소와 상태 비트) 
 )
 (
+  input           clk         ,
+  //input           rst         ,
   input           is_branch   ,   // branch 명령어인지?
   input   [31:0]  pc          ,   // 현재 명령어 주소
   input   [31:0]  mem_pc      ,   // mem stage의 pc값 
   input   [31:0]  target      ,   // 분기 목적지 주소
-  input   [1:0]   state       ,   // BHT state
   input           is_taken    ,   // 앞에서 결정하기를, 점프를 해야 한다. 그럼 테이블에 있는지 찾아보자.
-  input           b_valid     ,
   input           PCSrc       ,
   input           miss_predict,
   
+  output          hs          ,
   output          hit         ,
   output  [31:0]  next_pc         // 다음 명령어 주소
 );
@@ -25,6 +26,64 @@ module BTB
   
   /******************* for simulation *************************/
   
+  reg   [31:0]  next_pc_r;
+  reg           hit_r;
+  wire  [7:0]   addr;
+  wire          we;
+  wire          re;
+  //wire          hs;
+  wire  [39:0]  data_i;
+  wire  [39:0]  data_o;
+
+  always @ (*)
+  begin
+    hit_r = 1'b0;
+    next_pc_r = 1'b0;
+    if (is_taken && PCSrc) begin
+      next_pc_r = target;
+    end
+    else if(miss_predict) begin
+      next_pc_r = mem_pc + 32'd4;
+    end
+    else if(is_branch && !PCSrc) begin
+      if (is_taken) begin                                     // 앞에서 말하기를, 점프 해야하는 경우
+        hit_r = 1'b1;                               // 저장되어있던, 분기 목적지 주소로 세팅해줌
+        if (hs)
+          next_pc_r = data_o[31:0];
+      end
+      else begin                                          // 만약 찾았더라도 점프 하지 말라고 지시받았으면, 그대로 가라.
+        next_pc_r = next_pc_r;
+      end
+    end
+    else begin
+      next_pc_r = 32'b0;
+    end  
+  end
+
+  assign hit = hit_r;
+  assign next_pc = (hs && !miss_predict) ? data_o[31:0] : next_pc_r;
+  assign re = is_branch && !PCSrc && is_taken;
+  assign we = is_taken && PCSrc;
+  assign data_i = {mem_pc[9:2], target};
+  assign addr = re ? pc[9:2] : we ? mem_pc[9:2] : 8'b0;
+  
+  BTB_MEM BTB_MEM
+  (
+    //INPUT
+    .clk(clk)       ,
+    .WE(we)         ,
+    .RE(re)         ,
+    .addr(addr)     ,
+    .data_i(data_i) ,
+    //OUTPUT
+
+    .hs(hs)         ,
+    .data_o(data_o)
+  );
+
+
+  /********************** module start *************************/
+/*
   generate
     genvar  idx;
     for (idx = 0; idx < 64; idx = idx+1) begin: branch_target
@@ -40,23 +99,21 @@ module BTB
       end
   end
 
-  /********************** module start *************************/
   reg [ENTRY_WIDTH-1:0] btb [NUM_ENTRIES-1:0];              // BTB 메모리
-  reg [1:0]           valid [NUM_ENTRIES-1:0];
-  reg [31:0]                next_pc_r = 32'b0;
+  reg [31:0]                next_pc_r;
   reg hit_r;
 
   always @ (*) begin
     hit_r = 0;
-    if (~b_valid && is_taken && PCSrc) begin
+    next_pc_r = 0;
+    if (is_taken && PCSrc) begin
       next_pc_r = target;
-      btb[mem_pc[9:2]] = {mem_pc, target};
+      btb[mem_pc[9:2]] = {mem_pc[9:2], target};
     end
     else if(miss_predict) begin
       next_pc_r = mem_pc + 32'd4;
     end
     else if(is_branch && !PCSrc) begin
-      if ((btb[pc[9:2]][63:32] == pc[31:0])) begin          // 테이블에서 지금 pc를 발견함. 이 주소로 갈까요?
         if (is_taken) begin                                 // 앞에서 말하기를, 점프 해야하는 경우
           next_pc_r = btb[pc[9:2]][31:0];                   // 저장되어있던, 분기 목적지 주소로 세팅해줌
           hit_r = 1;
@@ -64,11 +121,14 @@ module BTB
         else begin                                          // 만약 찾았더라도 점프 하지 말라고 지시받았으면, 그대로 가라.
           next_pc_r = next_pc_r;
         end
-      end
+    end
+    else begin
+      next_pc_r = 32'b0;
     end
   end
 
   assign next_pc = next_pc_r;
   assign hit = hit_r;
-  
+
+*/
 endmodule

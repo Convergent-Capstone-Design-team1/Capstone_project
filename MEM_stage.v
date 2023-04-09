@@ -1,7 +1,6 @@
 module MEM_STAGE
 (
     input           clk_50              ,
-    input           rst                 ,
     input   [4:0]   MEM_control         ,
     input           zero                ,
     input   [31:0]  result              ,

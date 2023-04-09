@@ -27,7 +27,7 @@ module REGISTER_FILE
     end
   endgenerate
 
-  always @(posedge clk or posedge rst) begin
+  always @ (*) begin
 	  if (rst)
 	  begin
 	    for (i = 0; i < 32; i = i + 1)
@@ -36,5 +36,6 @@ module REGISTER_FILE
 	  else if (WE)
 	    register_file[WR] = WD;
   end
+
 
 endmodule

@@ -1,7 +1,6 @@
 module DATA_MEM
 (
   input           clk_50    ,
-  input           rst       ,
   input           MEMRead   ,
   input           MEMWrite  ,  
   input   [31:0]  ADDR      ,
@@ -15,22 +14,7 @@ module DATA_MEM
   reg     [31:0]  mem_cell [0:1023];
 
   assign word_addr = ADDR [11:2];
-/*
-  initial
-  begin
-    mem_cell[0] = 3;
-    mem_cell[1] = 8;
-    mem_cell[2] = 2;
-    mem_cell[3] = 9;
-    mem_cell[4] = 6;
-    mem_cell[5] = 1;
-    mem_cell[6] = 7;
-    mem_cell[7] = 11;
-    mem_cell[8] = 4;
-    mem_cell[9] = 10;
-    mem_cell[10] = 5;
-  end
-*/
+
   initial
   begin
     // Put your initial data 
@@ -70,11 +54,9 @@ module DATA_MEM
 
   /* read */
   reg [31:0]  RD_r;
-  always @ (posedge clk_50 or posedge rst)
+  always @ (posedge clk_50)
   begin
-    if (rst)
-      RD_r <= 0;
-    else if (MEMRead) 
+    if (MEMRead) 
       RD_r <= mem_cell[$unsigned(word_addr)];
     else
       RD_r <= 32'hz;
