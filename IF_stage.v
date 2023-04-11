@@ -2,14 +2,15 @@ module IF_STAGE
 (   
     input           clk             ,
     input           rst             ,
-    input           rst_switch      ,
     input           start_switch    ,
+/*    
+    input           rst_switch      ,
 
     input  [7:0]    btb_addr        ,
     input  [7:0]    bht_addr        ,
     input  [39:0]   btb_init        ,
     input  [1:0]    bht_init        ,
-
+*/
     input           PCSrc           ,
     input           PCWrite         ,
     input   [31:0]  mem_pc          ,

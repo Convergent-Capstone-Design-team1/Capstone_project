@@ -20,7 +20,7 @@ module PC
     REGISTER #(W) PC
     (
         .CLK(clk)           ,
-        .RST(rst)        ,
+        .RST(pc_rst)        ,
         .EN(PCWrite)     	,
         .D(n_pc)            ,
         .Q(pc)

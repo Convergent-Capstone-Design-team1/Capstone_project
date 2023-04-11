@@ -33,7 +33,7 @@ module REGISTER_FILE
   assign RD1 = register_file[RR1];
   assign RD2 = register_file[RR2];
 
-  always @ (posedge clk) begin
+  always @ (posedge clk or posedge rst) begin
 	  if (rst)
 	  begin
 	    for (i = 0; i < 32; i = i + 1)

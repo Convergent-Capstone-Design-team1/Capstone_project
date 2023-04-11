@@ -2,19 +2,7 @@ module TOPCPU
 (
 	input           clk                 ,
 	input           rst                 ,
-    input           rst_switch          ,
-    input           start_switch        
-/*
-    //BTB initialization
-    input   [39:0]  btb_init            ,
-    input   [7:0]   btb_addr            ,
-    //BHT initialization
-    input   [1:0]   bht_init            ,
-    input   [7:0]   bht_addr            ,      
-    //REGISTER_FILE initialization
-    input   [4:0]   reg_addr            ,
-    input   [31:0]  reg_init  
-*/
+    input           start_switch
 );
     //IF stage
     wire    [31:0]  PC;
@@ -82,6 +70,7 @@ module TOPCPU
         //INPUT
         .clk(clk)                       ,
         .rst(rst)                       ,
+        .start_switch(start_switch)     ,
         .PCSrc(branch)                  ,
         .PCWrite(stall)                 ,  
         .mem_pc(mem_pc)                 ,
