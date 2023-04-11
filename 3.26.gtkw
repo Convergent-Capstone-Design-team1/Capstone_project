@@ -1,27 +1,25 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Sun Apr  9 21:01:15 2023
+[*] Mon Apr 10 15:37:54 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Sun Apr  9 21:00:27 2023"
-[dumpfile_size] 3143099
+[dumpfile_mtime] "Mon Apr 10 15:37:32 2023"
+[dumpfile_size] 154231
 [savefile] "/home/hyundo/capstone/3.26.gtkw"
 [timestart] 0
 [size] 1536 801
-[pos] -139 -139
-*-24.331398 14970000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -1 -1
+*-17.331398 9998000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
-[treeopen] tb_CPU.CPU.ID_STAGE.
 [treeopen] tb_CPU.CPU.IF_STAGE.
-[treeopen] tb_CPU.CPU.IF_STAGE.BTB.BTB_MEM.
 [sst_width] 214
 [signals_width] 280
 [sst_expanded] 1
-[sst_vpaned_height] 333
+[sst_vpaned_height] 468
 @28
 tb_CPU.clk
-tb_CPU.rst
+tb_CPU.CPU.IF_STAGE.PC.pc_rst
 @200
 -
 -19us : 128 -> 64
@@ -85,7 +83,6 @@ tb_CPU.CPU.IF_STAGE.BHT.mem_pc[31:0]
 tb_CPU.CPU.IF_STAGE.BHT.PCSrc
 [color] 3
 tb_CPU.CPU.IF_STAGE.BHT.is_taken
-tb_CPU.CPU.IF_STAGE.BHT.mem_is_taken
 tb_CPU.CPU.IF_STAGE.BHT.T_NT
 tb_CPU.CPU.IF_STAGE.BHT.miss_predict
 tb_CPU.CPU.IF_STAGE.BHT.hs
@@ -124,38 +121,16 @@ tb_CPU.CPU.IF_STAGE.BTB.miss_predict
 @24
 tb_CPU.CPU.IF_STAGE.BTB.pc[31:0]
 tb_CPU.CPU.IF_STAGE.BTB.mem_pc[31:0]
-@25
 tb_CPU.CPU.IF_STAGE.BTB.target[31:0]
-@24
 tb_CPU.CPU.IF_STAGE.BTB.next_pc[31:0]
 tb_CPU.CPU.IF_STAGE.BTB.next_pc_r[31:0]
-@28
-tb_CPU.CPU.IF_STAGE.BTB.hs
-@22
-tb_CPU.CPU.IF_STAGE.BTB.data_o[39:0]
 @200
 -addr = 28
-@22
-tb_CPU.CPU.IF_STAGE.BTB.BTB_MEM.btb_mem[28].tmp[39:0]
-@200
 -addr = 32
-@22
-tb_CPU.CPU.IF_STAGE.BTB.BTB_MEM.btb_mem[32].tmp[39:0]
 @28
-tb_CPU.CPU.IF_STAGE.BTB.we
-tb_CPU.CPU.IF_STAGE.BTB.re
 tb_CPU.CPU.IF_STAGE.BTB.hit
 @200
 -
-@28
-tb_CPU.CPU.IF_STAGE.BTB.BTB_MEM.WE
-tb_CPU.CPU.IF_STAGE.BTB.BTB_MEM.RE
-@24
-tb_CPU.CPU.IF_STAGE.BTB.BTB_MEM.addr[7:0]
-@22
-tb_CPU.CPU.IF_STAGE.BTB.BTB_MEM.data_i[39:0]
-tb_CPU.CPU.IF_STAGE.BTB.BTB_MEM.data_o[39:0]
-@200
 -
 @420
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[28].tmp[31:0]

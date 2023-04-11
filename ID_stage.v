@@ -2,6 +2,10 @@ module ID_STAGE
 (   
     input           clk             ,
     input           rst             ,
+    input           rst_i           ,
+    input   [4:0]   reg_addr        ,
+    input   [31:0]  reg_init        ,
+
     input   [31:0]  INST            ,
     input   [4:0]   WR              ,
     input   [4:0]   RD              ,
@@ -48,6 +52,11 @@ module ID_STAGE
         //INPUT
         .clk(clk)                   ,
         .rst(rst)                   ,
+        /*
+        .rst_i(rst_i)               ,
+        .reg_addr(reg_addr)         ,
+        .reg_init(reg_init)         ,
+        */
         .RR1(INST[19:15])           ,
         .RR2(INST[24:20])           ,
         .WR(WR)                     ,

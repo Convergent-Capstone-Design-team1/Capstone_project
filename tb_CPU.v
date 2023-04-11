@@ -2,6 +2,9 @@
 module tb_CPU();
 
 	reg 	rst, clk;
+	//reg		rst_switch;
+	reg		start_switch;
+
 	integer i;
 	
   	TOPCPU CPU 
@@ -19,12 +22,12 @@ module tb_CPU();
 
 		rst = 0;
 		clk = 0;
-		#50
+		#150
 		rst = 1;
 		#50
 		rst = 0;
 		
-		#70000
+		#55000
 		rst = 1; 
 		$finish;
 	end

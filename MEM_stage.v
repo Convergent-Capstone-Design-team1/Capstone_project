@@ -1,6 +1,7 @@
 module MEM_STAGE
 (
     input           clk_50              ,
+    input           rst                 ,
     input   [4:0]   MEM_control         ,
     input           zero                ,
     input   [31:0]  result              ,
@@ -13,7 +14,7 @@ module MEM_STAGE
     output  [31:0]  mem_pc_o            
 );
 
-    assign branch = MEM_control[0] & zero; //& !hit;
+    assign branch = MEM_control[0] & zero;
     assign mem_pc_o = mem_pc;
 
     DATA_MEM DATA_MEM

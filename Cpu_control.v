@@ -3,6 +3,8 @@ module CPU_CONTROL
     // Reference Clock
     input           pll_refclk_i                ,   //from CLOCK_50 pin
     input           rst_button_i                ,
+    input			rst_switch_i			    , 
+	input			start_switch_i				,
     //input  [2:0]    user_button_n_i             ,
 
 	// User Interface (Push Buttons and LEDs)
@@ -12,7 +14,10 @@ module CPU_CONTROL
     output          clk_o                       ,
     output          rst_o                       ,
     output          pll_locked_o                ,
-    output          heartbeat_o                 
+    output          heartbeat_o                 ,
+
+    output    	 	rst_switch_o				,
+    output 			start_switch_o     
 
     // BIST
     //output          bist_start_o                ,
@@ -38,6 +43,7 @@ module CPU_CONTROL
         .debounced_signal(rst_debounced)            // Debounced signa
     );
 
+    
     SYSTEM_CLOCK_RESET SYSTEM_CLOCK_RESET
     (   
         //INPUT
@@ -49,32 +55,6 @@ module CPU_CONTROL
         .sys_clk_o    (clk_o)                   ,
         .sys_rst_o    (rst_o)
     );
-
-    // user_btn_n_i[0] ----> bist_run_o
-    /*
-    DEBOUNCER START_BUTTON
-    (
-        // Clock
-        .clk_i (pll_refclk_i)                   ,
-        
-        // Button Signal (Input)
-        .button_i (user_button_n_i[0])          ,
-
-        // Debounced Signal (Output)
-        .debounced_signal_o(user_debounced[0])
-    );
-    */
-    /*
-    EDGE_DETECTOR START_COMMAND
-    (
-        .clk_i           (clk_o)                ,
-        .rst_i           (rst_o)                ,
-        
-        .signal_i        (user_debounced[0])    ,
-        .rise_detected_o (bist_start_o)         ,
-        .fall_detected_o ()
-    );
-    */
 
     always @(posedge clk_o)
     begin
@@ -95,19 +75,8 @@ module CPU_CONTROL
         end
     end
     assign heartbeat_o = heartbeat_q;
-/*
-    // LEDs (1="ON", 0="OFF")
-    always @(posedge clk_o)
-    begin
-        if (rst_o)
-        begin
-            user_led_q <= 8'd0;
-        end
-        else
-        begin
-            user_led_q <= {~user_button_n_i, 2'd0, bist_status_i};
-        end
-    end
-    assign led_o = user_led_q;
-*/
+
+    assign rst_switch_o = rst_switch_i;
+	assign start_switch_o = start_switch_i;
+
 endmodule
