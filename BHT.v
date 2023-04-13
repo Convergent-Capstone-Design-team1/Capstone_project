@@ -15,11 +15,10 @@ module BHT
 )
 (
     input           clk                     ,
-    /*
     input           rst_i                   ,
     input   [7:0]   bht_addr                ,
     input   [1:0]   bht_init                ,
-    */
+    
     input           is_taken                ,   // BTB의 hit
     input           mem_is_taken            ,   // mem stage에서 가져온 hit
     input           PCSrc                   ,   
@@ -40,13 +39,6 @@ module BHT
         end
     endgenerate
 
-    integer i;
-    initial begin
-        for (i = 0; i < 256; i = i+1) begin
-            bht[i] = 2'b00;
-        end
-    end 
-
     /********************** module start *************************/
 
     reg [HISTORY_LENGTH-1:0] bht [0:BHT_SIZE-1];            // 이전 상태를 저장하는 레지스터
@@ -54,53 +46,51 @@ module BHT
     // BHT 갱신
     always @(posedge clk)
     begin                                                       // SN, wn 상태는 3clk 이후 결과를 알 수 있으므로 mem stage에서의 pc값을 가져옴
-        /*
         if (rst_i) begin
             bht[bht_addr] <= bht_init;
         end
         else begin
-            */
             case (bht[mem_pc[9:2]])                            
                 SN : begin                                        
                     if (PCSrc) begin                                // PCSrc가 1일 때 jump 
-                        bht[mem_pc[9:2]] = wn;                  // n으로 state를 이동
+                        bht[mem_pc[9:2]] <= wn;                  // n으로 state를 이동
                     end     
                     else begin                                      
-                        bht[mem_pc[9:2]] = SN;                  //N으로 state 유지함
+                        bht[mem_pc[9:2]] <= SN;                  //N으로 state 유지함
                     end
                 end
 
                 wn : begin
                     if (PCSrc) begin                                // PCSrc가 1일 때 jump
-                        bht[mem_pc[9:2]] = wt;                  // t으로 state를 이동
+                        bht[mem_pc[9:2]] <= wt;                  // t으로 state를 이동
                     end     
                     else begin
-                        bht[mem_pc[9:2]] = SN;                  //N으로 state 떨어짐
+                        bht[mem_pc[9:2]] <= SN;                  //N으로 state 떨어짐
                     end
                 end
 
                 wt : begin
                     if (bht[mem_pc[9:2]][1] != PCSrc) begin
-                        bht[mem_pc[9:2]] = wn;                     // miss 나면 아래 state로 내려줌    
+                        bht[mem_pc[9:2]] <= wn;                     // miss 나면 아래 state로 내려줌    
                     end 
                     else if (is_taken) begin                        // 
-                        bht[b_pc[9:2]] = ST;
+                        bht[b_pc[9:2]] <= ST;
                     end
                 end
 
                 ST : begin
                     if (bht[mem_pc[9:2]][1] != PCSrc) begin              
-                        bht[mem_pc[9:2]] = wt;                     // miss 나면 아래 state로 내려줌
+                        bht[mem_pc[9:2]] <= wt;                     // miss 나면 아래 state로 내려줌
                     end
                     else if (is_taken) begin
-                        bht[b_pc[9:2]] = ST;
+                        bht[b_pc[9:2]] <= ST;
                     end
                 end
 
                 default : bht[mem_pc[9:2]] = 2'b0;
             endcase
         end
-    //end 
+    end 
 
     reg miss_predict_r;
     always @ (mem_pc or PCSrc) begin

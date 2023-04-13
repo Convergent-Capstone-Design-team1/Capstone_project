@@ -2,16 +2,55 @@
 module tb_CPU();
 
 	reg 	rst, clk;
+
+	//FPGA Swtich
 	reg		start_switch;
+	reg		init_switch;
+	reg		rst_switch;
+
+	//BTB
+	wire	[7:0]	btb_addr;
+	wire	[39:0]	btb_init;
+	//BHT
+	wire	[7:0]	bht_addr;
+	wire	[1:0]	bht_init;
+	//REGISTER_FILE
+	wire	[4:0]	reg_addr;
+	wire	[31:0]	reg_init;
+
 	integer i;
 	
   	TOPCPU CPU 
 	(
-		.clk(clk)						,
-		.rst(rst)						,
-		.start_switch(start_switch)
+		//INPUT	
+		.clk(clk)					,
+		.rst(rst)					,	
+		.rst_switch(rst_switch)		,
+		.start_switch(start_switch)	,
+		.btb_init(btb_init)         ,
+   		.btb_addr(btb_addr)         ,
+    	.bht_init(bht_init)         ,
+  		.bht_addr(bht_addr)         ,     
+    	.reg_addr(reg_addr)         ,
+    	.reg_init(reg_init)			
 	);
 
+	INITIAL_MODULE INITIAL_MODULE
+	(	
+		//INPUT
+		.clk(clk)					,
+		.rst_i(init_switch)			,
+
+		//OUTPUT
+		.btb_init(btb_init)         ,
+   		.btb_addr(btb_addr)         ,
+    	.bht_init(bht_init)         ,
+  		.bht_addr(bht_addr)         ,     
+    	.reg_addr(reg_addr)         ,
+    	.reg_init(reg_init)	
+	);
+
+	
 	always #50 clk = ~clk;
 	
 	initial 
@@ -19,18 +58,31 @@ module tb_CPU();
 		$dumpfile("test.vcd");
 		$dumpvars(0, tb_CPU);
 
-		start_switch = 0;
-		rst = 0;
-		clk = 0;
-		#150
-		rst = 1;
-		#500
-		start_switch = 1;
+		rst = 1'b0;
+		clk = 1'b0;
+		init_switch = 1'b0;
+		rst_switch = 1'b0;
+		start_switch = 1'b0;
+
 		#50
-		rst = 0;
+		rst_switch = 1'b1;
+		init_switch = 1'b1;
 		
-		#55000
-		rst = 1; 
+		#150
+		init_switch = 1'b0;
+		
+		#55500
+		rst_switch = 1'b0;
+
+		#150
+		rst = 1'b1;
+		start_switch = 1'b1;
+		
+		#500
+		rst = 1'b0;
+		
+		#60000
+		rst = 1'b1; 
 		$finish;
 	end
 

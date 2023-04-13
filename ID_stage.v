@@ -51,12 +51,10 @@ module ID_STAGE
     (
         //INPUT
         .clk(clk)                   ,
-        .rst(rst)                   ,
-        /*
         .rst_i(rst_i)               ,
         .reg_addr(reg_addr)         ,
         .reg_init(reg_init)         ,
-        */
+        
         .RR1(INST[19:15])           ,
         .RR2(INST[24:20])           ,
         .WR(WR)                     ,

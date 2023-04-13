@@ -1,13 +1,15 @@
 module INST_MEM
-(
+(  
+   input             clk_50   ,
    input    [31:0]   ADDR     ,
    output   [31:0]   INST
 );
   
    //bge 3개, beq 3개
    reg    [31:0]   INST_r;
-   always @ (ADDR)
+   always @ (posedge clk_50)
    begin
+      INST_r = 32'b0;
       case(ADDR)
          0: INST_r = 32'h00000013;        //        addi x0, x0, 0
          4: INST_r = 32'h00000013;        //          addi x0, x0, 0

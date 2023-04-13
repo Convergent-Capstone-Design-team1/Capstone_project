@@ -2,8 +2,20 @@ module TOPCPU
 (
 	input           clk                 ,
 	input           rst                 ,
-    input           start_switch
-);
+    input           rst_switch          ,
+    input           start_switch        ,
+
+    //BTB initialization
+    input   [39:0]  btb_init            ,
+    input   [7:0]   btb_addr            ,
+    //BHT initialization
+    input   [1:0]   bht_init            ,
+    input   [7:0]   bht_addr            ,      
+    //REGISTER_FILE initialization
+    input   [4:0]   reg_addr            ,
+    input   [31:0]  reg_init  
+);  
+    wire            cpu_rst;
     //IF stage
     wire    [31:0]  PC;
     wire    [31:0]  PC_4;
@@ -63,14 +75,21 @@ module TOPCPU
     /*******************************/
 
     assign target_address = EX_MEM_Q[101:70];
-    
+    assign cpu_rst = rst & start_switch;
     
     IF_STAGE IF_STAGE
     (   
         //INPUT
         .clk(clk)                       ,
-        .rst(rst)                       ,
-        .start_switch(start_switch)     ,
+        .clk_50(clk_50)                 ,
+        .rst(cpu_rst)                   ,
+        .rst_switch(rst_switch)         ,
+        
+        .btb_addr(btb_addr)             ,
+        .btb_init(btb_init)             ,
+        .bht_addr(bht_addr)             ,
+        .bht_init(bht_init)             ,
+        
         .PCSrc(branch)                  ,
         .PCWrite(stall)                 ,  
         .mem_pc(mem_pc)                 ,
@@ -95,7 +114,7 @@ module TOPCPU
     (
         //INPUT
         .clk(clk)                       ,
-        .rst(rst)                       ,
+        .rst(cpu_rst)                       ,
         .IF_IDWrite(stall)              ,
         .D(IF_ID_D)                     ,
         
@@ -106,10 +125,14 @@ module TOPCPU
     ID_STAGE ID_STAGE
     (   
         //INPUT
-        .clk(clk)                       ,
-        .rst(rst)                       ,
-        .INST(IF_ID_Q[31:0])            ,
+        .clk(clk_50)                    ,
+        .rst(cpu_rst)                   ,
+        .rst_i(rst_switch)              ,
+        .reg_addr(reg_addr)             ,
+        .reg_init(reg_init)             ,
+
         //register file
+        .INST(IF_ID_Q[31:0])            ,
         .WR(MEM_WB_Q[4:0])              ,
         .RD(ID_EX_Q[4:0])               ,
         .WD(WB_OUTPUT)                  ,     
@@ -139,7 +162,7 @@ module TOPCPU
     (   
         //INPUT
         .clk(clk)                       ,
-        .rst(rst)                       ,
+        .rst(cpu_rst)                   ,
         .EN(1'b0)                       ,
         .flush(Flush)                   ,
         .D(ID_EX_D)                     ,
@@ -191,7 +214,7 @@ module TOPCPU
     (   
         //INPUT
         .clk(clk)                       ,
-        .rst(rst)                       ,
+        .rst(cpu_rst)                   ,
         .EN(1'b0)                       ,
         .D(EX_MEM_D)                    ,
         
@@ -204,7 +227,7 @@ module TOPCPU
         //INPUT
         //branch
         .clk_50(clk_50)                 ,
-        .rst(rst)                       ,
+        .rst(cpu_rst)                   ,
         .MEM_control(EX_MEM_Q[106:102]) ,
         .zero(EX_MEM_Q[69])             ,
         //data memory
@@ -224,7 +247,7 @@ module TOPCPU
     (
         //INPUT
         .clk(clk)                       ,
-        .rst(rst)                       ,
+        .rst(cpu_rst)                   ,
         .D(MEM_WB_D)                    ,
         
         //OUTPUT
@@ -246,7 +269,7 @@ module TOPCPU
     (   
         //INPUT
         .clk(clk)                       ,
-        .rst(rst)                       ,
+        .rst(cpu_rst)                   ,
         
         //OUTPUT
         .fall_detected(clk_50)          

@@ -8,11 +8,10 @@ module BTB
   parameter ENTRY_WIDTH = 40      // BTB 엔트리 너비 (주소와 상태 비트) 
 )
 (
-  /*
   input           rst_i       ,
   input   [7:0]   btb_addr    ,
   input   [39:0]  btb_init    ,
-  */
+
   input           is_branch   ,   // branch 명령어인지?
   input   [31:0]  pc          ,   // 현재 명령어 주소
   input   [31:0]  mem_pc      ,   // mem stage의 pc값 
@@ -36,42 +35,34 @@ module BTB
     end
   endgenerate
 
-  integer i; 
-  initial begin
-      for (i = 0; i < 40; i = i+1) begin
-        btb[i] = 40'b0;
-      end
-  end
-
   /********************** module start *************************/
 
   reg [ENTRY_WIDTH-1:0] btb [NUM_ENTRIES-1:0];
   reg   [31:0]  next_pc_r;
   reg           hit_r;
   
-  always @ (is_taken or PCSrc or miss_predict or is_branch)
+  always @ (is_taken or PCSrc or miss_predict or is_branch or rst_i)
   begin
     hit_r = 1'b0;
     next_pc_r = 1'b0;
-    /*
+  
     if (rst_i) begin
       btb[btb_addr] = btb_init;
     end
-    else */
-    if (is_taken && PCSrc) begin
+    else 
+    if (is_taken && PCSrc) begin                
       next_pc_r = target;
       btb[mem_pc[9:2]] = {mem_pc[9:2], target};
     end
-    else if(miss_predict) begin
+    else 
+    if(miss_predict) begin
       next_pc_r = mem_pc + 32'd4;
     end
-    else if(is_branch && !PCSrc) begin
+    else 
+    if(is_branch && !PCSrc) begin
       if (is_taken) begin                                     // 앞에서 말하기를, 점프 해야하는 경우
         next_pc_r = btb[pc[9:2]][31:0]; 
         hit_r = 1'b1;                               // 저장되어있던, 분기 목적지 주소로 세팅해줌
-      end
-      else begin                                          // 만약 찾았더라도 점프 하지 말라고 지시받았으면, 그대로 가라.
-        next_pc_r = next_pc_r;
       end
     end
     else begin

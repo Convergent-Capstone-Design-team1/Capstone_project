@@ -1,16 +1,15 @@
 module IF_STAGE
 (   
     input           clk             ,
+    input           clk_50          ,
     input           rst             ,
-    input           start_switch    ,
-/*    
     input           rst_switch      ,
 
     input  [7:0]    btb_addr        ,
     input  [7:0]    bht_addr        ,
     input  [39:0]   btb_init        ,
     input  [1:0]    bht_init        ,
-*/
+
     input           PCSrc           ,
     input           PCWrite         ,
     input   [31:0]  mem_pc          ,
@@ -42,7 +41,6 @@ module IF_STAGE
         //INPUT
         .rst(rst)                       ,
         .clk(clk)                       ,
-        .start_switch(start_switch)     ,
         
         .PCWrite(PCWrite)               ,
         .n_pc(n_pc)                     ,
@@ -66,11 +64,10 @@ module IF_STAGE
     (
         //INPUT
         .clk(clk)                       ,
-        /*
         .rst_i(rst_switch)              ,
         .bht_addr(bht_addr)             ,
         .bht_init(bht_init)             ,
-        */
+
         .is_taken(hit)                  ,
         .mem_is_taken(mem_is_taken)     ,
         .PCSrc(PCSrc)                   ,
@@ -86,11 +83,10 @@ module IF_STAGE
     BTB BTB
     (
         //INPUT
-        /*
         .rst_i(rst_switch)              ,
         .btb_addr(btb_addr)             ,
         .btb_init(btb_init)             ,
-        */
+
         .is_branch(is_branch)           ,
         .pc(b_pc)                       ,
         .mem_pc(mem_pc)                 ,
@@ -118,7 +114,8 @@ module IF_STAGE
     );
 
     INST_MEM INST_MEM
-    (
+    (   
+        .clk_50(clk_50)                 ,
         .ADDR(pc)                       ,
         .INST(inst)
     );
