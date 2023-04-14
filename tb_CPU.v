@@ -24,7 +24,7 @@ module tb_CPU();
 		#50
 		rst = 0;
 		
-		#55000
+		#150000
 		rst = 1; 
 		$finish;
 	end

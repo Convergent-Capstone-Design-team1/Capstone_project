@@ -4,7 +4,7 @@ module HAZARD_DETECTION
     input   [4:0]   RD              ,
     input   [4:0]   RS1             ,
     input   [4:0]   RS2             ,
-    
+        
     output          stall                            
 );
 

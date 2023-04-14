@@ -20,6 +20,8 @@ module BHT
     input           mem_is_taken            ,   // mem stage에서 가져온 hit
     input           PCSrc                   ,   
     input           ex_is_branch            ,
+    input           mem_is_branch           ,
+    input           wb_is_branch            ,
     input   [31:0]  b_pc                    ,
     input   [31:0]  mem_pc                  ,
 
@@ -109,7 +111,7 @@ module BHT
 
     always @ (mem_pc or PCSrc) begin
         miss_predict_r = 1'b0;
-        if (history[mem_pc[9:2]][1] != PCSrc) begin
+        if ((history[mem_pc[9:2]][1] != PCSrc) && (mem_is_branch != wb_is_branch)) begin
             miss_predict_r = 1'b1;                              // 3clk이후 PCSrc가 1이면 의도하지 않은 점프 -> miss predict   
         end
     end

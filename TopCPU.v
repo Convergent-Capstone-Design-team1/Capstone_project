@@ -13,6 +13,8 @@ module TOPCPU
     wire            Flush;
     wire            hit;
     wire            is_branch;
+    wire            flush2;
+    wire            flush3;
 
     //IF_ID register
     wire    [65:0]  IF_ID_D;
@@ -30,6 +32,8 @@ module TOPCPU
     //ID_EX register
     wire    [154:0] ID_EX_D;
     wire    [154:0] ID_EX_Q;
+    wire            back_RegWrite;
+    wire    [31:0]  back_WD;
 
     //EX_stage
     wire    [31:0]  t_addr;
@@ -49,8 +53,8 @@ module TOPCPU
     wire    [31:0]  mem_pc;
 
     //MEM_WB register
-    wire    [70:0]  MEM_WB_D;
-    wire    [70:0]  MEM_WB_Q;
+    wire    [71:0]  MEM_WB_D;
+    wire    [71:0]  MEM_WB_Q;
     
     //WB stage
     wire    [31:0]  WB_OUTPUT;
@@ -76,7 +80,9 @@ module TOPCPU
         .t_addr(target_address)         , 
         .mem_is_taken(EX_MEM_Q[139])    ,
         .ex_is_branch(ID_EX_Q[154])     ,
-        
+        .mem_is_branch(EX_MEM_Q[140])   ,
+        .wb_is_branch(MEM_WB_Q[71])     ,
+        .stall(stall)                   ,
         //OUTPUT
         .is_branch(is_branch)           ,
         .T_NT(Flush)                    ,
@@ -84,7 +90,9 @@ module TOPCPU
         .pc(PC)                         ,
         .inst(INST)                     ,
         .PC_4(PC_4)                     ,
-        .miss_predict(miss_predict)     
+        .miss_predict(miss_predict)     ,
+        .f_2(flush2)                    ,
+        .f_3(flush3)
     );
 
     //IF_ID => 66bit 
@@ -102,6 +110,7 @@ module TOPCPU
         .Q(IF_ID_Q)
     );
 
+    assign {back_WD, back_RegWrite} = flush3 ? 33'b0 : {WB_OUTPUT, MEM_WB_Q[69]};
     ID_STAGE ID_STAGE
     (   
         //INPUT
@@ -111,8 +120,8 @@ module TOPCPU
         //register file
         .WR(MEM_WB_Q[4:0])              ,
         .RD(ID_EX_Q[4:0])               ,
-        .WD(WB_OUTPUT)                  ,     
-        .RegWrite(MEM_WB_Q[69])         ,
+        .WD(back_WD)                  ,     
+        .RegWrite(back_RegWrite)         ,
         .MEMRead(ID_EX_Q[150])          ,   
         .flush(Flush)                   , 
         .hit(hit)                       ,  
@@ -130,9 +139,10 @@ module TOPCPU
         //ALU control
         .ALU_control(ALU_control)       
     );
-                // ALUSrc                MR  MW  B         ALUOP
-    //ID_EX 153 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
-                     //   106  105      104  103 102
+
+                    // ALUSrc                MR  MW  B         ALUOP
+    //ID_EX : 154 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
+                //   106  105      104  103 102
     assign ID_EX_D = {IF_ID_Q[65], IF_ID_Q[64], ID_control, IF_ID_Q[63:32], S_INST, IF_ID_Q[19:15], IF_ID_Q[24:20], RD1, RD2, ALU_control, IF_ID_Q[11:7]};
     ID_EX ID_EX
     (   
@@ -195,7 +205,7 @@ module TOPCPU
         .D(EX_MEM_D)                    ,
         
         //OUTPUT
-        .Q(EX_MEM_Q)                
+        .Q(EX_MEM_Q)
     );
 
     MEM_STAGE MEM_STAGE //EX_MEM_Q[138:107]
@@ -218,7 +228,8 @@ module TOPCPU
         .mem_pc_o(mem_pc)               
     );
 
-    assign MEM_WB_D = {EX_MEM_Q[106:105], R_DATA, EX_MEM_Q[68:37], EX_MEM_Q[4:0]};
+    // 72
+    assign MEM_WB_D = {EX_MEM_Q[140], EX_MEM_Q[106:105], R_DATA, EX_MEM_Q[68:37], EX_MEM_Q[4:0]};
     MEM_WB MEM_WB
     (
         //INPUT
@@ -236,7 +247,6 @@ module TOPCPU
         .WB(MEM_WB_Q[70])               ,
         .R_DATA(MEM_WB_Q[68:37])        ,
         .result(MEM_WB_Q[36:5])         ,
-        
         //OUTPUT
         .WB_OUTPUT(WB_OUTPUT)
     );

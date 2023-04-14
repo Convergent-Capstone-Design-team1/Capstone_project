@@ -9,6 +9,9 @@ module IF_STAGE
     input   [31:0]  t_addr      ,
     input           mem_is_taken,
     input           ex_is_branch,
+    input           mem_is_branch,
+    input           wb_is_branch,
+    input           stall       ,
 
     output          is_branch   ,
     output          T_NT        ,
@@ -16,7 +19,9 @@ module IF_STAGE
     output  [31:0]  pc          ,
     output  [31:0]  inst        ,
     output  [31:0]  PC_4        ,
-    output          miss_predict         
+    output          miss_predict,
+    output          f_2         ,
+    output          f_3   
 );
     //PC
     wire    [31:0]  pc; 
@@ -40,9 +45,15 @@ module IF_STAGE
         .clk(clk)                       ,
         .PCWrite(PCWrite)               ,
         .n_pc(n_pc)                     ,
-        
+        .stall(stall)                   ,
+        .mem_taken(mem_is_taken)        ,
+        .branch(ex_is_branch)           ,
+        .PCSrc(PCSrc)                   ,
+
         //OUTPUT
-        .pc(pc) 
+        .pc(pc)                         ,
+        .flush2(f_2)                    ,
+        .flush3(f_3)
     );
 
     PREDICTOR PREDICTOR

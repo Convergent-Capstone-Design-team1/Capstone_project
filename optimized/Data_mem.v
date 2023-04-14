@@ -16,6 +16,14 @@ module DATA_MEM
 
   assign word_addr = ADDR [11:2];
 
+  generate
+    genvar  idx;
+    for (idx = 0; idx < 1024; idx = idx+1) begin: datamem
+	    wire [31:0] tmp;
+	    assign tmp = mem_cell[idx];
+    end
+  endgenerate
+
   initial
   begin
     // Put your initial data 

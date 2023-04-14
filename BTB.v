@@ -48,7 +48,7 @@ module BTB
 
   always @ (*) begin
     hit_r = 0;
-    if (~b_valid && is_taken && PCSrc) begin
+    if (is_taken && PCSrc) begin
       next_pc_r = target;
       btb[mem_pc[9:2]] = {mem_pc, target};
     end
@@ -57,7 +57,7 @@ module BTB
     end
     else if(is_branch && !PCSrc) begin
       if ((btb[pc[9:2]][63:32] == pc[31:0])) begin          // 테이블에서 지금 pc를 발견함. 이 주소로 갈까요?
-        if (is_taken) begin                                 // 앞에서 말하기를, 점프 해야하는 경우
+        if (is_taken) begin      
           next_pc_r = btb[pc[9:2]][31:0];                   // 저장되어있던, 분기 목적지 주소로 세팅해줌
           hit_r = 1;
         end

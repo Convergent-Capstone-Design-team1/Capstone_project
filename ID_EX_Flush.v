@@ -7,6 +7,6 @@ module ID_EX_FLUSH
     output  [5:0]   id_ex_f_ctrl
 );
 
-    assign id_ex_f_ctrl = (flush && !hit) ? 6'b0 : id_ex_ctrl;
+    assign id_ex_f_ctrl = (flush && !hit) ? 6'b0 : id_ex_ctrl;  //{2'b0, id_ex_ctrl[3], 3'b0}
     
 endmodule
