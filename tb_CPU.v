@@ -51,7 +51,7 @@ module tb_CPU();
 	);
 
 	
-	always #50 clk = ~clk;
+	always #2.5 clk = ~clk;
 	
 	initial 
 	begin

@@ -8,6 +8,7 @@ module BTB
   parameter ENTRY_WIDTH = 40      // BTB 엔트리 너비 (주소와 상태 비트) 
 )
 (
+  input           clk         ,
   input           rst_i       ,
   input   [7:0]   btb_addr    ,
   input   [39:0]  btb_init    ,
@@ -24,50 +25,65 @@ module BTB
   output  [31:0]  next_pc         // 다음 명령어 주소
 );
 
-  
-  /******************* for simulation *************************/
-
   generate
-    genvar  idx;
-    for (idx = 0; idx < 40; idx = idx+1) begin: branch_target
-       wire [39:0] tmp;
-       assign tmp = btb[idx];
+    genvar 		 idx;
+    for(idx = 0; idx < 256; idx = idx+1) begin: btb_target
+	    wire [39:0] tmp;
+	    assign tmp = btb[idx];
     end
   endgenerate
-
-  /********************** module start *************************/
 
   reg [ENTRY_WIDTH-1:0] btb [NUM_ENTRIES-1:0];
   reg   [31:0]  next_pc_r;
   reg           hit_r;
   
-  always @ (is_taken or PCSrc or miss_predict or is_branch or rst_i)
+  always @ (posedge clk)
   begin
-    hit_r = 1'b0;
-    next_pc_r = 1'b0;
-  
     if (rst_i) begin
-      btb[btb_addr] = btb_init;
+      btb[btb_addr] <= btb_init;
     end
     else 
     if (is_taken && PCSrc) begin                
-      next_pc_r = target;
-      btb[mem_pc[9:2]] = {mem_pc[9:2], target};
+      btb[mem_pc[9:2]] <= {mem_pc[9:2], target};
     end
-    else 
+  end
+
+  always @ (miss_predict or is_branch or PCSrc or is_taken or pc or mem_pc or target)
+  begin
+    hit_r = 1'b0;
+    next_pc_r = 32'b0;
+    if (is_taken && PCSrc) begin                
+      next_pc_r = target;
+    end
+    else
     if(miss_predict) begin
       next_pc_r = mem_pc + 32'd4;
     end
-    else 
-    if(is_branch && !PCSrc) begin
+    else if(is_branch && !PCSrc) begin
       if (is_taken) begin                                     // 앞에서 말하기를, 점프 해야하는 경우
         next_pc_r = btb[pc[9:2]][31:0]; 
         hit_r = 1'b1;                               // 저장되어있던, 분기 목적지 주소로 세팅해줌
       end
     end
-    else begin
+     else begin
       next_pc_r = 32'b0;
-    end  
+    end 
+  end
+
+  reg [9:0] cnt;
+  reg [9:0] h_cnt;
+  always @ (posedge clk) begin
+    if (rst_i) 
+      cnt <= 10'b0;
+    else if (is_branch)
+      cnt <= cnt + 10'b1;
+  end
+
+  always @ (posedge clk) begin
+    if (rst_i) 
+      h_cnt <= 10'b0;
+    else if (hit_r)
+      h_cnt <= h_cnt + 10'b1;
   end
 
   assign hit = hit_r;

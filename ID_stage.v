@@ -1,7 +1,6 @@
 module ID_STAGE
 (   
-    input           clk             ,
-    input           rst             ,
+    input           clk_50          ,
     input           rst_i           ,
     input   [4:0]   reg_addr        ,
     input   [31:0]  reg_init        ,
@@ -50,7 +49,7 @@ module ID_STAGE
     REGISTER_FILE REGISTER_FILE
     (
         //INPUT
-        .clk(clk)                   ,
+        .clk_50(clk_50)             ,
         .rst_i(rst_i)               ,
         .reg_addr(reg_addr)         ,
         .reg_init(reg_init)         ,

@@ -16,7 +16,6 @@ module IF_STAGE
     input   [31:0]  t_addr          ,
     input           mem_is_taken    ,
     input           ex_is_branch    ,
-    input           id_m_predict    ,
 
     output          is_branch       ,
     output          T_NT            ,
@@ -83,6 +82,7 @@ module IF_STAGE
     BTB BTB
     (
         //INPUT
+        .clk(clk)                       ,
         .rst_i(rst_switch)              ,
         .btb_addr(btb_addr)             ,
         .btb_init(btb_init)             ,

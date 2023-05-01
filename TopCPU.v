@@ -125,8 +125,7 @@ module TOPCPU
     ID_STAGE ID_STAGE
     (   
         //INPUT
-        .clk(clk_50)                    ,
-        .rst(cpu_rst)                   ,
+        .clk_50(clk_50)                 ,
         .rst_i(rst_switch)              ,
         .reg_addr(reg_addr)             ,
         .reg_init(reg_init)             ,
@@ -222,7 +221,7 @@ module TOPCPU
         .Q(EX_MEM_Q)                
     );
 
-    MEM_STAGE MEM_STAGE //EX_MEM_Q[138:107]
+    MEM_STAGE MEM_STAGE
     (   
         //INPUT
         //branch
@@ -265,13 +264,14 @@ module TOPCPU
         .WB_OUTPUT(WB_OUTPUT)
     );
 
-    FALLING_EDGE_DETECTOR FALLING_EDGE_DETECTOR
+    EDGE_DETECTOR EDGE_DETECTOR
     (   
         //INPUT
         .clk(clk)                       ,
         .rst(cpu_rst)                   ,
         
         //OUTPUT
+        .rise_detected()                ,
         .fall_detected(clk_50)          
     );
 

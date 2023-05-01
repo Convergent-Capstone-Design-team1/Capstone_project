@@ -71,10 +71,10 @@ module BHT
 
                 wt : begin
                     if (bht[mem_pc[9:2]][1] != PCSrc) begin
-                        bht[mem_pc[9:2]] <= wn;                     // miss 나면 아래 state로 내려줌    
+                        bht[mem_pc[9:2]] <= wn;                     // miss 나면 아래 state로 내려줌   
                     end 
-                    else if (is_taken) begin                        // 
-                        bht[b_pc[9:2]] <= ST;
+                    else if (mem_is_taken) begin                        // 
+                        bht[mem_pc[9:2]] <= ST;
                     end
                 end
 
@@ -82,8 +82,8 @@ module BHT
                     if (bht[mem_pc[9:2]][1] != PCSrc) begin              
                         bht[mem_pc[9:2]] <= wt;                     // miss 나면 아래 state로 내려줌
                     end
-                    else if (is_taken) begin
-                        bht[b_pc[9:2]] <= ST;
+                    else if (mem_is_taken) begin
+                        bht[mem_pc[9:2]] <= ST;
                     end
                 end
 
@@ -102,6 +102,6 @@ module BHT
     assign miss_predict = miss_predict_r;
 
     // 예측 결과 출력
-    assign T_NT = ((PCSrc && !is_taken && !mem_is_taken) || miss_predict) ? 1'b1 : (bht[b_pc[9:2]][1] && ex_is_branch) ? 1'b0 : bht[b_pc[9:2]][1];
+    assign T_NT = ((PCSrc && !is_taken && !mem_is_taken) || miss_predict || (bht[b_pc[9:2]][1] && ex_is_branch)) ? 1'b1 : bht[b_pc[9:2]][1];
 
 endmodule

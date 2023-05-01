@@ -1,6 +1,6 @@
 module REGISTER_FILE
 (
-  input           clk       , 
+  input           clk_50    , 
   input           rst_i     , 
   input   [4:0]   reg_addr  ,
   input   [31:0]  reg_init  ,
@@ -29,7 +29,7 @@ module REGISTER_FILE
   assign RD1 = register_file[RR1];
   assign RD2 = register_file[RR2];
 
-  always @ (posedge clk or posedge rst_i) begin
+  always @ (posedge clk_50 or posedge rst_i) begin
     if (rst_i)
       register_file[reg_addr] <= reg_init;
     else if (WE)
