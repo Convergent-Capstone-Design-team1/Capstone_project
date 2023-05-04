@@ -1,3 +1,4 @@
+`timescale 1ns / 100ps
 module systolic_array(clk, rst, a1, a2, a3, b1, b2, b3, c1, c2, c3, c4, c5, c6, c7, c8, c9);
 
 parameter data_size = 32;

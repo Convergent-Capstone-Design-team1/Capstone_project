@@ -1,0 +1,5 @@
+xvlog ./mac.v ./systolic_array.v ./tb_systolic_array.v
+
+xelab tb_systolic_array -debug wave -s tb_systolic_array
+
+xsim tb_systolic_array -gui -wdb simulate_xsim_tb_systolic_array.wdb

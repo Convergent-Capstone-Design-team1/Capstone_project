@@ -22,7 +22,7 @@ wire [data_size-1:0] c7;
 wire [data_size-1:0] c8;
 wire [data_size-1:0] c9;
 
-systolic_array dut_systolic_array (
+systolic_array dut1(
     .clk(clk), 
     .rst(rst), 
     .a1(a1), 
@@ -55,11 +55,12 @@ initial begin
     #5;  rst = 0;
     #5;  a1 = 32'd1; a2 = 32'd0; a3 = 32'd0; b1 = 32'd1; b2 = 32'd0; b3 = 32'd0;
     #10; a1 = 32'd2; a2 = 32'd4; a3 = 32'd0; b1 = 32'd4; b2 = 32'd2; b3 = 32'd0;
-    #10; a1 = 32'd3; a2 = 32'd5; a3 = 32'd0; b1 = 32'd7; b2 = 32'd5; b3 = 32'd3;
+    #10; a1 = 32'd3; a2 = 32'd5; a3 = 32'd7; b1 = 32'd7; b2 = 32'd5; b3 = 32'd3;
     #10; a1 = 32'd0; a2 = 32'd6; a3 = 32'd8; b1 = 32'd0; b2 = 32'd8; b3 = 32'd6;
     #10; a1 = 32'd0; a2 = 32'd0; a3 = 32'd9; b1 = 32'd0; b2 = 32'd0; b3 = 32'd9;
     #10; a1 = 32'd0; a2 = 32'd0; a3 = 32'd0; b1 = 32'd0; b2 = 32'd0; b3 = 32'd0;
     #50;
+    $finish;
 end
 
     always #5 clk = ~clk;
