@@ -10,7 +10,7 @@ module INST_MEM
    always @ (posedge clk_50)
    begin
       INST_r = 32'b0;
-
+      /*
       case(ADDR)
          0: INST_r = 32'h00000013;        //         addi x0, x0, 0
          4: INST_r = 32'h00000013;        //         addi x0, x0, 0
@@ -29,7 +29,7 @@ module INST_MEM
          56: INST_r = 32'h00000e33;       //         add t3, zero, zero #tmp reset
          60: INST_r = 32'h41360e33;       //         sub t3, a2, s3     #tmp resigter t3 = n-i
          64: INST_r = 32'h000a0f13;       //         addi t5, s4, 0     #copy of j
-         68: INST_r = 32'h03cf5863;       //Loop 2: bge t5, t3, Exit1 #j is bigger than n-i or equal
+         68: INST_r = 32'h03cf5863;       //Loop 2:  bge t5, t3, Exit1 #j is bigger than n-i or equal
          72: INST_r = 32'h0002a503;       //         lw a0, 0(t0)      #t1 = arr[j] data
          76: INST_r = 32'h0042a583;       //         lw a1, 4(t0)      #t2 = arr[j+1] data
          80: INST_r = 32'h00428293;       //         addi t0, t0, 4    #t0 = arr[j+1] address
@@ -51,7 +51,8 @@ module INST_MEM
          144: INST_r = 32'h00a54533;      //        xor a0, a0, a0
          default: INST_r = 32'h00000000;
       endcase
-      /*
+      */
+      
       case(ADDR)
          0: INST_r = 32'h00000013;        //       addi x0, x0, 0
          4: INST_r = 32'h00000013;        //       addi x0, x0, 0
@@ -79,20 +80,20 @@ module INST_MEM
          92: INST_r = 32'h00c30333;       //       add t1, t1, a2       # C[i][j]s addr
          96: INST_r = 32'h00032023;       //       sw zero, 0(t1)       # sotre 0 for init   
          100: INST_r = 32'h00098793;      //       addi a5, s3, 0       # copy k to a5 
-         104: INST_r = 32'h00f283b3;      // L3:   add t2, t0, a5    	# t2 = 3*i + k
-         108: INST_r = 32'h04d7d663;      //       bge a5, a3, JPP     	# k >= 3 -> k++
+         104: INST_r = 32'h04d7d863;      // L3:   bge a5, a3, JPP     	# k >= 3 -> k++
+         108: INST_r = 32'h00f283b3;      //       add t2, t0, a5    	# t2 = 3*i + k
          112: INST_r = 32'h00239393;      //       slli t2, t2, 2       # word *= 4
-         120: INST_r = 32'h00a383b3;      //       add t2, t2, a0    	# A[i][k]s addr 
-         124: INST_r = 32'h0003aa83;      //       lw s5, 0(t2)      	# s5 = A[i][k]                   //stall
-         116: INST_r = 32'h02f68e33;      //       mul t3, a3, a5    	# t3 = 3*k, here is MULT   00a383b3;      //       add t2, t2, a0    	# A[i][k]s addr
+         116: INST_r = 32'h00a383b3;      //       add t2, t2, a0    	# A[i][k]s addr 
+         120: INST_r = 32'h0003aa83;      //       lw s5, 0(t2)      	# s5 = A[i][k]                   //stall
+         124: INST_r = 32'h02f68e33;      //       mul t3, a3, a5    	# t3 = 3*k, here is MULT   00a383b3;      //       add t2, t2, a0    	# A[i][k]s addr
          128: INST_r = 32'h00ee0e33;      //       add t3, t3, a4    	# t3 = 3*k + j
-         136: INST_r = 32'h002e1e13;      //       slli t3, t3, 2    	# word *= 4  
-         140: INST_r = 32'h00be0e33;      //       add t3, t3, a1    	# B[k][j]s addr                   //stall
-         144: INST_r = 32'h000e2b03;      //       lw s6, 0(t3)      	# s6 = B[k][j]
-         132: INST_r = 32'h00e28eb3;      //       add t4, t0, a4    	# t4 = 3*i+j     
+         132: INST_r = 32'h002e1e13;      //       slli t3, t3, 2    	# word *= 4  
+         136: INST_r = 32'h00be0e33;      //       add t3, t3, a1    	# B[k][j]s addr                   //stall
+         140: INST_r = 32'h000e2b03;      //       lw s6, 0(t3)      	# s6 = B[k][j]
+         144: INST_r = 32'h00e28eb3;      //       add t4, t0, a4    	# t4 = 3*i+j     
          148: INST_r = 32'h002e9e93;      //       slli t4, t4, 2    	# word *= 4
-         156: INST_r = 32'h00ce8eb3;      //       add t4, t4, a2    	# C[i][j]s addr
-         152: INST_r = 32'h036a8f33;      //       mul t5, s5, s6    	# mult two matrixes, here is MULT   
+         152: INST_r = 32'h00ce8eb3;      //       add t4, t4, a2    	# C[i][j]s addr
+         156: INST_r = 32'h036a8f33;      //       mul t5, s5, s6    	# mult two matrixes, here is MULT   
          160: INST_r = 32'h000eaf83;      //       lw t6, 0(t4)      	# get existing value there
          164: INST_r = 32'h01ff0f33;      //       add t5, t5, t6    	# and add calculated + existing
          168: INST_r = 32'h01eea023;      //       sw t5, 0(t4)      	# add values to array C
@@ -112,7 +113,6 @@ module INST_MEM
          224: INST_r = 32'h00a54533;      //       xor a0, a0, a0
          default: INST_r = 32'h00000000;
       endcase
-      */
    end
 
    assign INST = INST_r;

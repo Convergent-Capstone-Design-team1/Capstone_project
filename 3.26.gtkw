@@ -1,27 +1,29 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Fri May  5 18:50:10 2023
+[*] Fri May  5 21:48:28 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Fri May  5 18:50:01 2023"
-[dumpfile_size] 41438042
+[dumpfile_mtime] "Fri May  5 21:47:40 2023"
+[dumpfile_size] 7750586
 [savefile] "/home/hyundo/capstone/3.26.gtkw"
-[timestart] 48870000
-[size] 1000 600
+[timestart] 0
+[size] 1536 801
 [pos] -1 -1
-*-22.331398 55200000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-23.203852 65600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
+[treeopen] tb_CPU.CPU.EX_STAGE.
 [treeopen] tb_CPU.CPU.ID_STAGE.
 [treeopen] tb_CPU.CPU.ID_STAGE.REGISTER_FILE.
 [treeopen] tb_CPU.CPU.IF_STAGE.
 [treeopen] tb_CPU.CPU.IF_STAGE.BHT.history_table[120].
 [treeopen] tb_CPU.CPU.IF_STAGE.BHT.history_table[243].
 [treeopen] tb_CPU.CPU.MEM_STAGE.
+[treeopen] tb_CPU.CPU.MEM_STAGE.DATA_MEM.
 [sst_width] 214
-[signals_width] 280
+[signals_width] 190
 [sst_expanded] 1
-[sst_vpaned_height] 293
+[sst_vpaned_height] 468
 @28
 tb_CPU.clk
 tb_CPU.rst
@@ -46,6 +48,69 @@ tb_CPU.CPU.IF_STAGE.pc[31:0]
 -mem pc
 @24
 tb_CPU.CPU.IF_STAGE.mem_pc[31:0]
+@200
+-
+@28
+tb_CPU.CPU.ID_STAGE.HAZARD_DETECTION.MEMRead
+@200
+-
+@24
+tb_CPU.CPU.EX_STAGE.ALU_control[3:0]
+@420
+tb_CPU.CPU.EX_STAGE.ALU.result_r[31:0]
+@24
+tb_CPU.CPU.EX_STAGE.ALU.A[31:0]
+tb_CPU.CPU.EX_STAGE.ALU.B[31:0]
+@28
+tb_CPU.CPU.EX_STAGE.ALU.zero
+@200
+-s1 (i)
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[9].tmp[31:0]
+@200
+-a4 (j)
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[14].tmp[31:0]
+@200
+-a5 (k)
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[15].tmp[31:0]
+@200
+-t0
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[5].tmp[31:0]
+@200
+-t1
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[6].tmp[31:0]
+@200
+-t2
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[7].tmp[31:0]
+@200
+-t3
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[28].tmp[31:0]
+@200
+-t4
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[29].tmp[31:0]
+@200
+-s5
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[21].tmp[31:0]
+@200
+-s6
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[22].tmp[31:0]
+@200
+-t5
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[30].tmp[31:0]
+@200
+-t6
+@24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[31].tmp[31:0]
 @200
 -
 @28
@@ -88,21 +153,6 @@ tb_CPU.CPU.MEM_STAGE.zero
 @24
 tb_CPU.CPU.IF_STAGE.BHT.bht_addr[7:0]
 tb_CPU.CPU.IF_STAGE.BHT.bht_init[1:0]
-@28
-tb_CPU.CPU.IF_STAGE.BHT.history_table[242].t_state[1:0]
-@c00028
-tb_CPU.CPU.IF_STAGE.BHT.history_table[243].t_state[1:0]
-@28
-(0)tb_CPU.CPU.IF_STAGE.BHT.history_table[243].t_state[1:0]
-(1)tb_CPU.CPU.IF_STAGE.BHT.history_table[243].t_state[1:0]
-@1401200
--group_end
-@28
-tb_CPU.CPU.IF_STAGE.BHT.history_table[251].t_state[1:0]
-tb_CPU.CPU.IF_STAGE.BHT.history_table[252].t_state[1:0]
-tb_CPU.CPU.IF_STAGE.BHT.history_table[253].t_state[1:0]
-tb_CPU.CPU.IF_STAGE.BHT.history_table[254].t_state[1:0]
-tb_CPU.CPU.IF_STAGE.BHT.history_table[255].t_state[1:0]
 @200
 -
 @24
@@ -111,6 +161,7 @@ tb_CPU.CPU.IF_STAGE.BHT.mem_pc[31:0]
 @28
 tb_CPU.CPU.IF_STAGE.BHT.PCSrc
 tb_CPU.CPU.IF_STAGE.BHT.T_NT
+@29
 tb_CPU.CPU.IF_STAGE.BHT.miss_predict
 @200
 -
@@ -183,9 +234,8 @@ tb_CPU.INITIAL_MODULE.reg_init[31:0]
 @200
 -
 -Register
-@25
-tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[0].tmp[31:0]
 @24
+tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[0].tmp[31:0]
 tb_CPU.CPU.ID_STAGE.REGISTER_FILE.register[31].tmp[31:0]
 @200
 -a0, a1
@@ -256,5 +306,17 @@ tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[6].tmp[31:0]
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[7].tmp[31:0]
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[8].tmp[31:0]
 tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[9].tmp[31:0]
+@200
+-
+@24
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[18].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[19].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[20].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[21].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[22].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[23].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[24].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[25].tmp[31:0]
+tb_CPU.CPU.MEM_STAGE.DATA_MEM.datamem[26].tmp[31:0]
 [pattern_trace] 1
 [pattern_trace] 0

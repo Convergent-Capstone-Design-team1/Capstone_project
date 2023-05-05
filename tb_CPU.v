@@ -71,7 +71,7 @@ module tb_CPU();
 		#150
 		init_switch = 1'b0;
 		
-		#55500
+		#5000
 		rst_switch = 1'b0;
 
 		#150
@@ -81,7 +81,7 @@ module tb_CPU();
 		#500
 		rst = 1'b0;
 		
-		#60000
+		#10000
 		rst = 1'b1; 
 		$finish;
 	end
