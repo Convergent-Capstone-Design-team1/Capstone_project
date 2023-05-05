@@ -19,10 +19,8 @@ module BHT
     input   [7:0]   bht_addr                ,
     input   [1:0]   bht_init                ,
     
-    input           is_taken                ,   // BTB의 hit
     input           mem_is_taken            ,   // mem stage에서 가져온 hit
     input           PCSrc                   ,   
-    input           ex_is_branch            ,
     input   [31:0]  b_pc                    ,
     input   [31:0]  mem_pc                  ,
 
@@ -71,7 +69,7 @@ module BHT
 
                 wt : begin
                     if (bht[mem_pc[9:2]][1] != PCSrc) begin
-                        bht[mem_pc[9:2]] <= wn;                     // miss 나면 아래 state로 내려줌   
+                        bht[mem_pc[9:2]] <= wn;                     // miss 나면 아래 state로 내려줌    
                     end 
                     else if (mem_is_taken) begin                        // 
                         bht[mem_pc[9:2]] <= ST;
@@ -102,6 +100,6 @@ module BHT
     assign miss_predict = miss_predict_r;
 
     // 예측 결과 출력
-    assign T_NT = ((PCSrc && !is_taken && !mem_is_taken) || miss_predict || (bht[b_pc[9:2]][1] && ex_is_branch)) ? 1'b1 : bht[b_pc[9:2]][1];
+    assign T_NT = ((PCSrc && !mem_is_taken) || miss_predict) ? 1'b1 : bht[b_pc[9:2]][1];
 
 endmodule

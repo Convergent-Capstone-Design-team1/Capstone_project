@@ -15,7 +15,6 @@ module IF_STAGE
     input   [31:0]  mem_pc          ,
     input   [31:0]  t_addr          ,
     input           mem_is_taken    ,
-    input           ex_is_branch    ,
 
     output          is_branch       ,
     output          T_NT            ,
@@ -67,10 +66,8 @@ module IF_STAGE
         .bht_addr(bht_addr)             ,
         .bht_init(bht_init)             ,
 
-        .is_taken(hit)                  ,
         .mem_is_taken(mem_is_taken)     ,
         .PCSrc(PCSrc)                   ,
-        .ex_is_branch(ex_is_branch)     ,
         .b_pc(b_pc)                     ,
         .mem_pc(mem_pc)                 ,
         

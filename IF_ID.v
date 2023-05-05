@@ -1,6 +1,6 @@
 module IF_ID
 #(
-    parameter  W = 66
+    parameter  W = 65
 )
 (
     input           clk         ,
