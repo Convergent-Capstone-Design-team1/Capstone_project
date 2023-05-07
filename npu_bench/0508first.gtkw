@@ -1,0 +1,74 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Sun May  7 17:00:24 2023
+[*]
+[dumpfile] "/home/dox/Capstone_project/npu_bench/test.vcd"
+[dumpfile_mtime] "Sun May  7 16:59:02 2023"
+[dumpfile_size] 7874
+[savefile] "/home/dox/Capstone_project/npu_bench/0508first.gtkw"
+[timestart] 0
+[size] 1920 1017
+[pos] -1 -1
+*-15.000000 120000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_npu.
+[treeopen] tb_npu.DUT_npu.
+[sst_width] 214
+[signals_width] 134
+[sst_expanded] 1
+[sst_vpaned_height] 299
+@28
+tb_npu.clk
+tb_npu.rst
+@24
+tb_npu.DUT_npu.ack_cnt[23:0]
+@28
+tb_npu.DUT_npu.ack
+tb_npu.DUT_npu.en
+@200
+-
+@24
+[color] 3
+tb_npu.DUT_npu.a1[31:0]
+[color] 3
+tb_npu.DUT_npu.a2[31:0]
+[color] 3
+tb_npu.DUT_npu.a3[31:0]
+@200
+-
+@24
+[color] 3
+tb_npu.DUT_npu.b1[31:0]
+[color] 3
+tb_npu.DUT_npu.b2[31:0]
+[color] 3
+tb_npu.DUT_npu.b3[31:0]
+@200
+-
+@24
+tb_npu.DUT_npu.i[5:0]
+@28
+tb_npu.DUT_npu.en_ab[2:0]
+@200
+-
+@24
+[color] 3
+tb_npu.DUT_npu.c1[31:0]
+[color] 3
+tb_npu.DUT_npu.c2[31:0]
+[color] 3
+tb_npu.DUT_npu.c3[31:0]
+[color] 3
+tb_npu.DUT_npu.c4[31:0]
+[color] 3
+tb_npu.DUT_npu.c5[31:0]
+[color] 3
+tb_npu.DUT_npu.c6[31:0]
+[color] 3
+tb_npu.DUT_npu.c7[31:0]
+[color] 3
+tb_npu.DUT_npu.c8[31:0]
+@25
+[color] 3
+tb_npu.DUT_npu.c9[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
