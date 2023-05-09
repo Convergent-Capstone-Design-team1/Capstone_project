@@ -1,0 +1,26 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Mon Mar 27 02:31:04 2023
+[*]
+[dumpfile] "/home/hyundo/verilog/DSD/assign5/test.vcd"
+[dumpfile_mtime] "Tue Mar 21 15:15:44 2023"
+[dumpfile_size] 315862
+[savefile] "/home/hyundo/verilog/DSD/assign5/single cycle.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-18.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_Vr_CPU.
+[treeopen] tb_Vr_CPU.U0.
+[sst_width] 214
+[signals_width] 110
+[sst_expanded] 1
+[sst_vpaned_height] 290
+@28
+tb_Vr_CPU.clk
+tb_Vr_CPU.rst
+@25
+tb_Vr_CPU.U0.n_pc[31:0]
+tb_Vr_CPU.U0.PC[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
