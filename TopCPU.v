@@ -125,7 +125,7 @@ module TOPCPU
     (   
         //INPUT
         .clk_50(clk_50)                 ,
-        .rst_i(rst_switch)              ,
+        .rst(rst_switch)                ,
         .reg_addr(reg_addr)             ,
         .reg_init(reg_init)             ,
 

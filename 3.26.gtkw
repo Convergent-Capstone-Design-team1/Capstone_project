@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Fri May  5 21:48:28 2023
+[*] Tue May  9 10:55:57 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/test.vcd"
-[dumpfile_mtime] "Fri May  5 21:47:40 2023"
-[dumpfile_size] 7750586
+[dumpfile_mtime] "Tue May  9 06:07:47 2023"
+[dumpfile_size] 7750582
 [savefile] "/home/hyundo/capstone/3.26.gtkw"
-[timestart] 0
-[size] 1536 801
+[timestart] 2610000
+[size] 1000 600
 [pos] -1 -1
-*-23.203852 65600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-22.203852 65600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_CPU.
 [treeopen] tb_CPU.CPU.
 [treeopen] tb_CPU.CPU.EX_STAGE.
@@ -23,7 +23,7 @@
 [sst_width] 214
 [signals_width] 190
 [sst_expanded] 1
-[sst_vpaned_height] 468
+[sst_vpaned_height] 319
 @28
 tb_CPU.clk
 tb_CPU.rst

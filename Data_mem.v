@@ -76,7 +76,7 @@ module DATA_MEM
   always @ (posedge clk_50)
   begin
 	  if (MEMWrite)
-      mem_cell[$unsigned(word_addr)] <= WD;
+      mem_cell[word_addr] <= WD;
   end
 
   /* read */
@@ -86,7 +86,7 @@ module DATA_MEM
     if (rst)
       RD_r <= 0;
     else if (MEMRead) 
-      RD_r <= mem_cell[$unsigned(word_addr)];
+      RD_r <= mem_cell[word_addr];
     else
       RD_r <= 32'hz;
   end
