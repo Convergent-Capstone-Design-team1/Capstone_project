@@ -1,0 +1,50 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu May 11 08:35:11 2023
+[*]
+[dumpfile] "/home/hyundo/capstone/NPU/test.vcd"
+[dumpfile_mtime] "Thu May 11 08:35:04 2023"
+[dumpfile_size] 9086
+[savefile] "/home/hyundo/capstone/NPU/NPU.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] 8 31
+*-15.000000 20000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_NPU.
+[treeopen] tb_NPU.NPU.
+[sst_width] 214
+[signals_width] 189
+[sst_expanded] 1
+[sst_vpaned_height] 257
+@28
+tb_NPU.NPU.SYSTOLIC_ARRAY.clk
+tb_NPU.NPU.SYSTOLIC_ARRAY.rst
+@24
+tb_NPU.NPU.a1[31:0]
+tb_NPU.NPU.a2[31:0]
+tb_NPU.NPU.a3[31:0]
+tb_NPU.NPU.b1[31:0]
+tb_NPU.NPU.b2[31:0]
+tb_NPU.NPU.b3[31:0]
+@200
+-
+@29
+tb_NPU.NPU.en
+@28
+tb_NPU.NPU.ack
+@22
+tb_NPU.NPU.ack_cnt[23:0]
+@200
+-
+@24
+tb_NPU.NPU.c1[31:0]
+tb_NPU.NPU.c2[31:0]
+tb_NPU.NPU.c3[31:0]
+tb_NPU.NPU.c4[31:0]
+tb_NPU.NPU.c5[31:0]
+tb_NPU.NPU.c6[31:0]
+tb_NPU.NPU.c7[31:0]
+tb_NPU.NPU.c8[31:0]
+tb_NPU.NPU.c9[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
