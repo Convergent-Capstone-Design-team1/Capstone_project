@@ -10,12 +10,16 @@ module INITIAL_MODULE
     output  [7:0]   bht_addr    ,
 
     output  [31:0]  reg_init    ,    
-    output  [4:0]   reg_addr
+    output  [4:0]   reg_addr    ,
+    output  [31:0]  mem_init    ,    
+    output  [4:0]   mem_addr
 );
 
     reg [31:0] 	register_file [0:31];
     reg [31:0]  btb [0:255];
     reg [1:0]   bht [0:255];
+    reg [31:0]  mem [0:26];
+    reg [31:0]  mem_init;
 
     // BTB initialization
     reg [7:0] btb_addr_r;
@@ -78,10 +82,54 @@ module INITIAL_MODULE
         begin
             reg_addr_r <= 5'b0;
         end
-        
     end
 
     assign reg_init = register_file[reg_addr_r];
     assign reg_addr = reg_addr_r;
+
+    // Memory initilization
+    reg [4:0] mem_addr_r;
+    always @ (posedge clk)
+    begin
+        if (rst_i) begin
+            mem_addr_r <= 5'b0;
+        end
+        else if (mem_addr_r <= 5'd26) begin
+            case(mem_addr_r)
+                5'd0 : mem_init <= 1;
+                5'd1 : mem_init <= 2;
+                5'd2 : mem_init <= 3;
+                5'd3 : mem_init <= 4;
+                5'd4 : mem_init <= 5;
+                5'd5 : mem_init <= 6;
+                5'd6 : mem_init <= 7;
+                5'd7 : mem_init <= 8;
+                5'd8 : mem_init <= 9;
+                5'd9 : mem_init <= 1;
+                5'd10 : mem_init <= 2;
+                5'd11 : mem_init <= 3;
+                5'd12 : mem_init <= 4;
+                5'd13 : mem_init <= 5;
+                5'd14 : mem_init <= 6;
+                5'd15 : mem_init <= 7;
+                5'd16 : mem_init <= 8;
+                5'd17 : mem_init <= 9;
+                5'd18 : mem_init <= 0;
+                5'd19 : mem_init <= 0;
+                5'd20 : mem_init <= 0;
+                5'd21 : mem_init <= 0;
+                5'd22 : mem_init <= 0;
+                5'd23 : mem_init <= 0;
+                5'd24 : mem_init <= 0;
+                5'd25 : mem_init <= 0;
+                5'd26 : mem_init <= 0;
+            endcase
+            mem_addr_r <= mem_addr_r + 1;
+        end
+        else begin
+            mem_addr_r <= 5'b0;
+        end
+    end
+    assign mem_addr = mem_addr_r;
 
 endmodule

@@ -14,11 +14,17 @@ module TOPCPU
     //REGISTER_FILE initialization
     input   [4:0]   reg_addr            ,
     input   [31:0]  reg_init            ,
+    //MEMORY initilization
+    input   [4:0]   mem_addr            ,
+    input   [31:0]  mem_init            ,
+
     input           acquire_npu         ,
 
-
     // OUTPUT
-    output          toss_npu
+    output          toss_npu            ,
+    output          sync_wr             ,
+    output  [31:0]  sync_addr           ,
+    output  [31:0]  sync_data
 );  
     wire            cpu_rst;
     //IF stage
@@ -228,12 +234,17 @@ module TOPCPU
         .Q(EX_MEM_Q)                
     );
 
+    assign sync_addr = EX_MEM_Q[68:37];
+    assign sync_data = EX_MEM_Q[36:5];
+    assign sync_wr = EX_MEM_Q[103] || rst_switch;
     MEM_STAGE MEM_STAGE
     (   
         //INPUT
+        .mem_addr(mem_addr)             ,
+        .mem_init(mem_init)             ,
         //branch
         .clk_50(clk_50)                 ,
-        .rst(cpu_rst)                   ,
+        .rst(rst_switch)                ,
         .MEM_control(EX_MEM_Q[106:102]) ,
         .zero(EX_MEM_Q[69])             ,
         //data memory
@@ -280,5 +291,9 @@ module TOPCPU
         //OUTPUT
         .fall_detected(clk_50)          
     );
+
+    always@(posedge clk)begin
+
+    end
 
 endmodule 

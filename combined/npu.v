@@ -1,34 +1,21 @@
-`timescale 1ns / 100ps
-module npu(clk, rst, en, in1, in2, ack);
+module npu(clk, rst, en, get_wr, get_data, get_addr, mem_addr, mem_init, ack);
 parameter data_size = 32;
-parameter mem_size = 24;
+parameter mem_size = 28;
 parameter mul_size = 3;
 
-input clk;
-input rst;
-input en;
-input [31:0] in1;
-input [31:0] in2;
-output ack;
+input        clk;
+input        rst;
+input        en;
+input        get_wr;
+input [31:0] get_data;
+input [31:0] get_addr;
+input [4:0]  mem_addr;
+input [31:0] mem_init;
+output       ack;
 
-reg [mem_size-1:0] row_data[data_size-1:0];     // for문으로 각 24개씩 32'b data를 초기화하며 넣어줌
-reg [mem_size-1:0] col_data[data_size-1:0];
-reg [5:0] i = 6'b0;
-reg flag = 0;
-
-// this is temporary area - initial data is 1 to 9 for both memory.
-initial begin
-    for(i = 0; i < 6'd32; i = i + 1) begin
-        row_data[i] = 0;
-        col_data[i] = 0;
-    end
-    i = 6'b0;
-    for(i = 0; i < 4'd9; i = i + 1) begin
-        row_data[i] = i + 1;
-        col_data[i] = i + 1;
-    end
-end
-//
+reg [(mem_size*2)-1:0] npu_mem[data_size-1:0];     // for문으로 각 24개씩 32'b data를 초기화하며 넣어줌
+reg [5:0]              i = 6'b0;
+reg                    flag = 0;
 
 reg [data_size-1:0] a1 = 32'b0;
 reg [data_size-1:0] a2 = 32'b0;
@@ -50,32 +37,59 @@ wire [data_size-1:0] c9;
 reg [mul_size-1:0] en_ab;
 reg [mem_size-1:0] ack_cnt;
 
-always@(posedge clk or posedge rst) begin
+generate
+    genvar  idx;
+    for (idx = 0; idx < 27; idx = idx+1) begin: inside_npu
+	    wire [31:0] tmp;
+	    assign tmp = npu_mem[idx];
+    end
+endgenerate
+
+always@(posedge rst) begin
+    a1 <= 32'b0;
+    a2 <= 32'b0;
+    a3 <= 32'b0;
+    b1 <= 32'b0;
+    b2 <= 32'b0;
+    b3 <= 32'b0;
+    i  <= 6'b0;
+end
+
+always@(posedge clk) begin
+
+    if(rst) begin
+        npu_mem[mem_addr-1] <= mem_init;
+    end
 
     en_ab[0] <= (en && (i < (mul_size))) ? 1'b1 : 1'b0;
     en_ab[1] <= (en && (en_ab[0])) ? 1'b1 : 1'b0;
     en_ab[2] <= (en && (en_ab[1])) ? 1'b1 : 1'b0;
+    //en_ab[mul_size-1:1] <= (en && (en_ab[mul_size-2:0])) ? 1'b1 : 1'b0;
+
+    if(get_wr && (get_addr >= 0)) begin
+        npu_mem[mem_addr] <= get_data;
+    end
 
     if(en) begin
         if(en_ab[0]) begin
-            a1 <= row_data[5'd0 * mul_size + (i-1)];
-            b1 <= col_data[(i-1) * mul_size + 5'd0];
+            a1 <= npu_mem[5'd0 * mul_size + (i-1)];
+            b1 <= npu_mem[(i-1) * mul_size + 5'd0 + 5'd9];
         end
         else begin
             a1 <= 32'd0;
             b1 <= 32'd0;
         end
         if(en_ab[1]) begin
-            a2 <= row_data[5'd1 * mul_size + (i-2)];
-            b2 <= col_data[(i-2) * mul_size + 5'd1];
+            a2 <= npu_mem[5'd1 * mul_size + (i-2)];
+            b2 <= npu_mem[(i-2) * mul_size + 5'd1 + 5'd9];
         end
         else begin
             a2 <= 32'd0;
             b2 <= 32'd0;
         end
         if(en_ab[2]) begin
-            a3 <= row_data[5'd2 * mul_size + (i-3)];
-            b3 <= col_data[(i-3) * mul_size + 5'd2];
+            a3 <= npu_mem[5'd2 * mul_size + (i-3)];
+            b3 <= npu_mem[(i-3) * mul_size + 5'd2 + 5'd9];
         end
         else begin
             a3 <= 32'd0;

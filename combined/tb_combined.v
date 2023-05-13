@@ -17,39 +17,29 @@ module tb_combined();
 	//REGISTER_FILE
 	wire	[4:0]	reg_addr;
 	wire	[31:0]	reg_init;
+	//MEMORY DATA
+	wire	[4:0]	mem_addr;
+	wire	[31:0]	mem_init;
 
 	wire			en_npu;
 	wire			back_to_cpu;
 
 	integer i;
-	
-  	TOPCPU CPU 
+
+	combined DUT_combined
 	(
-		//INPUT	
 		.clk(clk)					,
 		.rst(rst)					,	
 		.rst_switch(rst_switch)		,
 		.start_switch(start_switch)	,
-		.btb_init(btb_init)         ,
-   		.btb_addr(btb_addr)         ,
-    	.bht_init(bht_init)         ,
-  		.bht_addr(bht_addr)         ,     
-    	.reg_addr(reg_addr)         ,
-    	.reg_init(reg_init)			,
-		.acquire_npu(back_to_cpu)	,
-
-		//OUTPUT
-		.toss_npu(en_npu)
-	);
-
-	npu DUT_npu
-	(
-		.clk(clk)					,
-		.rst(rst_switch)			,
-		.en(en_npu)					,
-		.in1()						,
-		.in2()						,
-		.ack(back_to_cpu)
+		.btb_init(btb_init)			,
+		.btb_addr(btb_addr)			,
+		.bht_init(bht_init)			,
+		.bht_addr(bht_addr)			,
+		.reg_addr(reg_addr)			,
+		.reg_init(reg_init)			,
+		.mem_addr(mem_addr)			,
+		.mem_init(mem_init)
 	);
 
 	INITIAL_MODULE INITIAL_MODULE
@@ -64,14 +54,15 @@ module tb_combined();
     	.bht_init(bht_init)         ,
   		.bht_addr(bht_addr)         ,     
     	.reg_addr(reg_addr)         ,
-    	.reg_init(reg_init)	
+    	.reg_init(reg_init)			,
+		.mem_addr(mem_addr)			,
+		.mem_init(mem_init)
 	);
 
 	
 	always #2.5 clk = ~clk;
 	
-	initial 
-	begin
+	initial	begin
 		$dumpfile("test.vcd");
 		$dumpvars(0, tb_combined);
 

@@ -6,6 +6,8 @@ module DATA_MEM
   input           MEMWrite  ,  
   input   [31:0]  ADDR      ,
   input   [31:0]  WD        ,
+  input   [4:0]   mem_addr  ,
+  input   [31:0]  mem_init  ,
 
   output  [31:0]  RD        
 
@@ -16,7 +18,7 @@ module DATA_MEM
 
   assign word_addr = ADDR [11:2];
 
-
+/*
   initial
   begin
     // Put your initial data 
@@ -75,8 +77,12 @@ module DATA_MEM
   /* write */
   always @ (posedge clk_50)
   begin
-	  if (MEMWrite)
+	  if (MEMWrite) begin
       mem_cell[word_addr] <= WD;
+    end
+    else if(rst) begin
+      mem_cell[mem_addr-1] <= mem_init;
+    end
   end
 
   /* read */
