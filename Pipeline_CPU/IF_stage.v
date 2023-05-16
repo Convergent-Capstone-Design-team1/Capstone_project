@@ -117,4 +117,5 @@ module IF_STAGE
         .INST(inst)
     );
 
+    
 endmodule
