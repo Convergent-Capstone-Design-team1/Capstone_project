@@ -12,7 +12,7 @@ module INITIAL_MODULE
     output  [31:0]  reg_init    ,    
     output  [4:0]   reg_addr    ,
     output  [31:0]  mem_init    ,    
-    output  [4:0]   mem_addr
+    output  [31:0]  mem_addr
 );
 
     reg [31:0] 	register_file [0:31];
@@ -130,6 +130,6 @@ module INITIAL_MODULE
             mem_addr_r <= 5'b0;
         end
     end
-    assign mem_addr = mem_addr_r;
+    assign mem_addr = {27'b0, mem_addr_r};
 
 endmodule

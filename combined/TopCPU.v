@@ -15,10 +15,13 @@ module TOPCPU
     input   [4:0]   reg_addr            ,
     input   [31:0]  reg_init            ,
     //MEMORY initilization
-    input   [4:0]   mem_addr            ,
-    input   [31:0]  mem_init            ,
+    input   [31:0]  mem_init_addr       ,
+    input   [31:0]  mem_init_data       ,
 
     input           acquire_npu         ,
+    input   [31:0]  npu_addr            ,
+    input   [31:0]  npu_data            ,
+    input           npu_we              ,
 
     // OUTPUT
     output          toss_npu            ,
@@ -71,6 +74,8 @@ module TOPCPU
     wire    [1:0]   MEM_control;
     wire    [31:0]  R_DATA;
     wire    [31:0]  mem_pc;
+    wire    [31:0]  update_mem_addr;
+    wire    [31:0]  update_mem_data;
 
     //MEM_WB register
     wire    [70:0]  MEM_WB_D;
@@ -237,11 +242,14 @@ module TOPCPU
     assign sync_addr = EX_MEM_Q[68:37];
     assign sync_data = EX_MEM_Q[36:5];
     assign sync_wr = EX_MEM_Q[103] || rst_switch;
+    assign update_mem_addr = npu_we ? npu_addr : mem_init_addr;
+    assign update_mem_data = npu_we ? npu_data : mem_init_data;
     MEM_STAGE MEM_STAGE
     (   
         //INPUT
-        .mem_addr(mem_addr)             ,
-        .mem_init(mem_init)             ,
+        .mem_addr(update_mem_addr)      ,
+        .mem_init(update_mem_data)      ,
+        .npu2mem(npu_we)                ,
         //branch
         .clk_50(clk_50)                 ,
         .rst(rst_switch)                ,

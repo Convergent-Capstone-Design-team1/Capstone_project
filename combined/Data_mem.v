@@ -6,7 +6,7 @@ module DATA_MEM
   input           MEMWrite  ,  
   input   [31:0]  ADDR      ,
   input   [31:0]  WD        ,
-  input   [4:0]   mem_addr  ,
+  input   [31:0]  mem_addr  ,
   input   [31:0]  mem_init  ,
 
   output  [31:0]  RD        

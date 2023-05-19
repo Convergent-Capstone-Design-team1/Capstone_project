@@ -18,7 +18,7 @@ module tb_combined();
 	wire	[4:0]	reg_addr;
 	wire	[31:0]	reg_init;
 	//MEMORY DATA
-	wire	[4:0]	mem_addr;
+	wire	[31:0]	mem_addr;
 	wire	[31:0]	mem_init;
 
 	wire			en_npu;

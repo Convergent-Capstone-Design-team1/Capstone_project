@@ -1,7 +1,8 @@
-module npu(clk, rst, en, get_wr, get_data, get_addr, mem_addr, mem_init, ack);
+module npu(clk, rst, en, get_wr, get_data, get_addr, mem_addr, mem_init, pass_we, ack, modified_addr, modified_data);
 parameter data_size = 32;
 parameter mem_size = 28;
 parameter mul_size = 3;
+parameter mat_size = 9;
 
 input        clk;
 input        rst;
@@ -9,13 +10,21 @@ input        en;
 input        get_wr;
 input [31:0] get_data;
 input [31:0] get_addr;
-input [4:0]  mem_addr;
+input [31:0] mem_addr;
 input [31:0] mem_init;
+
+output       pass_we;
 output       ack;
+output[31:0] modified_addr;
+output[31:0] modified_data;
 
 reg [(mem_size*2)-1:0] npu_mem[data_size-1:0];     // for문으로 각 24개씩 32'b data를 초기화하며 넣어줌
 reg [5:0]              i = 6'b0;
+reg [5:0]              j = 6'b0;
+reg [5:0]              k = 6'b0;
 reg                    flag = 0;
+reg [31:0]             modified_addr = 0;
+reg [31:0]             modified_data = 0;
 
 reg [data_size-1:0] a1 = 32'b0;
 reg [data_size-1:0] a2 = 32'b0;
@@ -73,7 +82,7 @@ always@(posedge clk) begin
     if(en) begin
         if(en_ab[0]) begin
             a1 <= npu_mem[5'd0 * mul_size + (i-1)];
-            b1 <= npu_mem[(i-1) * mul_size + 5'd0 + 5'd9];
+            b1 <= npu_mem[(i-1) * mul_size + 5'd0 + mat_size];
         end
         else begin
             a1 <= 32'd0;
@@ -81,7 +90,7 @@ always@(posedge clk) begin
         end
         if(en_ab[1]) begin
             a2 <= npu_mem[5'd1 * mul_size + (i-2)];
-            b2 <= npu_mem[(i-2) * mul_size + 5'd1 + 5'd9];
+            b2 <= npu_mem[(i-2) * mul_size + 5'd1 + mat_size];
         end
         else begin
             a2 <= 32'd0;
@@ -89,7 +98,7 @@ always@(posedge clk) begin
         end
         if(en_ab[2]) begin
             a3 <= npu_mem[5'd2 * mul_size + (i-3)];
-            b3 <= npu_mem[(i-3) * mul_size + 5'd2 + 5'd9];
+            b3 <= npu_mem[(i-3) * mul_size + 5'd2 + mat_size];
         end
         else begin
             a3 <= 32'd0;
@@ -104,14 +113,46 @@ always@(posedge clk) begin
         ack_cnt <= 0;
         i <= 6'd0;
     end
+    if(ack) begin
+        for(j = 0; j < mat_size; j = j + 1) begin
+            npu_mem[mat_size*2 + j] <= 0;
+        end
+    end
+    else begin
+        npu_mem[mat_size*2 + 0] <= c1;
+        npu_mem[mat_size*2 + 1] <= c2;
+        npu_mem[mat_size*2 + 2] <= c3;
+        npu_mem[mat_size*2 + 3] <= c4;
+        npu_mem[mat_size*2 + 4] <= c5;
+        npu_mem[mat_size*2 + 5] <= c6;
+        npu_mem[mat_size*2 + 6] <= c7;
+        npu_mem[mat_size*2 + 7] <= c8;
+        npu_mem[mat_size*2 + 8] <= c9;
+    end
+    if(!flag && (mul_size == ack_cnt)) begin
+        flag <= 1;
+    end
+    else if(flag && (k < mat_size)) begin
+        modified_addr <= mat_size*8 + k*4;
+        modified_data <= npu_mem[mat_size*2 + k];
+        k <= k + 1;
+    end
+    else begin
+        k <= 0;
+        flag <= 0;
+        modified_addr <= 0;
+        modified_data <= 0;
+    end
 end
 
-assign ack = (mul_size == ack_cnt) ? 1'b1 : 1'b0;
+wire ack;
+assign ack = (k == mat_size) ? 1'b1 : 1'b0;
+assign pass_we = k && flag;
 
 systolic_array dut1
 (
     .clk(clk), 
-    .rst(rst), 
+    .rst(!en), 
     .a1(a1), 
     .a2(a2), 
     .a3(a3), 
