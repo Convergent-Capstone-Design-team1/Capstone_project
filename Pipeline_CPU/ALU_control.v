@@ -27,6 +27,7 @@ module ALU_CONTROL
 				5'b00100 : ALU_control_r = 4;   	//xor
 				5'b10000 : ALU_control_r = 6;  		//sub
 				5'b01000 : ALU_control_r = 1;  		//mult
+				5'b00001 : ALU_control_r = 8;       //matr
 				default : ALU_control_r = 4'b0;
 			endcase
 		end 

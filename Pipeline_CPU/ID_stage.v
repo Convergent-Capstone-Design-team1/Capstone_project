@@ -19,7 +19,8 @@ module ID_STAGE
     output  [31:0]  RD2             ,
     output  [31:0]  S_INST          ,
     output  [5:0]   f_id_ctrl       ,
-    output  [3:0]   ALU_control     
+    output  [3:0]   ALU_control     ,
+    output          EN_NPU       
 );
 
     wire    [7:0]   control;
@@ -84,7 +85,7 @@ module ID_STAGE
         //OUTPUT
         .ALU_control(ALU_control)
     );
-
+    
     ID_EX_FLUSH ID_EX_FLUSH
     (
         //INPUT
@@ -95,5 +96,7 @@ module ID_STAGE
         //OUTPUT
         .id_ex_f_ctrl(f_id_ctrl)    
     );
+
+    assign EN_NPU = (ALU_control == 4'd8) ? 1'b1 : 1'b0;
     
 endmodule

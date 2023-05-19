@@ -13,7 +13,9 @@ module TOPCPU
     input   [7:0]   bht_addr            ,      
     //REGISTER_FILE initialization
     input   [4:0]   reg_addr            ,
-    input   [31:0]  reg_init  
+    input   [31:0]  reg_init            ,
+
+    output          EN_NPU           
 );  
     wire            cpu_rst;
     //IF stage
@@ -150,7 +152,8 @@ module TOPCPU
         //Control Unit
         .f_id_ctrl(ID_control)          ,
         //ALU control
-        .ALU_control(ALU_control)       
+        .ALU_control(ALU_control)       ,
+        .EN_NPU(EN_NPU)                 
     );
                 // ALUSrc                MR  MW  B         ALUOP
     //ID_EX 153 -> 152 [[ 151 150 ]] [[ 149 148 147 ]] [[ 146 145 ]] 
