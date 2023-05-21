@@ -1,4 +1,5 @@
-module combined(
+module combined
+(
     input           clk				,
     input           rst				,
     input           rst_switch		,
@@ -14,7 +15,7 @@ module combined(
 );
 	
     wire back_to_cpu;
-    wire en_npu;
+    wire EN_NPU;
 	wire passing;
 	wire updating;
 	wire [31:0] sync_addr;
@@ -43,7 +44,7 @@ module combined(
 		.npu_we(updating)			,
 
 		//OUTPUT
-		.toss_npu(en_npu)			,
+		.EN_NPU(EN_NPU)				,
 		.sync_wr(passing)			,
 		.sync_addr(sync_addr)		,
 		.sync_data(sync_data)
@@ -54,7 +55,7 @@ module combined(
 		//INPUT
 		.clk(clk)					,
 		.rst(rst_switch)			,
-		.en(en_npu)					,
+		.en(EN_NPU)					,
 		.get_wr(passing)			,
 		.get_data(sync_data)		,
 		.get_addr(sync_addr)		,

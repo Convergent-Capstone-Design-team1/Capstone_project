@@ -1,3 +1,4 @@
+//assign EN_NPU = (ALU_control == 4'd8) ? 1'b1 : 1'b0;
 module ID_STAGE
 (   
     input           clk_50          ,
@@ -21,7 +22,7 @@ module ID_STAGE
     output  [31:0]  S_INST          ,
     output  [5:0]   f_id_ctrl       ,
     output  [3:0]   ALU_control     ,
-    output          en_npu
+    output          EN_NPU
 );
     wire            flag;
     wire    [7:0]   control;
@@ -65,7 +66,7 @@ module ID_STAGE
         end        
     end
 
-    assign en_npu = en_npu_r;
+    assign EN_NPU = en_npu_r;
 
     REGISTER_FILE REGISTER_FILE
     (

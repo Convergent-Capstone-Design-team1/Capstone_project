@@ -24,7 +24,7 @@ module TOPCPU
     input           npu_we              ,
 
     // OUTPUT
-    output          toss_npu            ,
+    output          EN_NPU              ,
     output          sync_wr             ,
     output  [31:0]  sync_addr           ,
     output  [31:0]  sync_data
@@ -168,7 +168,7 @@ module TOPCPU
         .f_id_ctrl(ID_control)          ,
         //ALU control
         .ALU_control(ALU_control)       ,
-        .en_npu(toss_npu)
+        .EN_NPU(EN_NPU)   
     );
 
                 // ALUSrc                MR  MW  B         ALUOP
