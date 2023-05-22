@@ -24,6 +24,7 @@ module npu
     reg [(mem_size*2)-1:0] npu_mem [data_size-1:0];     // for문으로 각 24개씩 32'b data를 초기화하며 넣어줌
     
     reg         flag;
+    reg         n_en;
     reg [5:0]   i;
     reg [5:0]   j;
     reg [5:0]   k;
@@ -68,13 +69,14 @@ module npu
         i  <= 6'b0;
         j  <= 6'b0;
         k  <= 6'b0;
+        n_en <= 1'b0;
     end
 
     always@(posedge clk) begin
 
-        en_ab[0] <= (en && (i < (mul_size))) ? 1'b1 : 1'b0;
-        en_ab[1] <= (en && (en_ab[0])) ? 1'b1 : 1'b0;
-        en_ab[2] <= (en && (en_ab[1])) ? 1'b1 : 1'b0;
+        en_ab[0] <= (n_en && (i < (mul_size))) ? 1'b1 : 1'b0;
+        en_ab[1] <= (n_en && (en_ab[0])) ? 1'b1 : 1'b0;
+        en_ab[2] <= (n_en && (en_ab[1])) ? 1'b1 : 1'b0;
 
         /*** NPU module initialization ***/
         if(rst) begin
@@ -83,12 +85,15 @@ module npu
             modified_data <= 32'b0;
         end
 
+        if(en)
+            n_en <= 1'b1;
+
         if(get_wr && (get_addr >= 0)) begin
             npu_mem[mem_addr] <= get_data;
         end
 
         /*** NPU core (Systolic array) operation ***/
-        if(en) begin
+        if(n_en) begin
             // CPU Instruction : matr  =>  EN : 1  & NPU operation start
             i <= i + 1'b1;
             // A matrix first row & B matrix first column
@@ -162,6 +167,11 @@ module npu
             modified_data <= npu_mem[mat_size*2 + k];
             k <= k + 1;
         end
+        else if(k == mat_size) begin
+            n_en <= 1'b0;
+            k <= 0;
+            flag <= 0;
+        end
         else begin
             // 위 조건이 아닐시 초기화
             k <= 0;
@@ -169,6 +179,7 @@ module npu
             modified_addr <= 0;
             modified_data <= 0;
         end
+        
     end
 
     wire ack;
@@ -180,7 +191,7 @@ module npu
     (   
         //INPUT
         .clk(clk)       , 
-        .rst(!en)       , 
+        .rst(!n_en)     , 
         .a1(a1)         , 
         .a2(a2)         , 
         .a3(a3)         , 

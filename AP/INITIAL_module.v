@@ -96,15 +96,15 @@ module INITIAL_MODULE
         end
         else if (mem_addr_r <= 5'd26) begin
             case(mem_addr_r)
-                5'd0 : mem_init <= 1;
-                5'd1 : mem_init <= 2;
-                5'd2 : mem_init <= 3;
-                5'd3 : mem_init <= 4;
+                5'd0 : mem_init <= 9;
+                5'd1 : mem_init <= 8;
+                5'd2 : mem_init <= 7;
+                5'd3 : mem_init <= 6;
                 5'd4 : mem_init <= 5;
-                5'd5 : mem_init <= 6;
-                5'd6 : mem_init <= 7;
-                5'd7 : mem_init <= 8;
-                5'd8 : mem_init <= 9;
+                5'd5 : mem_init <= 4;
+                5'd6 : mem_init <= 3;
+                5'd7 : mem_init <= 2;
+                5'd8 : mem_init <= 1;
                 5'd9 : mem_init <= 1;
                 5'd10 : mem_init <= 2;
                 5'd11 : mem_init <= 3;

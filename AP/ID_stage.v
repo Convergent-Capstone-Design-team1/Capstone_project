@@ -1,4 +1,3 @@
-//assign EN_NPU = (ALU_control == 4'd8) ? 1'b1 : 1'b0;
 module ID_STAGE
 (   
     input           clk_50          ,
@@ -50,24 +49,6 @@ module ID_STAGE
         .control(control)
     );
 
-    assign flag = (RegWrite && (RD == 5'd13) && (WD != 0)) ? 1'b1 : 1'b0;
-
-    always @(posedge clk_50 or posedge rst) begin
-        if(rst) begin
-            en_npu_r <= 1'b0;
-        end
-        else if(ack) begin
-            en_npu_r <= 1'b0;
-        end
-        else if(RegWrite && (RD == 5'd13) && (WD != 0)) begin
-            en_npu_r <= 1'b1;
-        end
-        else begin
-        end        
-    end
-
-    assign EN_NPU = en_npu_r;
-
     REGISTER_FILE REGISTER_FILE
     (
         //INPUT
@@ -117,5 +98,7 @@ module ID_STAGE
         //OUTPUT
         .id_ex_f_ctrl(f_id_ctrl)    
     );
+
+    assign EN_NPU = (ALU_control == 4'd8) ? 1'b1 : 1'b0;
     
 endmodule
