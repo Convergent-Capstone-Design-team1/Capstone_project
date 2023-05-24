@@ -6,7 +6,6 @@ module PC
 (
     input           clk             ,
     input           rst             ,
-  
     input           PCWrite  	    ,
     input   [W-1:0] n_pc            ,
 
