@@ -53,6 +53,7 @@ module TOPCPU
     wire    [5:0]   ID_control;
     wire 	[3:0] 	ALU_control;
     wire            stall;
+    wire            EN_NPU;
     wire    [9:0]   is_critical;
     wire            itiscritical;
 
@@ -245,7 +246,7 @@ module TOPCPU
     );
 
     assign sync_addr = EX_MEM_Q[68:37];
-    assign sync_data = EX_MEM_Q[36:5];
+    assign sync_data = EN_NPU ? RD1 : EX_MEM_Q[36:5];
     assign sync_wr = EX_MEM_Q[103] || rst_switch;
     assign update_mem_addr = npu_we ? npu_addr : mem_init_addr;
     assign update_mem_data = npu_we ? npu_data : mem_init_data;

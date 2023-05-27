@@ -110,7 +110,7 @@ module ID_STAGE
         .Q(npu_stalling2)
     );
 
-    assign sel_addr = npu_stalling2 ? INST[11:7] : INST[19:15];
+    assign sel_addr = (npu_stalling2) ? INST[11:7] : (npu_stalling1 ? INST[19:15] : (npu_stall ? INST[24:20] : INST[19:15]));
     REGISTER_FILE REGISTER_FILE
     (
         //INPUT
