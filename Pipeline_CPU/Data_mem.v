@@ -20,15 +20,15 @@ module DATA_MEM
   initial
   begin
     // Put your initial data 
-    mem_cell[0] = 1;
-    mem_cell[1] = 2;
-    mem_cell[2] = 3;
-    mem_cell[3] = 4;
+    mem_cell[0] = 9;
+    mem_cell[1] = 8;
+    mem_cell[2] = 7;
+    mem_cell[3] = 6;
     mem_cell[4] = 5;
-    mem_cell[5] = 6;
-    mem_cell[6] = 7;
-    mem_cell[7] = 8;
-    mem_cell[8] = 9;
+    mem_cell[5] = 4;
+    mem_cell[6] = 3;
+    mem_cell[7] = 2;
+    mem_cell[8] = 1;
     mem_cell[9] = 1;
     mem_cell[10] = 2;
     mem_cell[11] = 3;

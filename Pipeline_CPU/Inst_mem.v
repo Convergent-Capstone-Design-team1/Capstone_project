@@ -10,7 +10,7 @@ module INST_MEM
    always @ (posedge clk_50)
    begin
       INST_r = 32'b0;
-      /*
+      
       case(ADDR)
          0: INST_r = 32'h00000013;        //         addi x0, x0, 0
          4: INST_r = 32'h00000013;        //         addi x0, x0, 0
@@ -23,7 +23,7 @@ module INST_MEM
          32: INST_r = 32'h00400993;       //         addi s3, zero, 4  #i = 1
          36: INST_r = 32'h00000a13;       //         addi s4, zero, 0  #j = 0
          40: INST_r = 32'h00000513;       //Loop 1:  addi a0, s1, 0   #download base addr of arry[] at a0 -> 0
-         44: INST_r = 32'h02800613;       //         addi a2, s2, 40     #download size of arry[](=n) at a2 -> 10 * 4  //028  02c 190
+         44: INST_r = 32'h02400613;       //         addi a2, s2, 40     #download size of arry[](=n) at a2 -> 10 * 4  //028  02c 190
          48: INST_r = 32'h00050293;       //         addi t0, a0, 0     #copy of a0
          52: INST_r = 32'h04c9d863;       //         bge s3, a2, Exit   #j is bigger than n or equal
          56: INST_r = 32'h00000e33;       //         add t3, zero, zero #tmp reset
@@ -51,8 +51,8 @@ module INST_MEM
          144: INST_r = 32'h00a54533;      //        xor a0, a0, a0
          default: INST_r = 32'h00000000;
       endcase
-      */
       
+      /*
       case(ADDR)
          0: INST_r = 32'h00000013;        //       addi x0, x0, 0
          4: INST_r = 32'h00000013;        //       addi x0, x0, 0
@@ -113,6 +113,7 @@ module INST_MEM
          224: INST_r = 32'h00a54533;      //       xor a0, a0, a0
          default: INST_r = 32'h00000000;
       endcase
+      */
    end
 
    assign INST = INST_r;

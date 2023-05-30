@@ -71,7 +71,7 @@ module INITIAL_MODULE
         end
         else if (reg_addr_r <= 8'd255)
         begin
-            register_file[reg_addr_r] <= 32'b0;
+            register_file[reg_addr_r] <= reg_addr_r;
             reg_addr_r <= reg_addr_r + 1;
         end
         else

@@ -276,4 +276,4 @@ module TOPCPU
         .fall_detected(clk_50)          
     );
 
-endmodule 
+endmodule

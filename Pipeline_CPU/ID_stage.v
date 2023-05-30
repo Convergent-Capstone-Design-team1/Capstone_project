@@ -13,6 +13,7 @@ module ID_STAGE
     input           MEMRead         ,
     input           flush           ,
     input           hit             ,
+    input           ack             ,
     
     output          stall           ,
     output  [31:0]  RD1             ,
@@ -20,10 +21,11 @@ module ID_STAGE
     output  [31:0]  S_INST          ,
     output  [5:0]   f_id_ctrl       ,
     output  [3:0]   ALU_control     ,
-    output          EN_NPU       
+    output          EN_NPU
 );
-
+    wire            flag;
     wire    [7:0]   control;
+    reg             en_npu_r;
 
     HAZARD_DETECTION HAZARD_DETECTION
     (   
@@ -85,7 +87,7 @@ module ID_STAGE
         //OUTPUT
         .ALU_control(ALU_control)
     );
-    
+
     ID_EX_FLUSH ID_EX_FLUSH
     (
         //INPUT
