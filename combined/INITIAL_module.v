@@ -75,7 +75,7 @@ module INITIAL_MODULE
         end
         else if (reg_addr_r <= 8'd255)
         begin
-            register_file[reg_addr_r] <= reg_addr;
+            register_file[reg_addr_r] <= 0;
             reg_addr_r <= reg_addr_r + 1;
         end
         else
@@ -127,7 +127,7 @@ module INITIAL_MODULE
             mem_addr_r <= mem_addr_r + 1;
         end
         else begin
-            mem_addr_r <= 5'b11111;
+            mem_addr_r <= 5'b0;
         end
     end
     assign mem_addr = {27'b0, mem_addr_r};

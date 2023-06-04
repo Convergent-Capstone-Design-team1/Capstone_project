@@ -25,35 +25,36 @@ module INST_MEM
          40: INST_r = 32'h00000793;       //         addi a5, zero, 0     # A[][] start address
          44: INST_r = 32'h02400813;       //         addi a6, zero, 36    # B[][] start address
          48: INST_r = 32'h04800893;       //         addi a7, zero, 72    # C[][] start address
-         52: INST_r = 32'h00f818b3;       //         matr a7, a5, a6   # A X B = C 
-         56: INST_r = 32'h00000513;       //Loop 1:  addi a0, s1, 0   #download base addr of arry[] at a0 -> 0
-         60: INST_r = 32'h02800613;       //         addi a2, s2, 40     #download size of arry[](=n) at a2 -> 10 * 4  //028  02c 190
-       //64: INST_r = 32'h00050293;       //  case 1 addi t0, a0, 0        #sorting MatA
-         64: INST_r = 32'h04800293;       //  case 2 addi t0, zero, 72     #sorting MatC
-         68: INST_r = 32'h04c9d863;       //         bge s3, a2, Exit   #j is bigger than n or equal
-         72: INST_r = 32'h00000e33;       //         add t3, zero, zero #tmp reset
-         76: INST_r = 32'h41360e33;       //         sub t3, a2, s3     #tmp resigter t3 = n-i
-         80: INST_r = 32'h000a0f13;       //         addi t5, s4, 0     #copy of j
-         84: INST_r = 32'h03cf5863;       //Loop 2:  bge t5, t3, Exit1 #j is bigger than n-i or equal
-         88: INST_r = 32'h0002a503;       //         lw a0, 0(t0)      #t1 = arr[j] data
-         92: INST_r = 32'h0042a583;       //         lw a1, 4(t0)      #t2 = arr[j+1] data
-         96: INST_r = 32'h00428293;       //         addi t0, t0, 4    #t0 = arr[j+1] address
-         100: INST_r = 32'h02a5d463;      //         bge a1, a0, Exit2 #arry[j+1] data is bigger than arry[j] or equal
-         104: INST_r = 32'h00050f93;      //         addi t6, a0, 0     #swap, t6 is tmp register
-         108: INST_r = 32'h00058513;      //         addi a0, a1, 0
-         112: INST_r = 32'h000f8593;      //         addi a1, t6, 0
-         116: INST_r = 32'hfea2ae23;      //         sw a0, -4(t0)     #save memory
-         120: INST_r = 32'h00b2a023;      //         sw a1, 0(t0)
-         124: INST_r = 32'h004f0f13;      //         addi t5, t5, 4    #j++
-         128: INST_r = 32'hfc000ae3;      //         beq zero, zero, Loop2
-         132: INST_r = 32'h00498993;      //Exit1 :  addi s3, s3, 4           // i++
-         136: INST_r = 32'hfa0008e3;      //         beq zero, zero, Loop1
-         140: INST_r = 32'h004f0f13;      //Exit2:   addi t5, t5, 4           // j++
-         144: INST_r = 32'hfc0002e3;      //         beq zero, zero, Loop2
-         148: INST_r = 32'h00013983;      ///Exit :  lw s3, 0(sp)
-         152: INST_r = 32'h00413a03;      //         lw s4, 4(sp)
-         156: INST_r = 32'h00810113;      //         addi sp, sp, 8
-         160: INST_r = 32'h00a54533;      //         xor a0, a0, a0
+         52: INST_r = 32'h00f818b3;       //         matr a7, a5, a6   # A X B = C
+         56: INST_r = 32'h00f818b3;       //         matr a7, a5, a6   # A X B = C 
+         60: INST_r = 32'h00000513;       //Loop 1:  addi a0, s1, 0   #download base addr of arry[] at a0 -> 0
+         64: INST_r = 32'h02400613;       //         addi a2, s2, 40     #download size of arry[](=n) at a2 -> 10 * 4  //028  02c 190
+         68: INST_r = 32'h00F002B3;       //  case 1 add t0, zero, a5     #sorting MatA
+         //64: INST_r = 32'h011002B3;       //  case 2 add t0, zero, a7     #sorting MatC
+         72: INST_r = 32'h04c9d863;       //         bge s3, a2, Exit   #j is bigger than n or equal
+         76: INST_r = 32'h00000e33;       //         add t3, zero, zero #tmp reset
+         80: INST_r = 32'hFFC60E13;       //         addi t3, a2, -4       <original : sub t3, a2, s3     #tmp resigter t3 = n-i>
+         84: INST_r = 32'h000a0f13;       //         addi t5, s4, 0     #copy of j
+         88: INST_r = 32'h03cf5863;       //Loop 2:  bge t5, t3, Exit1 #j is bigger than n-i or equal
+         92: INST_r = 32'h0002a503;       //         lw a0, 0(t0)      #t1 = arr[j] data
+         96: INST_r = 32'h0042a583;       //         lw a1, 4(t0)      #t2 = arr[j+1] data
+         100: INST_r = 32'h00428293;       //         addi t0, t0, 4    #t0 = arr[j+1] address
+         104: INST_r = 32'h02a5d463;      //         bge a1, a0, Exit2 #arry[j+1] data is bigger than arry[j] or equal
+         108: INST_r = 32'h00050f93;      //         addi t6, a0, 0     #swap, t6 is tmp register
+         112: INST_r = 32'h00058513;      //         addi a0, a1, 0
+         116: INST_r = 32'h000f8593;      //         addi a1, t6, 0
+         120: INST_r = 32'hfea2ae23;      //         sw a0, -4(t0)     #save memory
+         124: INST_r = 32'h00b2a023;      //         sw a1, 0(t0)
+         128: INST_r = 32'h004f0f13;      //         addi t5, t5, 4    #j++
+         132: INST_r = 32'hfc000ae3;      //         beq zero, zero, Loop2
+         136: INST_r = 32'h00498993;      //Exit1 :  addi s3, s3, 4           // i++
+         140: INST_r = 32'hfa0008e3;      //         beq zero, zero, Loop1
+         144: INST_r = 32'h004f0f13;      //Exit2:   addi t5, t5, 4           // j++
+         148: INST_r = 32'hfc0002e3;      //         beq zero, zero, Loop2
+         152: INST_r = 32'h00013983;      ///Exit :  lw s3, 0(sp)
+         156: INST_r = 32'h00413a03;      //         lw s4, 4(sp)
+         160: INST_r = 32'h00810113;      //         addi sp, sp, 8
+         164: INST_r = 32'h00a54533;      //         xor a0, a0, a0
          default: INST_r = 32'h00000000;
       endcase
       

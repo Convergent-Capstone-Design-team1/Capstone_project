@@ -6,6 +6,7 @@ module DATA_MEM
   input           MEMWrite  ,  
   input   [31:0]  ADDR      ,
   input   [31:0]  WD        ,
+  input           syncing   ,
   input   [31:0]  mem_addr  ,
   input   [31:0]  mem_init  ,
 
@@ -13,10 +14,12 @@ module DATA_MEM
 
 );
 
-  wire    [9:0]   word_addr;
+  wire    [9:0]   word_addr_c;
+  wire    [9:0]   word_addr_n;
   reg     [31:0]  mem_cell [0:1023];
 
-  assign word_addr = ADDR [11:2];
+  assign word_addr_c = ADDR [11:2];
+  assign word_addr_n = mem_addr [11:2];
 
   generate
     genvar  idx;
@@ -30,10 +33,13 @@ module DATA_MEM
   always @ (posedge clk_50)
   begin
     if(MEMWrite) begin
-      mem_cell[word_addr] <= WD;
+      mem_cell[word_addr_c] <= WD;
     end
     else if(rst) begin
       mem_cell[mem_addr-1] <= mem_init;
+    end
+    if(syncing) begin
+      mem_cell[word_addr_n] <= mem_init;
     end
   end
 
@@ -45,7 +51,7 @@ module DATA_MEM
       RD_r <= 0;
     end
     else if (MEMRead) begin
-      RD_r <= mem_cell[word_addr];
+      RD_r <= mem_cell[word_addr_c];
     end
     else begin
       RD_r <= 32'hz;

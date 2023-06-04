@@ -53,9 +53,9 @@ module TOPCPU
     wire    [5:0]   ID_control;
     wire 	[3:0] 	ALU_control;
     wire            stall;
-    wire            EN_NPU;
     wire    [9:0]   is_critical;
     wire            itiscritical;
+    wire            npu_stall;
 
     //ID_EX register
     wire    [153:0] ID_EX_D;
@@ -150,6 +150,7 @@ module TOPCPU
         .ack(acquire_npu)               ,
         .critical(itiscritical)         ,
         .npu_matching(npu_we)           ,
+        .pc(PC)                         ,
 
         //register file
         .INST(IF_ID_Q[31:0])            ,
@@ -174,7 +175,8 @@ module TOPCPU
         //ALU control
         .ALU_control(ALU_control)       ,
         .EN_NPU(EN_NPU)                 ,
-        .critical_addr(is_critical) 
+        .critical_addr(is_critical)     ,
+        .npu_stall_o(npu_stall)   
     );
 
                 // ALUSrc                MR  MW  B         ALUOP
@@ -206,6 +208,7 @@ module TOPCPU
         .pc(ID_EX_Q[146:115])           ,
 
         /**************ALU**************/
+        .EN_NPU(EN_NPU)                 ,
         //IMMGen output
         .S_INST(ID_EX_Q[114:83])        ,
         //Fowarding Unit input
@@ -222,6 +225,7 @@ module TOPCPU
         .RD2(ID_EX_Q[40:9])             ,
         //ALU control output
         .ALU_control(ID_EX_Q[8:5])      ,
+        .npu_stall(npu_stall)           ,
         
         //OUTPUT
         .t_addr(t_addr)                 ,
@@ -246,7 +250,7 @@ module TOPCPU
     );
 
     assign sync_addr = EX_MEM_Q[68:37];
-    assign sync_data = EN_NPU ? RD1 : EX_MEM_Q[36:5];
+    assign sync_data = EX_MEM_Q[36:5];
     assign sync_wr = EX_MEM_Q[103] || rst_switch;
     assign update_mem_addr = npu_we ? npu_addr : mem_init_addr;
     assign update_mem_data = npu_we ? npu_data : mem_init_data;

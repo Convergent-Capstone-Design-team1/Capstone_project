@@ -36,10 +36,6 @@ reg [data_size-1:0] b1 = 32'b0;
 reg [data_size-1:0] b2 = 32'b0;
 reg [data_size-1:0] b3 = 32'b0;
 
-reg [data_size-1:0] matA = 32'b0;
-reg [data_size-1:0] matB = 32'b0;
-reg [data_size-1:0] matC = 32'b0;
-
 wire [data_size-1:0] c1;
 wire [data_size-1:0] c2;
 wire [data_size-1:0] c3;
@@ -77,46 +73,35 @@ always@(posedge clk) begin
         npu_mem[mem_addr-1] <= mem_init;
     end
 
-    en_ab[0] <= (en && (i < (mul_size + 3)) && (3 <= i)) ? 1'b1 : 1'b0;
+    en_ab[0] <= (en && (i < (mul_size))) ? 1'b1 : 1'b0;
     en_ab[1] <= (en && (en_ab[0])) ? 1'b1 : 1'b0;
     en_ab[2] <= (en && (en_ab[1])) ? 1'b1 : 1'b0;
     //en_ab[mul_size-1:1] <= (en && (en_ab[mul_size-2:0])) ? 1'b1 : 1'b0;
 
-    if(!en && get_wr && (get_addr >= 0)) begin
+    if(get_wr && (get_addr >= 0)) begin
         npu_mem[mem_addr] <= get_data;
     end
 
     if(en) begin
-
-        if(i==0) begin
-            matA <= (get_data / 4);
-        end
-        else if(i==1) begin
-            matB <= (get_data / 4);
-        end
-        else if(i==2) begin
-            matC <= (get_data / 4);
-        end
-
         if(en_ab[0]) begin
-            a1 <= npu_mem[5'd0 * mul_size + (i-4) + matA];
-            b1 <= npu_mem[(i-4) * mul_size + 5'd0 + matB];
+            a1 <= npu_mem[5'd0 * mul_size + (i-1)];
+            b1 <= npu_mem[(i-1) * mul_size + 5'd0 + mat_size];
         end
         else begin
             a1 <= 32'd0;
             b1 <= 32'd0;
         end
         if(en_ab[1]) begin
-            a2 <= npu_mem[5'd1 * mul_size + (i-5) + matA];
-            b2 <= npu_mem[(i-5) * mul_size + 5'd1 + matB];
+            a2 <= npu_mem[5'd1 * mul_size + (i-2)];
+            b2 <= npu_mem[(i-2) * mul_size + 5'd1 + mat_size];
         end
         else begin
             a2 <= 32'd0;
             b2 <= 32'd0;
         end
         if(en_ab[2]) begin
-            a3 <= npu_mem[5'd2 * mul_size + (i-6) + matA];
-            b3 <= npu_mem[(i-6) * mul_size + 5'd2 + matB];
+            a3 <= npu_mem[5'd2 * mul_size + (i-3)];
+            b3 <= npu_mem[(i-3) * mul_size + 5'd2 + mat_size];
         end
         else begin
             a3 <= 32'd0;
@@ -151,7 +136,7 @@ always@(posedge clk) begin
         flag <= 1;
     end
     else if(flag && (k < mat_size)) begin
-        modified_addr <= (matC + k) * 4;
+        modified_addr <= mat_size*8 + k*4;
         modified_data <= npu_mem[mat_size*2 + k];
         k <= k + 1;
     end
