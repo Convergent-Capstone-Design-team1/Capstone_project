@@ -94,7 +94,7 @@ module combined
 		//INPUT
 		.clk(clk)					,
 		.rst(rst_switch)			,
-		.en(cycle3)					,		// NPU is triggered by cycle3, not EN_NPU. 3 cycle delay enables to find out the mem addr to calculate.
+		.en(cycle3 && EN_NPU)		,		// NPU is triggered by cycle3, not EN_NPU. 3 cycle delay enables to find out the mem addr to calculate.
 		.mem_addr(mem_addr)			,
 		.mem_init(mem_init)			,
 		.src1_addr(mat_src1[9:2])	,

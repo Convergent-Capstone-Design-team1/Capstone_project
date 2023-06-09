@@ -18,6 +18,7 @@ module ID_STAGE
     input           mem_wr_en       ,
         
     output          stall           ,
+    output          double_matr     ,
     output  [31:0]  RD1             ,
     output  [31:0]  RD2             ,
     output  [31:0]  S_INST          ,
@@ -67,7 +68,6 @@ module ID_STAGE
         else if(ALU_control == 4'd8) begin              // 3. Matrix 연산이 시작되었으므로, NPU를 동작시키고, critical addr get까지 PC를 stall합니다.
             if(EN_NPU) begin
                 double_matr <= 1;
-                npu_stall <= 1'b1;
             end
             else begin
                 EN_NPU <= 1'b1;
@@ -110,17 +110,17 @@ module ID_STAGE
     (   
         //INPUT
         .MEMRead(MEMRead)                   ,
-        .RD(RD)                      ,
-        .RS1(INST[19:15])            ,
-        .RS2(INST[24:20])            ,
+        .RD(RD)                             ,
+        .RS1(INST[19:15])                   ,
+        .RS2(INST[24:20])                   ,
         .mat_start(npu_stall || double_matr),
-        .EN_NPU(EN_NPU)              ,
-        .mem_wr(mem_wr_en)           ,
-        .critical_addr(critical_addr),
-        .mem_is_writing(mem_wr_addr) ,
+        .EN_NPU(EN_NPU)                     ,
+        .mem_wr(mem_wr_en)                  ,
+        .critical_addr(critical_addr)       ,
+        .mem_is_writing(mem_wr_addr)        ,
         
         //OUTPUT
-        .stall(stall)                ,
+        .stall(stall)                       ,
         .critical(critical)
     );
 

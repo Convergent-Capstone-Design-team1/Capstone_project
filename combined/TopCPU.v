@@ -57,6 +57,7 @@ module TOPCPU
     wire    [5:0]   ID_control;
     wire 	[3:0] 	ALU_control;
     wire            stall;
+    wire            npu_busy;
 
     //ID_EX register
     wire    [153:0] ID_EX_D;
@@ -117,6 +118,7 @@ module TOPCPU
         .mem_pc(EX_MEM_Q[138:107])      ,
         .t_addr(target_address)         , 
         .mem_is_taken(EX_MEM_Q[139])    ,
+        .double_matr(npu_busy)          ,
         
         //OUTPUT
         .is_branch(is_branch)           ,
@@ -167,6 +169,7 @@ module TOPCPU
         //OUTPUT 
         //Hazard Detecting Unit
         .stall(stall)                   ,
+        .double_matr(npu_busy)          ,
         //Register file
         .RD1(RD1)                       ,      
         .RD2(RD2)                       ,

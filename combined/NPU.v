@@ -149,7 +149,7 @@ always@(posedge clk or posedge rst) begin
         i <= 6'd0;
     end
 
-    if((ack_cnt == mul_size)) begin
+    if((ack_cnt == (mul_size-1))) begin
         mem_cell[rd_addr + 0] <= c1;
         mem_cell[rd_addr + 1] <= c2;
         mem_cell[rd_addr + 2] <= c3;

@@ -15,6 +15,7 @@ module IF_STAGE
     input   [31:0]  mem_pc          ,
     input   [31:0]  t_addr          ,
     input           mem_is_taken    ,
+    input           double_matr     ,
 
     output          is_branch       ,
     output          T_NT            ,
@@ -33,6 +34,8 @@ module IF_STAGE
     wire    [31:0]  next_pc;
     //PC_MUX
     wire    [31:0]  n_pc;
+    //PC roll back
+    wire            double_matr_stall;
     
     PC PC
     (   
@@ -96,7 +99,16 @@ module IF_STAGE
         .next_pc(next_pc)       
     );
 
-    assign PC_4 = pc + 32'd4;
+    REGISTER #(1) waiting_for_npu_reset
+    (
+        .CLK(clk_50)        ,
+        .RST(rst)           ,
+        .EN(1'b0)           ,
+        .D(double_matr)     ,
+        .Q(double_matr_stall)
+    );
+
+    assign PC_4 = double_matr_stall ? (pc - 32'd4) : (pc + 32'd4);
     
     PC_MUX PC_MUX
     (
