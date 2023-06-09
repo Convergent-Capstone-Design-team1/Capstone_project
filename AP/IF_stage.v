@@ -39,7 +39,6 @@ module IF_STAGE
         //INPUT
         .rst(rst)                       ,
         .clk(clk)                       ,
-        
         .PCWrite(PCWrite)               ,
         .n_pc(n_pc)                     ,
         

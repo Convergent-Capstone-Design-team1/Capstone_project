@@ -53,6 +53,8 @@ module TOPCPU
     wire    [5:0]   ID_control;
     wire 	[3:0] 	ALU_control;
     wire            stall;
+    wire    [9:0]   is_critical;
+    wire            itiscritical;
 
     //ID_EX register
     wire    [153:0] ID_EX_D;
@@ -144,6 +146,9 @@ module TOPCPU
         .rst(rst_switch)                ,
         .reg_addr(reg_addr)             ,
         .reg_init(reg_init)             ,
+        .ack(acquire_npu)               ,
+        .critical(itiscritical)         ,
+        .npu_matching(npu_we)           ,
 
         //register file
         .INST(IF_ID_Q[31:0])            ,
@@ -154,7 +159,6 @@ module TOPCPU
         .MEMRead(ID_EX_Q[149])          ,   
         .flush(Flush)                   , 
         .hit(hit)                       ,
-        .ack(acquire_npu)               ,
  
         //OUTPUT 
         //Hazard Detecting Unit
@@ -168,7 +172,8 @@ module TOPCPU
         .f_id_ctrl(ID_control)          ,
         //ALU control
         .ALU_control(ALU_control)       ,
-        .EN_NPU(EN_NPU)   
+        .EN_NPU(EN_NPU)                 ,
+        .critical_addr(is_critical) 
     );
 
                 // ALUSrc                MR  MW  B         ALUOP
@@ -250,6 +255,7 @@ module TOPCPU
         .mem_addr(update_mem_addr)      ,
         .mem_init(update_mem_data)      ,
         .npu2mem(npu_we)                ,
+        .EN_NPU(EN_NPU)                 ,
         //branch
         .clk_50(clk_50)                 ,
         .rst(rst_switch)                ,
@@ -260,11 +266,13 @@ module TOPCPU
         .WD(EX_MEM_Q[36:5])             ,
         .mem_pc(EX_MEM_Q[138:107])      ,
         .hit(EX_MEM_Q[139])             ,
+        .critical_addr(is_critical)     ,
         
         //OUTPUT
         .branch(branch)                 ,
         .R_DATA(R_DATA)                 ,
-        .mem_pc_o(mem_pc)               
+        .mem_pc_o(mem_pc)               ,
+        .critical(itiscritical)
     );
 
     assign MEM_WB_D = {EX_MEM_Q[106:105], R_DATA, EX_MEM_Q[68:37], EX_MEM_Q[4:0]};
@@ -299,9 +307,5 @@ module TOPCPU
         //OUTPUT
         .fall_detected(clk_50)          
     );
-
-    always@(posedge clk)begin
-
-    end
-
+    
 endmodule 

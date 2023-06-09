@@ -16,7 +16,7 @@ module DATA_MEM
 
   assign word_addr = ADDR [11:2];
 
-
+/*
   initial
   begin
     // Put your initial data 
@@ -48,22 +48,24 @@ module DATA_MEM
     mem_cell[25] = 0;
     mem_cell[26] = 0;    
   end
-/* 
+ */ 
+  
   initial
   begin
     // Put your initial data 
-    mem_cell[0] = 1;
-    mem_cell[1] = 9;
-    mem_cell[2] = 2;
-    mem_cell[3] = 3;
-    mem_cell[4] = 5;
-    mem_cell[5] = 10;
-    mem_cell[6] = 7;
+    mem_cell[0] = 9;
+    mem_cell[1] = 5;
+    mem_cell[2] = 4;
+    mem_cell[3] = 2;
+    mem_cell[4] = 8;
+    mem_cell[5] = 7;
+    mem_cell[6] = 10;
     mem_cell[7] = 6;
-    mem_cell[8] = 4;
-    mem_cell[9] = 8;
+    mem_cell[8] = 3;
+    mem_cell[9] = 1;
   end
-*/
+  
+
   generate
     genvar  idx;
     for (idx = 0; idx < 1024; idx = idx+1) begin: datamem

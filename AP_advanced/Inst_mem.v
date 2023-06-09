@@ -20,7 +20,7 @@ module INST_MEM
          20: INST_r = 32'hff810113;       //         addi sp, sp, -8   #save s4, s4 on stack *
          24: INST_r = 32'h01412223;       //         sw s4, 4(sp)      #int j *
          28: INST_r = 32'h01312023;       //         sw s3, 0(sp)      #int i *
-         32: INST_r = 32'h00400993;       //         addi s3, zero, 4  #i = 1
+         32: INST_r = 32'h00000993;       //         addi s3, zero, 4  #i = 0
          36: INST_r = 32'h00000a13;       //         addi s4, zero, 0  #j = 0
          40: INST_r = 32'h00000793;       //         addi a5, zero, 0     # A[][] start address
          44: INST_r = 32'h02400813;       //         addi a6, zero, 36    # B[][] start address

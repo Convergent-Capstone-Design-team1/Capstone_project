@@ -57,7 +57,7 @@ module TOPCPU
     wire    [5:0]   ID_control;
     wire 	[3:0] 	ALU_control;
     wire            stall;
-    wire            npu_busy;
+    wire            double_matr;
 
     //ID_EX register
     wire    [153:0] ID_EX_D;
@@ -89,6 +89,7 @@ module TOPCPU
     wire    [70:0]  MEM_WB_Q;
     
     //WB stage
+    wire            WB_RegWrite;
     wire    [31:0]  WB_OUTPUT;
 
     //fall_detected
@@ -118,7 +119,7 @@ module TOPCPU
         .mem_pc(EX_MEM_Q[138:107])      ,
         .t_addr(target_address)         , 
         .mem_is_taken(EX_MEM_Q[139])    ,
-        .double_matr(npu_busy)          ,
+        .double_matr(double_matr)       ,
         
         //OUTPUT
         .is_branch(is_branch)           ,
@@ -169,7 +170,7 @@ module TOPCPU
         //OUTPUT 
         //Hazard Detecting Unit
         .stall(stall)                   ,
-        .double_matr(npu_busy)          ,
+        .double_matr(double_matr)       ,
         //Register file
         .RD1(RD1)                       ,      
         .RD2(RD2)                       ,
@@ -260,7 +261,7 @@ module TOPCPU
     MEM_STAGE MEM_STAGE
     (   
         //INPUT
-        .MEM_control(EX_MEM_Q[106:102]) ,
+        .MEM_control(EX_MEM_Q[104:102]) ,
         .zero(EX_MEM_Q[69])             ,
         
         //OUTPUT
@@ -268,8 +269,9 @@ module TOPCPU
         .memrd(mem_rd_w),
         .memwr(mem_wr_w)                
 );
-
-    assign MEM_WB_D = {EX_MEM_Q[106:105], R_DATA, EX_MEM_Q[68:37], EX_MEM_Q[4:0]};
+    
+    assign MEM_control = EX_MEM_Q[106:105];
+    assign MEM_WB_D = {MEM_control, R_DATA, EX_MEM_Q[68:37], EX_MEM_Q[4:0]};
     MEM_WB MEM_WB
     (
         //INPUT

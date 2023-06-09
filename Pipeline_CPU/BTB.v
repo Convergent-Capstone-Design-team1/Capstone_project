@@ -1,10 +1,10 @@
-//BTB는 64개의 엔트리, 각 엔트리는 64비트 너비, 상위 32비트는 이전 분기 명령어의 주소를, 하위 32비트는 해당 엔트리의 상태 비트
+//BTB는 256개의 엔트리, 각 엔트리는 40비트 너비, 상위 32비트는 이전 분기 명령어의 주소를, 하위 32비트는 해당 엔트리의 상태 비트
 //상태 비트는 2비트 크기이며, not is_taken, weakly is_taken, strongly is_taken, reserved 중 하나임.
 //항상 현재 명령어 주소(pc)와 일치하는 엔트리를 찾아 업데이트하며, 해당 주소 또는 +4한 값을 다음 명령어 주소(next_pc_r)로 반환함.
 
 module BTB 
 #(
-  parameter NUM_ENTRIES = 256  ,   // BTB 엔트리 수
+  parameter NUM_ENTRIES = 256  ,  // BTB 엔트리 수
   parameter ENTRY_WIDTH = 40      // BTB 엔트리 너비 (주소와 상태 비트) 
 )
 (
@@ -25,14 +25,16 @@ module BTB
   output  [31:0]  next_pc         // 다음 명령어 주소
 );
 
+  /***************************************************************/
+  wire [39:0] tmp;
   generate
     genvar 		 idx;
     for(idx = 0; idx < 256; idx = idx+1) begin: btb_target
-	    wire [39:0] tmp;
 	    assign tmp = btb[idx];
     end
   endgenerate
 
+  /***************************************************************/
   reg [ENTRY_WIDTH-1:0] btb [NUM_ENTRIES-1:0];
   reg   [31:0]  next_pc_r;
   reg           hit_r;
@@ -48,8 +50,7 @@ module BTB
     end
   end
 
-  always @ (miss_predict or is_branch or PCSrc or is_taken or pc or mem_pc or target)
-  begin
+  always @ (*) begin
     hit_r = 1'b0;
     next_pc_r = 32'b0;
     if (is_taken && PCSrc) begin                

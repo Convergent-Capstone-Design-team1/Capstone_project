@@ -7,6 +7,6 @@ module WB_STAGE
     output  [31:0]  WB_OUTPUT
 );
     
-    assign WB_OUTPUT = WB? R_DATA : result;
+    assign WB_OUTPUT = WB ? R_DATA : result;
 
 endmodule
