@@ -28,9 +28,9 @@ module INST_MEM
          52: INST_r = 32'h00f818b3;       //         matr a7, a5, a6   # A X B = C 
          56: INST_r = 32'h00000513;       //Loop 1:  addi a0, s1, 0   #download base addr of arry[] at a0 -> 0
          60: INST_r = 32'h02400613;       //         addi a2, s2, 40     #download size of arry[](=n) at a2 -> 10 * 4  //028  02c 190
-         //64: INST_r = 32'h00F002B3;       //  case 1 add t0, zero, a5     #sorting MatA
+         64: INST_r = 32'h00F002B3;       //  case 1 add t0, zero, a5     #sorting MatA
          //64: INST_r = 32'h011002B3;       //  case 2 add t0, zero, a7     #sorting MatC (broken)
-         64: INST_r = 32'h04800293;       //   temp  case 2 addi t0, zero, 72     #sorting MatC
+         //64: INST_r = 32'h04800293;       //   temp  case 2 addi t0, zero, 72     #sorting MatC
          68: INST_r = 32'h04c9d863;       //         bge s3, a2, Exit   #j is bigger than n or equal
          72: INST_r = 32'h00000e33;       //         add t3, zero, zero #tmp reset
          76: INST_r = 32'hFFC60E13;       //         addi t3, a2, -4       <original : sub t3, a2, s3     #tmp resigter t3 = n-i>
