@@ -1,0 +1,101 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Sat May 13 07:34:14 2023
+[*]
+[dumpfile] "/home/dox/Capstone_project/combined/test.vcd"
+[dumpfile_mtime] "Sat May 13 07:30:10 2023"
+[dumpfile_size] 8275135
+[savefile] "/home/dox/Capstone_project/combined/0513_memsync.gtkw"
+[timestart] 4974000
+[size] 1536 801
+[pos] -1 -1
+*-19.000000 6125000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_combined.
+[treeopen] tb_combined.DUT_combined.
+[treeopen] tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.
+[treeopen] tb_combined.DUT_combined.DUT_NPU.
+[sst_width] 214
+[signals_width] 142
+[sst_expanded] 1
+[sst_vpaned_height] 223
+@24
+tb_combined.DUT_combined.DUT_NPU.clk
+tb_combined.DUT_combined.DUT_NPU.rst
+@200
+-
+-NPU
+@24
+tb_combined.DUT_combined.DUT_NPU.en
+@420
+tb_combined.DUT_combined.DUT_NPU.get_addr[31:0]
+tb_combined.DUT_combined.DUT_NPU.get_data[31:0]
+@24
+tb_combined.DUT_combined.DUT_NPU.get_wr
+@200
+-
+@24
+tb_combined.DUT_combined.DUT_NPU.a1[31:0]
+tb_combined.DUT_combined.DUT_NPU.a2[31:0]
+tb_combined.DUT_combined.DUT_NPU.a3[31:0]
+@200
+-
+@24
+tb_combined.DUT_combined.DUT_NPU.b1[31:0]
+tb_combined.DUT_combined.DUT_NPU.b2[31:0]
+tb_combined.DUT_combined.DUT_NPU.b3[31:0]
+@200
+-
+@24
+tb_combined.DUT_combined.DUT_NPU.c1[31:0]
+tb_combined.DUT_combined.DUT_NPU.c2[31:0]
+tb_combined.DUT_combined.DUT_NPU.c3[31:0]
+tb_combined.DUT_combined.DUT_NPU.c4[31:0]
+tb_combined.DUT_combined.DUT_NPU.c5[31:0]
+tb_combined.DUT_combined.DUT_NPU.c6[31:0]
+tb_combined.DUT_combined.DUT_NPU.c7[31:0]
+tb_combined.DUT_combined.DUT_NPU.c8[31:0]
+tb_combined.DUT_combined.DUT_NPU.c9[31:0]
+@200
+-
+@28
+tb_combined.DUT_combined.DUT_NPU.en_ab[2:0]
+@24
+tb_combined.DUT_combined.DUT_NPU.i[5:0]
+tb_combined.DUT_combined.DUT_NPU.ack_cnt[27:0]
+@25
+tb_combined.DUT_combined.DUT_NPU.ack
+@200
+-
+-CPU
+@24
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.mem_addr[4:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.mem_init[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[0].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[1].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[2].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[3].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[4].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[5].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[6].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[7].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[8].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[9].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[10].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[11].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[12].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[13].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[14].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[15].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[16].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[17].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[18].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[19].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[20].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[21].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[22].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[23].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[24].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[25].tmp[31:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.DATA_MEM.datamem[26].tmp[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
