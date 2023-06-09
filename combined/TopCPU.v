@@ -20,6 +20,7 @@ module TOPCPU
 
     input           acquire_npu         ,
     input   [31:0]  R_DATA              ,
+    input           mem_haz             ,
 
     // OUTPUT
     output          EN_NPU              ,
@@ -27,7 +28,10 @@ module TOPCPU
     output          memread_c           ,
     output          memwrite_c          ,
     output  [31:0]  addr_c              ,
-    output  [31:0]  wd_c                
+    output  [31:0]  wd_c                ,
+    output  [9:0]   matA                ,
+    output  [9:0]   matB                ,
+    output  [9:0]   matC                
 );  
     wire            cpu_rst;
     //IF stage
@@ -53,8 +57,6 @@ module TOPCPU
     wire    [5:0]   ID_control;
     wire 	[3:0] 	ALU_control;
     wire            stall;
-    wire    [9:0]   is_critical;
-    wire            itiscritical;
 
     //ID_EX register
     wire    [153:0] ID_EX_D;
@@ -112,7 +114,7 @@ module TOPCPU
         
         .PCSrc(branch)                  ,
         .PCWrite(stall)                 ,  
-        .mem_pc(EX_MEM_Q[138:107])                 ,
+        .mem_pc(EX_MEM_Q[138:107])      ,
         .t_addr(target_address)         , 
         .mem_is_taken(EX_MEM_Q[139])    ,
         
@@ -149,8 +151,8 @@ module TOPCPU
         .reg_addr(reg_addr)             ,
         .reg_init(reg_init)             ,
         .ack(acquire_npu)               ,
-        .critical(itiscritical)         ,
-        .npu_matching(npu_we)           ,
+        .mem_wr_addr(addr_c[9:0])       ,
+        .mem_wr_en(mem_wr_w)            ,
 
         //register file
         .INST(IF_ID_Q[31:0])            ,
@@ -175,7 +177,9 @@ module TOPCPU
         //ALU control
         .ALU_control(ALU_control)       ,
         .EN_NPU(EN_NPU)                 ,
-        .critical_addr(is_critical) 
+        .matA_addr(matA)                ,
+        .matB_addr(matB)                ,
+        .matC_addr(matC)
     );
 
                 // ALUSrc                MR  MW  B         ALUOP

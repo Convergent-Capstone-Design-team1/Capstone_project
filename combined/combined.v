@@ -19,6 +19,14 @@ module combined
 	wire clk_50_w;
 	wire mem_rd_w;
 	wire mem_wr_w;
+	wire race;
+
+	wire cycle1;
+	wire cycle2;
+	wire cycle3;
+	wire [9:0] 	mat_src1;
+	wire [9:0] 	mat_src2;
+	wire [9:0] 	mat_rd;
 	wire [31:0] addr_w;
 	wire [31:0] wd_w;
 	wire [31:0] data_w;
@@ -40,6 +48,7 @@ module combined
 		.mem_init_data(mem_init)	,
 		.acquire_npu(back_to_cpu)	,
 		.R_DATA(data_w)				,
+		.mem_haz(race)				,
 
 		//OUTPUT
 		.EN_NPU(EN_NPU)				,
@@ -47,27 +56,61 @@ module combined
 		.memread_c(mem_rd_w)		,
 		.memwrite_c(mem_wr_w)		,
 		.addr_c(addr_w)				,
-		.wd_c(wd_w)
+		.wd_c(wd_w)					,
+		.matA(mat_src1)				,
+		.matB(mat_src2)				,
+		.matC(mat_rd)
 	);
+
+	REGISTER #(1) calc_src_addr1
+    (
+        .CLK(clk_50_w)      ,
+        .RST(rst)           ,
+        .EN(1'b0)           ,
+        .D(EN_NPU)       	,
+        .Q(cycle1)
+    );
+
+    REGISTER #(1) calc_src_addr2
+    (
+        .CLK(clk_50_w)      ,
+        .RST(rst)           ,
+        .EN(1'b0)           ,
+        .D(cycle1)   		,
+        .Q(cycle2)
+    );
+
+    REGISTER #(1) calc_src_addr3
+    (
+        .CLK(clk_50_w)      ,
+        .RST(rst)           ,
+        .EN(1'b0)           ,
+        .D(cycle2)   		,
+        .Q(cycle3)
+    );
 
 	npu DUT_NPU
 	(
 		//INPUT
 		.clk(clk)					,
 		.rst(rst_switch)			,
-		.en(EN_NPU)					,
+		.en(cycle3)					,		// NPU is triggered by cycle3, not EN_NPU. 3 cycle delay enables to find out the mem addr to calculate.
 		.mem_addr(mem_addr)			,
 		.mem_init(mem_init)			,
+		.src1_addr(mat_src1[9:2])	,
+		.src2_addr(mat_src2[9:2])	,
+		.rd_addr(mat_rd[9:2])		,
 
 		//OUTPUT
 		.ack(back_to_cpu)			,
 
 		//ports due to shared memory system
-		.clk_50(clk_50_w),
-		.MEMRead(mem_rd_w),
-		.MEMWrite(mem_wr_w),
-		.ADDR(addr_w),
-		.WD(wd_w),
+		.clk_50(clk_50_w)			,
+		.MEMRead(mem_rd_w)			,
+		.MEMWrite(mem_wr_w)			,
+		.ADDR(addr_w)				,
+		.WD(wd_w)					,
+		.race_haz(race)				,
 		.RD(data_w)
 	);
 

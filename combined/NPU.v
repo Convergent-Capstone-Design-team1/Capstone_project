@@ -1,7 +1,7 @@
 module npu
 #(
     parameter data_size = 32        ,
-    parameter mem_size = 28         ,
+    parameter mem_size = 28         ,       // memory size extendable
     parameter mul_size = 3          ,
     parameter mat_size = 9
 )
@@ -11,6 +11,9 @@ module npu
     input           en              ,
     input   [31:0]  mem_addr        ,
     input   [31:0]  mem_init        ,
+    input   [7:0]   src1_addr       ,
+    input   [7:0]   src2_addr       ,
+    input   [7:0]   rd_addr         ,
 
     output          ack             ,
 
@@ -20,38 +23,42 @@ module npu
     input           MEMWrite        ,
     input   [31:0]  ADDR            ,
     input   [31:0]  WD              ,
+
+    output          race_haz        ,
     output  [31:0]  RD
 );
 ////// Shared memory part below //////
-reg [data_size-1:0] mem_cell [mem_size-1:0];
-wire    [9:0]   word_addr;
-assign word_addr = ADDR [11:2];
+reg         [data_size-1:0] mem_cell [mem_size-1:0];
+wire        [9:0]           word_addr = ADDR [11:2];
 
 /* write */
-  always @ (posedge clk_50) begin
+always @ (posedge clk_50) begin
     if(MEMWrite) begin
-      mem_cell[word_addr] <= WD;
+        mem_cell[word_addr] <= WD;
     end
     else if(rst) begin
-      mem_cell[mem_addr-1] <= mem_init;
+        mem_cell[mem_addr-1] <= mem_init;
     end
-  end
+end
 
-  /* read */
-  reg [31:0]  RD_r;
-  always @ (posedge clk_50 or posedge rst) begin
+/* read */
+reg [31:0]  RD_r;
+always @ (posedge clk_50 or posedge rst) begin
     if (rst) begin
-      RD_r <= 0;
+        RD_r <= 0;
     end
     else if (MEMRead) begin
-      RD_r <= mem_cell[word_addr];
+        RD_r <= mem_cell[word_addr];
     end
     else begin
-      RD_r <= 32'hz;
+        RD_r <= 32'hz;
     end
-  end
+end
 
-  assign RD = RD_r;
+assign RD = RD_r;
+
+// hazard detection part
+reg race = 0;
 
 ////// NPU operation part below //////
 reg [5:0]              i = 6'b0;
@@ -109,24 +116,24 @@ always@(posedge clk or posedge rst) begin
 
     if(en) begin
         if(en_ab[0]) begin
-            a1 <= mem_cell[5'd0 * mul_size + (i-1)];
-            b1 <= mem_cell[(i-1) * mul_size + 5'd0 + mat_size];
+            a1 <= mem_cell[5'd0 * mul_size + (i-1) + src1_addr];
+            b1 <= mem_cell[(i-1) * mul_size + 5'd0 + src2_addr];
         end
         else begin
             a1 <= 32'd0;
             b1 <= 32'd0;
         end
         if(en_ab[1]) begin
-            a2 <= mem_cell[5'd1 * mul_size + (i-2)];
-            b2 <= mem_cell[(i-2) * mul_size + 5'd1 + mat_size];
+            a2 <= mem_cell[5'd1 * mul_size + (i-2) + src1_addr];
+            b2 <= mem_cell[(i-2) * mul_size + 5'd1 + src2_addr];
         end
         else begin
             a2 <= 32'd0;
             b2 <= 32'd0;
         end
         if(en_ab[2]) begin
-            a3 <= mem_cell[5'd2 * mul_size + (i-3)];
-            b3 <= mem_cell[(i-3) * mul_size + 5'd2 + mat_size];
+            a3 <= mem_cell[5'd2 * mul_size + (i-3) + src1_addr];
+            b3 <= mem_cell[(i-3) * mul_size + 5'd2 + src2_addr];
         end
         else begin
             a3 <= 32'd0;
@@ -143,15 +150,15 @@ always@(posedge clk or posedge rst) begin
     end
 
     if((ack_cnt == mul_size)) begin
-        mem_cell[mat_size*2 + 0] <= c1;
-        mem_cell[mat_size*2 + 1] <= c2;
-        mem_cell[mat_size*2 + 2] <= c3;
-        mem_cell[mat_size*2 + 3] <= c4;
-        mem_cell[mat_size*2 + 4] <= c5;
-        mem_cell[mat_size*2 + 5] <= c6;
-        mem_cell[mat_size*2 + 6] <= c7;
-        mem_cell[mat_size*2 + 7] <= c8;
-        mem_cell[mat_size*2 + 8] <= c9;
+        mem_cell[rd_addr + 0] <= c1;
+        mem_cell[rd_addr + 1] <= c2;
+        mem_cell[rd_addr + 2] <= c3;
+        mem_cell[rd_addr + 3] <= c4;
+        mem_cell[rd_addr + 4] <= c5;
+        mem_cell[rd_addr + 5] <= c6;
+        mem_cell[rd_addr + 6] <= c7;
+        mem_cell[rd_addr + 7] <= c8;
+        mem_cell[rd_addr + 8] <= c9;
         ack <= 1'b1;
     end
     else begin
