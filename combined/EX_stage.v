@@ -28,8 +28,6 @@ module EX_STAGE
 	input	[31:0] 	RD2				,   
     //ALU control output
     input   [3:0]   ALU_control     ,
-    input           EN_NPU          ,
-    input           npu_stall       ,
     
     /*******************************/
     /*           OUTPUT            */
@@ -59,7 +57,6 @@ module EX_STAGE
         //INPUT
         .A(A)                               ,
         .B(ALU_MUX_OUTPUT)                  ,
-        .EN_NPU(EN_NPU)                     ,
         .ALU_control(ALU_control)           ,
         
         //OUTPUT
@@ -113,7 +110,6 @@ module EX_STAGE
         //INPUT
         .flush(flush)                       ,
         .hit(hit)                           ,
-        .npu_stall(npu_stall)               ,
         .ex_mem_ctrl(EX_control)            ,
 
         //OUTPUT

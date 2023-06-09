@@ -7,14 +7,12 @@ module REGISTER_FILE
 
   input   [4:0]   RR1       ,   //Read register1
   input   [4:0]   RR2       ,   //Read register2
-  input   [4:0]   RR3       ,   //Read register3
   input   [4:0]   WR        ,   //write register
   input   [31:0]  WD        ,   //write data
   input 	        WE        ,   //RegWrite (by Control)
   
   output  [31:0]  RD1       ,   //to directly ALU
-  output  [31:0]  RD2       ,   //to MUX
-  output  [31:0]  RD3           //to get NPU operation data
+  output  [31:0]  RD2           //to MUX
 );
 
 /*******************************************************/
@@ -30,7 +28,6 @@ module REGISTER_FILE
   reg [31:0] 	register_file[0:31];
   assign RD1 = register_file[RR1];
   assign RD2 = register_file[RR2];
-  assign RD3 = register_file[RR3];
 
   always @ (posedge clk_50 or posedge rst  ) begin
     if (rst  )

@@ -2,7 +2,6 @@ module ALU
 (
 	input    	[31:0] 	A			,
 	input		[31:0] 	B			,
-	input				EN_NPU		,
 	input		[3:0]  	ALU_control	,
 	output             	zero		,
 	output		[31:0] 	result
@@ -43,9 +42,6 @@ module ALU
 		else if (ALU_control == 4'd3) begin	//slli
 			result_r = A << 2;
 			zero_r = 1'b0;
-		end
-		else if (ALU_control == 4'd8 && EN_NPU) begin
-			result_r = A << 1;
 		end
 		else begin
 			result_mult_r = 64'b0;

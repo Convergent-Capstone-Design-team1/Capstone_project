@@ -16,12 +16,12 @@ module combined
 	
     wire back_to_cpu;
     wire EN_NPU;
-	wire passing;
-	wire updating;
-	wire [31:0] sync_addr;
-	wire [31:0] sync_data;
-	wire [31:0] wb_addr;
-	wire [31:0] wb_data;
+	wire clk_50_w;
+	wire mem_rd_w;
+	wire mem_wr_w;
+	wire [31:0] addr_w;
+	wire [31:0] wd_w;
+	wire [31:0] data_w;
 
   	TOPCPU DUT_CPU 
 	(
@@ -39,15 +39,15 @@ module combined
 		.mem_init_addr(mem_addr)	,
 		.mem_init_data(mem_init)	,
 		.acquire_npu(back_to_cpu)	,
-		.npu_addr(wb_addr)			,
-		.npu_data(wb_data)			,
-		.npu_we(updating)			,
+		.R_DATA(data_w)				,
 
 		//OUTPUT
 		.EN_NPU(EN_NPU)				,
-		.sync_wr(passing)			,
-		.sync_addr(sync_addr)		,
-		.sync_data(sync_data)
+		.clk_50(clk_50_w)			,
+		.memread_c(mem_rd_w)		,
+		.memwrite_c(mem_wr_w)		,
+		.addr_c(addr_w)				,
+		.wd_c(wd_w)
 	);
 
 	npu DUT_NPU
@@ -56,17 +56,19 @@ module combined
 		.clk(clk)					,
 		.rst(rst_switch)			,
 		.en(EN_NPU)					,
-		.get_wr(passing)			,
-		.get_data(sync_data)		,
-		.get_addr(sync_addr)		,
 		.mem_addr(mem_addr)			,
 		.mem_init(mem_init)			,
 
 		//OUTPUT
-		.pass_we(updating)			,
 		.ack(back_to_cpu)			,
-		.modified_addr(wb_addr)		,
-		.modified_data(wb_data)
+
+		//ports due to shared memory system
+		.clk_50(clk_50_w),
+		.MEMRead(mem_rd_w),
+		.MEMWrite(mem_wr_w),
+		.ADDR(addr_w),
+		.WD(wd_w),
+		.RD(data_w)
 	);
 
 endmodule

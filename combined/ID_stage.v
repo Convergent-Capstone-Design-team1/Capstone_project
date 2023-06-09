@@ -6,7 +6,6 @@ module ID_STAGE
     input   [31:0]  reg_init        ,
 
     input   [31:0]  INST            ,
-    input   [31:0]  pc              ,
     input   [4:0]   WR              ,
     input   [4:0]   RD              ,
     input   [31:0]  WD              ,
@@ -25,62 +24,46 @@ module ID_STAGE
     output  [5:0]   f_id_ctrl       ,
     output  [3:0]   ALU_control     ,
     output          EN_NPU          ,
-    output  [9:0]   critical_addr   ,
-    output          npu_stall_o   
+    output  [9:0]   critical_addr
 );
-
     wire    [7:0]   control;
+    wire    [4:0]   sel_addr;
     wire            npu_stalling1;      // npu_stall을 1 cycle delay
     wire            npu_stalling2;      // npu_stall을 2 cycle delay (critical addr 저장 완료시점)
-    wire    [31:0]  RD3;                // matr 연산자의 경우 명령어 정보를 읽기 위한 전용 신호입니다
-    reg     [31:0]  pc_matr;
     reg     [9:0]   critical_addr;      // 메모리의 해당 영역의 주소는 접근해선 안됩니다.
     reg             EN_NPU = 0;         // NPU의 동작신호
     reg             npu_stall = 0;      // 1. Matrix연산이 시작되었다는 뜻으로, PC는 critical addr이 확실히 저장되었을 때 까지 무조건 기다려야합니다.
                                         // 2. 이는, 바로 직전 명령어가 critical addr의 값을 reg에 썼을 경우 2cycle을 기다려야 하기 때문입니다.
     reg             critical_state = 0;
-    reg             double_matr = 0;
-
 
     always @(posedge clk_50 or posedge rst) begin
         if(rst) begin
-            EN_NPU <= 0;
+            EN_NPU <= 1'b0;
             critical_addr <= 0;
             critical_state <= 0;
-            pc_matr <= 0;
         end
         else if(ack) begin
-            EN_NPU <= 0;
+            EN_NPU <= 1'b0;
             critical_addr <= 0;
             critical_state <= 0;
             npu_stall <= 0;
-            pc_matr <= 0;
-            double_matr <= 0;
         end
-        else if(critical) begin                                     // 6. 만일 critical path의 데이터를 load할 경우, data hazard입니다!
+        else if(npu_matching) begin
+            npu_stall <= 1'b1;
+        end
+        else if(ALU_control == 4'd8) begin              // 3. Matrix 연산이 시작되었으므로, NPU를 동작시키고, critical addr get까지 PC를 stall합니다.
+            EN_NPU <= 1'b1;
+            npu_stall <= 1'b1;
+        end
+        else if(critical) begin                         // 6. 만일 critical path의 데이터를 load할 경우, data hazard입니다!
             npu_stall <= 1'b1;
             critical_state <= 1'b1;
         end
-        else if(!critical_state && critical_addr) begin             // 5. critical addr get이 끝났으므로, 이제 PC는 resume해도 됩니다.
-            if(EN_NPU && (pc_matr != pc)) begin
-                double_matr <= 1'b1;
-            end
-            else begin
-                npu_stall <= 1'b0;
-            end
+        else if(!critical_state && critical_addr) begin // 5. critical addr get이 끝났으므로, 이제 PC는 resume해도 됩니다.
+            npu_stall <= 1'b0;
         end
-        else if(npu_stalling2 && EN_NPU && (!critical_addr)) begin  // 4. Matrix연산 직전 명령어가 critical path라도, 2사이클 이후엔 확실히 값이 쓰여 있습니다.
-            critical_addr <= RD3[9:0];                              // 4. Matr 명령어의 RD부분으로부터 critical path를 얻습니다.
-        end
-        else if(ALU_control == 4'd8) begin                          // 3. Matrix 연산이 시작되었으므로, NPU를 동작시키고, critical addr get까지 PC를 stall합니다.
-            if(EN_NPU && (pc_matr != pc)) begin
-                double_matr <= 1'b1;
-            end
-            else begin
-                EN_NPU <= 1'b1;
-                npu_stall <= 1'b1;
-            end
-            pc_matr <= pc;
+        else if(npu_stalling2 && EN_NPU) begin          // 4. Matrix연산 직전 명령어가 critical path라도, 2사이클 이후엔 확실히 값이 쓰여 있습니다.
+            critical_addr <= RD1[9:0];                  // 4. Matr 명령어의 RD부분으로부터 critical path를 얻습니다.
         end
         else begin
         end        
@@ -89,11 +72,11 @@ module ID_STAGE
     HAZARD_DETECTION HAZARD_DETECTION
     (   
         //INPUT
-        .MEMRead(MEMRead)                       ,
-        .RD(RD)                                 ,
-        .RS1(INST[19:15])                       ,
-        .RS2(INST[24:20])                       ,
-        .mat_stall(npu_stall || double_matr)    ,
+        .MEMRead(MEMRead)           ,
+        .RD(RD)                     ,
+        .RS1(INST[19:15])           ,
+        .RS2(INST[24:20])           ,
+        .mat_start(npu_stall)       ,
         
         //OUTPUT
         .stall(stall)               
@@ -103,7 +86,6 @@ module ID_STAGE
     (
         //INPUT
         .CtrlSrc(stall)             ,
-        .npu_stall(npu_stalling1)   ,
         .opcode(INST[6:0])          ,
         
         //OUTPUT
@@ -128,6 +110,7 @@ module ID_STAGE
         .Q(npu_stalling2)
     );
 
+    assign sel_addr = npu_stalling2 ? INST[11:7] : INST[19:15];
     REGISTER_FILE REGISTER_FILE
     (
         //INPUT
@@ -136,17 +119,15 @@ module ID_STAGE
         .reg_addr(reg_addr)         ,
         .reg_init(reg_init)         ,
         
-        .RR1(INST[19:15])           ,
+        .RR1(sel_addr)              ,
         .RR2(INST[24:20])           ,
-        .RR3(INST[11:7])            ,
         .WR(WR)                     ,
         .WD(WD)                     ,
         .WE(RegWrite)               ,
         
         //OUTPUT
         .RD1(RD1)                   ,
-        .RD2(RD2)                   ,
-        .RD3(RD3)
+        .RD2(RD2)
     );
 
     IMMGEN IMMGEN
@@ -173,14 +154,11 @@ module ID_STAGE
     (
         //INPUT
         .flush(flush)               ,
-        .npu_stall(npu_stalling1)   ,
         .hit(hit)                   ,
         .id_ex_ctrl(control[7:2])   ,
        
         //OUTPUT
         .id_ex_f_ctrl(f_id_ctrl)    
     );
-
-    assign npu_stall_o = npu_stalling1;
     
 endmodule

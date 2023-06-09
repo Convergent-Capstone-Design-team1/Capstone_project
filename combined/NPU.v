@@ -9,25 +9,55 @@ module npu
     input           clk             ,
     input           rst             ,
     input           en              ,
-    input           get_wr          ,
-    input   [31:0]  get_data        ,
-    input   [31:0]  get_addr        ,
     input   [31:0]  mem_addr        ,
     input   [31:0]  mem_init        ,
 
-    output          pass_we         ,
     output          ack             ,
-    output  [31:0]  modified_addr   ,
-    output  [31:0]  modified_data
-);
 
-reg [(mem_size*2)-1:0] npu_mem[data_size-1:0];     // for문으로 각 24개씩 32'b data를 초기화하며 넣어줌
+    // PORTs due to shared memory system
+    input           clk_50          ,
+    input           MEMRead         ,
+    input           MEMWrite        ,
+    input   [31:0]  ADDR            ,
+    input   [31:0]  WD              ,
+    output  [31:0]  RD
+);
+////// Shared memory part below //////
+reg [data_size-1:0] mem_cell [mem_size-1:0];
+wire    [9:0]   word_addr;
+assign word_addr = ADDR [11:2];
+
+/* write */
+  always @ (posedge clk_50) begin
+    if(MEMWrite) begin
+      mem_cell[word_addr] <= WD;
+    end
+    else if(rst) begin
+      mem_cell[mem_addr-1] <= mem_init;
+    end
+  end
+
+  /* read */
+  reg [31:0]  RD_r;
+  always @ (posedge clk_50 or posedge rst) begin
+    if (rst) begin
+      RD_r <= 0;
+    end
+    else if (MEMRead) begin
+      RD_r <= mem_cell[word_addr];
+    end
+    else begin
+      RD_r <= 32'hz;
+    end
+  end
+
+  assign RD = RD_r;
+
+////// NPU operation part below //////
 reg [5:0]              i = 6'b0;
 reg [5:0]              j = 6'b0;
 reg [5:0]              k = 6'b0;
-reg                    flag = 0;
-reg [31:0]             modified_addr = 0;
-reg [31:0]             modified_data = 0;
+reg                    ack;
 
 reg [data_size-1:0] a1 = 32'b0;
 reg [data_size-1:0] a2 = 32'b0;
@@ -53,7 +83,7 @@ generate
     genvar  idx;
     for (idx = 0; idx < 27; idx = idx+1) begin: inside_npu
 	    wire [31:0] tmp;
-	    assign tmp = npu_mem[idx];
+	    assign tmp = mem_cell[idx];
     end
 endgenerate
 
@@ -67,41 +97,36 @@ always@(posedge rst) begin
     i  <= 6'b0;
 end
 
-always@(posedge clk) begin
+always@(posedge clk or posedge rst) begin
 
     if(rst) begin
-        npu_mem[mem_addr-1] <= mem_init;
+        mem_cell[mem_addr-1] <= mem_init;
     end
 
     en_ab[0] <= (en && (i < (mul_size))) ? 1'b1 : 1'b0;
     en_ab[1] <= (en && (en_ab[0])) ? 1'b1 : 1'b0;
     en_ab[2] <= (en && (en_ab[1])) ? 1'b1 : 1'b0;
-    //en_ab[mul_size-1:1] <= (en && (en_ab[mul_size-2:0])) ? 1'b1 : 1'b0;
-
-    if(get_wr && (get_addr >= 0)) begin
-        npu_mem[mem_addr] <= get_data;
-    end
 
     if(en) begin
         if(en_ab[0]) begin
-            a1 <= npu_mem[5'd0 * mul_size + (i-1)];
-            b1 <= npu_mem[(i-1) * mul_size + 5'd0 + mat_size];
+            a1 <= mem_cell[5'd0 * mul_size + (i-1)];
+            b1 <= mem_cell[(i-1) * mul_size + 5'd0 + mat_size];
         end
         else begin
             a1 <= 32'd0;
             b1 <= 32'd0;
         end
         if(en_ab[1]) begin
-            a2 <= npu_mem[5'd1 * mul_size + (i-2)];
-            b2 <= npu_mem[(i-2) * mul_size + 5'd1 + mat_size];
+            a2 <= mem_cell[5'd1 * mul_size + (i-2)];
+            b2 <= mem_cell[(i-2) * mul_size + 5'd1 + mat_size];
         end
         else begin
             a2 <= 32'd0;
             b2 <= 32'd0;
         end
         if(en_ab[2]) begin
-            a3 <= npu_mem[5'd2 * mul_size + (i-3)];
-            b3 <= npu_mem[(i-3) * mul_size + 5'd2 + mat_size];
+            a3 <= mem_cell[5'd2 * mul_size + (i-3)];
+            b3 <= mem_cell[(i-3) * mul_size + 5'd2 + mat_size];
         end
         else begin
             a3 <= 32'd0;
@@ -116,41 +141,23 @@ always@(posedge clk) begin
         ack_cnt <= 0;
         i <= 6'd0;
     end
-    if(ack) begin
-        for(j = 0; j < mat_size; j = j + 1) begin
-            npu_mem[mat_size*2 + j] <= 0;
-        end
+
+    if((ack_cnt == mul_size)) begin
+        mem_cell[mat_size*2 + 0] <= c1;
+        mem_cell[mat_size*2 + 1] <= c2;
+        mem_cell[mat_size*2 + 2] <= c3;
+        mem_cell[mat_size*2 + 3] <= c4;
+        mem_cell[mat_size*2 + 4] <= c5;
+        mem_cell[mat_size*2 + 5] <= c6;
+        mem_cell[mat_size*2 + 6] <= c7;
+        mem_cell[mat_size*2 + 7] <= c8;
+        mem_cell[mat_size*2 + 8] <= c9;
+        ack <= 1'b1;
     end
     else begin
-        npu_mem[mat_size*2 + 0] <= c1;
-        npu_mem[mat_size*2 + 1] <= c2;
-        npu_mem[mat_size*2 + 2] <= c3;
-        npu_mem[mat_size*2 + 3] <= c4;
-        npu_mem[mat_size*2 + 4] <= c5;
-        npu_mem[mat_size*2 + 5] <= c6;
-        npu_mem[mat_size*2 + 6] <= c7;
-        npu_mem[mat_size*2 + 7] <= c8;
-        npu_mem[mat_size*2 + 8] <= c9;
-    end
-    if(!flag && (mul_size == ack_cnt)) begin
-        flag <= 1;
-    end
-    else if(flag && (k < mat_size)) begin
-        modified_addr <= mat_size*8 + k*4;
-        modified_data <= npu_mem[mat_size*2 + k];
-        k <= k + 1;
-    end
-    else begin
-        k <= 0;
-        flag <= 0;
-        modified_addr <= 0;
-        modified_data <= 0;
+        ack <= 0;
     end
 end
-
-wire ack;
-assign ack = (k == mat_size) ? 1'b1 : 1'b0;
-assign pass_we = k && flag;
 
 SYSTOLIC_ARRAY dut1
 (
