@@ -16,7 +16,7 @@ module ALU
 		zero_r = 1'b0;
 		result_r = 32'b0;
 		result_mult_r = 64'b0;
-		if (ALU_control == 4'd2) begin			//add
+		if (ALU_control == 4'd2) begin		//add
 			result_r = A + B;
 			zero_r = 1'b0;
 		end 

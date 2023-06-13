@@ -27,8 +27,9 @@ module ID_STAGE
     output          EN_NPU          ,
     output  [9:0]   matA_addr       ,
     output  [9:0]   matB_addr       ,
-    output  [9:0]   matC_addr       
-);
+    output  [9:0]   matC_addr                
+);  
+    wire            WE;
     wire    [7:0]   control;
     wire            critical;
     wire            npu_stalling1;      // npu_stall을 1 cycle delay
@@ -40,7 +41,7 @@ module ID_STAGE
     reg     [9:0]   matA_addr;
     reg     [9:0]   matB_addr;
     reg     [9:0]   matC_addr;
-    reg             double_matr = 0;
+    reg             double_matr_r = 0;
     reg             EN_NPU = 0;         // NPU의 동작신호
     reg             npu_stall = 0;      // 1. Matrix연산이 시작되었다는 뜻으로, PC는 critical addr이 확실히 저장되었을 때 까지 무조건 기다려야합니다.
                                         // 2. 이는, 바로 직전 명령어가 critical addr의 값을 reg에 썼을 경우 2cycle을 기다려야 하기 때문입니다.
@@ -49,7 +50,7 @@ module ID_STAGE
         if(rst) begin
             EN_NPU <= 1'b0;
             critical_addr <= 0;
-            double_matr <= 0;
+            double_matr_r <= 0;
             npu_reg_addr <= 0;
             matA_addr <= 0;
             matB_addr <= 0;
@@ -59,7 +60,7 @@ module ID_STAGE
             EN_NPU <= 1'b0;
             critical_addr <= 0;
             npu_stall <= 0;
-            double_matr <= 0;
+            double_matr_r <= 0;
             npu_reg_addr <= 0;
             matA_addr <= 0;
             matB_addr <= 0;
@@ -67,7 +68,7 @@ module ID_STAGE
         end
         else if(ALU_control == 4'd8) begin              // 3. Matrix 연산이 시작되었으므로, NPU를 동작시키고, critical addr get까지 PC를 stall합니다.
             if(EN_NPU) begin
-                double_matr <= 1;
+                double_matr_r <= 1;
             end
             else begin
                 EN_NPU <= 1'b1;
@@ -105,7 +106,8 @@ module ID_STAGE
             npu_reg_addr <= 0; 
         end
     end
-    
+    assign double_matr = double_matr_r;
+
     HAZARD_DETECTION HAZARD_DETECTION
     (   
         //INPUT
@@ -161,6 +163,7 @@ module ID_STAGE
         .Q(npu_stalling3)
     );
 
+    //assign WE = npu_stall ? 1'b0 : RegWrite;
     REGISTER_FILE REGISTER_FILE
     (
         //INPUT
@@ -208,6 +211,8 @@ module ID_STAGE
         .flush(flush)               ,
         .hit(hit)                   ,
         .id_ex_ctrl(control[7:2])   ,
+        .EN_NPU(EN_NPU)             ,
+        .ack(ack)                   ,
        
         //OUTPUT
         .id_ex_f_ctrl(f_id_ctrl)    

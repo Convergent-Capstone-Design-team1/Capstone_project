@@ -1,0 +1,222 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Sat Jun 10 05:03:23 2023
+[*]
+[dumpfile] "/home/dox/Capstone_project/combined/test.vcd"
+[dumpfile_mtime] "Sat Jun 10 04:57:11 2023"
+[dumpfile_size] 8134667
+[savefile] "/home/dox/Capstone_project/combined/0610_it_seems_done.gtkw"
+[timestart] 5895200
+[size] 1920 1017
+[pos] -1 -1
+*-15.000000 9441000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_combined.
+[treeopen] tb_combined.DUT_combined.
+[treeopen] tb_combined.DUT_combined.DUT_CPU.
+[treeopen] tb_combined.DUT_combined.DUT_CPU.EX_STAGE.
+[treeopen] tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.
+[sst_width] 214
+[signals_width] 220
+[sst_expanded] 1
+[sst_vpaned_height] 525
+@28
+tb_combined.DUT_combined.DUT_NPU.clk
+tb_combined.DUT_combined.DUT_NPU.rst
+@200
+-NPU_INPUT
+@24
+tb_combined.DUT_combined.DUT_NPU.mem_addr[31:0]
+tb_combined.DUT_combined.DUT_NPU.mem_init[31:0]
+tb_combined.DUT_combined.DUT_NPU.src1_addr[7:0]
+tb_combined.DUT_combined.DUT_NPU.src2_addr[7:0]
+tb_combined.DUT_combined.DUT_NPU.rd_addr[7:0]
+@200
+-
+@24
+tb_combined.DUT_combined.DUT_NPU.a1[31:0]
+tb_combined.DUT_combined.DUT_NPU.a2[31:0]
+tb_combined.DUT_combined.DUT_NPU.a3[31:0]
+@200
+-
+@24
+tb_combined.DUT_combined.DUT_NPU.b1[31:0]
+tb_combined.DUT_combined.DUT_NPU.b2[31:0]
+tb_combined.DUT_combined.DUT_NPU.b3[31:0]
+@200
+-
+@24
+tb_combined.DUT_combined.DUT_NPU.c1[31:0]
+tb_combined.DUT_combined.DUT_NPU.c2[31:0]
+tb_combined.DUT_combined.DUT_NPU.c3[31:0]
+tb_combined.DUT_combined.DUT_NPU.c4[31:0]
+tb_combined.DUT_combined.DUT_NPU.c5[31:0]
+tb_combined.DUT_combined.DUT_NPU.c6[31:0]
+tb_combined.DUT_combined.DUT_NPU.c7[31:0]
+tb_combined.DUT_combined.DUT_NPU.c8[31:0]
+tb_combined.DUT_combined.DUT_NPU.c9[31:0]
+@200
+-
+-NPU_signals
+@28
+tb_combined.DUT_combined.DUT_NPU.en_ab[2:0]
+@24
+tb_combined.DUT_combined.DUT_NPU.i[5:0]
+tb_combined.DUT_combined.DUT_NPU.ack_cnt[27:0]
+@28
+tb_combined.DUT_combined.DUT_NPU.ack
+@200
+-
+-NPU_mem
+@24
+[color] 2
+tb_combined.DUT_combined.DUT_CPU.PC[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[0].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[1].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[2].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[3].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[4].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[5].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[6].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[7].tmp[31:0]
+@25
+tb_combined.DUT_combined.DUT_NPU.inside_npu[8].tmp[31:0]
+@24
+tb_combined.DUT_combined.DUT_NPU.inside_npu[9].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[10].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[11].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[12].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[13].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[14].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[15].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[16].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[17].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[18].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[19].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[20].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[21].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[22].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[23].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[24].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[25].tmp[31:0]
+tb_combined.DUT_combined.DUT_NPU.inside_npu[26].tmp[31:0]
+@200
+-a0
+@24
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.REGISTER_FILE.register[10].tmp[31:0]
+@200
+-a1
+@24
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.REGISTER_FILE.register[11].tmp[31:0]
+@200
+-
+-CPU_signals
+@24
+[color] 2
+tb_combined.DUT_combined.DUT_CPU.PC[31:0]
+@28
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.EN_NPU
+@24
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.ALU_control[3:0]
+@28
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.npu_stall
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.double_matr
+@24
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.critical
+@28
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.HAZARD_DETECTION.mem_wr
+@24
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.critical_addr[9:0]
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.HAZARD_DETECTION.mem_is_writing[9:0]
+@200
+-
+-look here!
+-why a7 is 0??
+@24
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.PC.n_pc[31:0]
+[color] 2
+tb_combined.DUT_combined.DUT_CPU.PC[31:0]
+@200
+-t0
+@24
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.REGISTER_FILE.register[5].tmp[31:0]
+@200
+-a7
+@24
+[color] 2
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.REGISTER_FILE.register[17].tmp[31:0]
+@200
+-
+-ID_STAGE
+@28
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.double_matr
+tb_combined.DUT_combined.DUT_NPU.ack
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.npu_stall
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.double_matr
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.EN_NPU
+@200
+-
+-Control
+@28
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.CONTROL.opcode[6:0]
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.CONTROL.CtrlSrc
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.CONTROL.control[7:0]
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.ID_EX_FLUSH.id_ex_f_ctrl[5:0]
+tb_combined.DUT_combined.DUT_CPU.EX_STAGE.EX_MEM_FLUSH.ex_mem_f_ctrl[4:0]
+tb_combined.DUT_combined.DUT_CPU.MEM_control[1:0]
+@200
+-
+-BTB
+@28
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.is_branch
+@24
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.mem_pc[31:0]
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.target[31:0]
+@28
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.is_taken
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.is_branch
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.PCSrc
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.miss_predict
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.hit
+@24
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.BTB.next_pc[31:0]
+@200
+-
+-PC_MUX
+@24
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.PC_MUX.PC_4[31:0]
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.PC_MUX.target_address[31:0]
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.PC_MUX.sel_mux
+tb_combined.DUT_combined.DUT_CPU.IF_STAGE.PC_MUX.next_pc[31:0]
+@200
+-
+-Hazard detection unit
+@28
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.HAZARD_DETECTION.mat_start
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.HAZARD_DETECTION.stall
+@200
+-
+@28
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.RegWrite
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.npu_stall
+@24
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.WD[31:0]
+@200
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+[pattern_trace] 1
+[pattern_trace] 0

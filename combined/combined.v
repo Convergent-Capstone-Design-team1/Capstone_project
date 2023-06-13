@@ -14,6 +14,7 @@ module combined
 	input [31:0]	mem_init
 );
 	
+	wire double_matr;
     wire back_to_cpu;
     wire EN_NPU;
 	wire clk_50_w;

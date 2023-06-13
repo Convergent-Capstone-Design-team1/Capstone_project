@@ -20,16 +20,17 @@ module INST_MEM
          20: INST_r = 32'hff810113;       //         addi sp, sp, -8   #save s4, s4 on stack *
          24: INST_r = 32'h01412223;       //         sw s4, 4(sp)      #int j *
          28: INST_r = 32'h01312023;       //         sw s3, 0(sp)      #int i *
-         32: INST_r = 32'h00400993;       //         addi s3, zero, 4  #i = 1
+         32: INST_r = 32'h00000993;       //         addi s3, zero, 4  #i = 0
          36: INST_r = 32'h00000a13;       //         addi s4, zero, 0  #j = 0
-         40: INST_r = 32'h00000793;       //         addi a5, zero, 0     # A[][] start address
-         44: INST_r = 32'h02400813;       //         addi a6, zero, 36    # B[][] start address
-         48: INST_r = 32'h04800893;       //         addi a7, zero, 72    # C[][] start address
+         40: INST_r = 32'h02000793;       //         addi a5, zero, 32     # A[][] start address
+         44: INST_r = 32'h05000813;       //         addi a6, zero, 80    # B[][] start address
+         48: INST_r = 32'h0A000893;       //         addi a7, zero, 164    # C[][] start address
          52: INST_r = 32'h00f818b3;       //         matr a7, a5, a6   # A X B = C
-         56: INST_r = 32'h00f818b3;       // double  matr a7, a5, a6   # A X B = C        
+         56: INST_r = 32'h010897B3;       // double  matr a7, a5, a6   # A X B = C        
          60: INST_r = 32'h00000513;       //Loop 1:  addi a0, s1, 0   #download base addr of arry[] at a0 -> 0
          64: INST_r = 32'h02400613;       //         addi a2, s2, 40     #download size of arry[](=n) at a2 -> 10 * 4  //028  02c 190
-         68: INST_r = 32'h00F002B3;       //  case 1 add t0, zero, a5     #sorting MatA
+         //68: INST_r = 32'h00F002B3;       //  case 1 add t0, zero, a5     #sorting MatA
+         68: INST_r = 32'h011002B3;       //  case 2 add t0, zero, a7     #sorting MatC
          72: INST_r = 32'h04c9d863;       //         bge s3, a2, Exit   #j is bigger than n or equal
          76: INST_r = 32'h00000e33;       //         add t3, zero, zero #tmp reset
          80: INST_r = 32'hFFC60E13;       //         addi t3, a2, -4       <original : sub t3, a2, s3     #tmp resigter t3 = n-i>

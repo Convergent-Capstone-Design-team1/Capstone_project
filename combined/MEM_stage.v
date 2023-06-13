@@ -1,6 +1,6 @@
 module MEM_STAGE
 (
-    input   [4:0]   MEM_control         ,
+    input   [2:0]   MEM_control         ,
     input           zero                ,
 
     output          branch              ,
