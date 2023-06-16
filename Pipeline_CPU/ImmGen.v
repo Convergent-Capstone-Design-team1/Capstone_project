@@ -1,3 +1,6 @@
+// addi, lw, sw, beg, bge의 immediate 값을 32bit로 확장시켜주기 위한 module
+// 각 명령어 타입의 아키텍쳐에 맞게 확장해도록 case문 사용
+
 module IMMGEN
 (	
 	input		[31:0] INST         ,

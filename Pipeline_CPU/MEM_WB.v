@@ -1,3 +1,5 @@
+// MEM_WB Register (71bit)
+
 module MEM_WB
 #(
     parameter  W = 71

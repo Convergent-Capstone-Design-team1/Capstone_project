@@ -1,3 +1,5 @@
+// EX_MEM Register (140bit)
+
 module EX_MEM
 #(
     parameter  W = 140
@@ -10,6 +12,7 @@ module EX_MEM
     output  [W-1:0] Q
 );
 
+        
     REGISTER #(W) REG_EX_MEM
     (
         .CLK(clk)   ,

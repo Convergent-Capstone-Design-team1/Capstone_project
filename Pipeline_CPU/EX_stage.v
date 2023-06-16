@@ -1,3 +1,5 @@
+// Execution Stage : ALU, ALU_MUX, Forwarding Unit, Forwarding MUX. EX_MEM_FLUSH
+
 module EX_STAGE
 (
     /*******************************/
@@ -9,7 +11,7 @@ module EX_STAGE
     input           hit             ,
     input   [4:0]   EX_control      ,
     input           ALUSrc          ,
-    //target address adder
+    //Using target address calculate
     input   [31:0]  pc              ,
     /**************ALU**************/
     //ImmGen output
@@ -116,7 +118,7 @@ module EX_STAGE
         .ex_mem_f_ctrl(f_ex_ctrl)   
     );
 
-    assign F_B = B;
-    assign t_addr = pc + (S_INST << 1);
-    
+    assign F_B = B;                                 // Forwarding Mux에서 나온 B 출력이 ALU input B로 들어감
+    assign t_addr = pc + (S_INST << 1);             // Target address 계산 
+
 endmodule

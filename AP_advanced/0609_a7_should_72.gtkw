@@ -1,28 +1,45 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Fri Jun  9 19:07:15 2023
+[*] Sat Jun 10 08:06:15 2023
 [*]
 [dumpfile] "/home/hyundo/capstone/AP_advanced/test.vcd"
-[dumpfile_mtime] "Fri Jun  9 19:06:50 2023"
-[dumpfile_size] 7663107
+[dumpfile_mtime] "Sat Jun 10 07:54:42 2023"
+[dumpfile_size] 8093944
 [savefile] "/home/hyundo/capstone/AP_advanced/0609_a7_should_72.gtkw"
-[timestart] 1090000
+[timestart] 5901400
 [size] 1536 801
 [pos] -1 -1
-*-21.000000 9080000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-15.000000 5960000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_combined.
 [treeopen] tb_combined.DUT_combined.
 [treeopen] tb_combined.DUT_combined.DUT_CPU.
-[treeopen] tb_combined.DUT_combined.DUT_CPU.EX_STAGE.
 [treeopen] tb_combined.DUT_combined.DUT_CPU.MEM_STAGE.
-[sst_width] 214
+[sst_width] 274
 [signals_width] 220
 [sst_expanded] 1
-[sst_vpaned_height] 267
+[sst_vpaned_height] 254
 @28
 tb_combined.DUT_combined.DUT_NPU.clk
 tb_combined.DUT_combined.DUT_NPU.rst
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.npu_stall
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.npu_stalling1
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.npu_stalling2
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.npu_stalling3
+@24
+tb_combined.DUT_combined.DUT_CPU.matA[9:0]
+tb_combined.DUT_combined.DUT_CPU.matB[9:0]
+@25
+tb_combined.DUT_combined.DUT_CPU.matC[9:0]
+@28
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.critical
+tb_combined.DUT_combined.DUT_CPU.EN_NPU
+tb_combined.DUT_combined.cycle1
+tb_combined.DUT_combined.cycle2
+tb_combined.DUT_combined.cycle3
+@24
+tb_combined.DUT_combined.DUT_CPU.ID_STAGE.critical_addr[9:0]
 @200
+-
 -NPU_INPUT
 @24
 tb_combined.DUT_combined.DUT_NPU.mem_addr[31:0]
@@ -67,9 +84,6 @@ tb_combined.DUT_combined.DUT_NPU.ack
 @200
 -
 -NPU_mem
-@25
-[color] 2
-tb_combined.DUT_combined.DUT_CPU.PC[31:0]
 @24
 tb_combined.DUT_combined.DUT_NPU.inside_npu[0].tmp[31:0]
 tb_combined.DUT_combined.DUT_NPU.inside_npu[1].tmp[31:0]
@@ -98,6 +112,8 @@ tb_combined.DUT_combined.DUT_NPU.inside_npu[23].tmp[31:0]
 tb_combined.DUT_combined.DUT_NPU.inside_npu[24].tmp[31:0]
 tb_combined.DUT_combined.DUT_NPU.inside_npu[25].tmp[31:0]
 tb_combined.DUT_combined.DUT_NPU.inside_npu[26].tmp[31:0]
+[color] 2
+tb_combined.DUT_combined.DUT_CPU.PC[31:0]
 @200
 -a0
 @24

@@ -1,3 +1,6 @@
+// INST MEM 구현
+// 실제 memory 형태는 아니지만 pc값에 대한 case 구문을 활용해 ROM의 형태로 구현
+
 module INST_MEM
 (  
    input             clk_50   ,
@@ -10,7 +13,9 @@ module INST_MEM
    always @ (posedge clk_50)
    begin
       INST_r = 32'b0;
-        
+    
+      /* Bubble sort instructions */
+      
       case(ADDR)
          0: INST_r = 32'h00000013;        //         addi x0, x0, 0
          4: INST_r = 32'h00000013;        //         addi x0, x0, 0
@@ -52,6 +57,8 @@ module INST_MEM
          default: INST_r = 32'h00000000;
       endcase
       
+      
+      /* matrix multiplication instructions */
       /*
       case(ADDR)
          0: INST_r = 32'h00000013;        //       addi x0, x0, 0

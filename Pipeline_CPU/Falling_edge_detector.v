@@ -1,3 +1,6 @@
+// Register file과 Data mem에서 위상이 반전된 clk을 사용하기 위한 Falling edge detector
+// 기존 clk에서 falling edge일 때 1로 set하고 아닐 때 0으로 set해 위상 반전을 구현
+
 module FALLING_EDGE_DETECTOR
 (
     input  clk              ,

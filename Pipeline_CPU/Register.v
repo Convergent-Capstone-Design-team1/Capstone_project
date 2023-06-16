@@ -13,9 +13,9 @@ module REGISTER
     reg     [W-1:0] Q_r;
     always @ (posedge CLK or negedge RST)
     begin
-        if      (RST)   Q_r <= 0;
-        else if (EN)    Q_r <= Q;   //D가 들어가야 하는것 아닌가?
-        else            Q_r <= D;
+        if      (RST)   Q_r <= 0;           //reset 신호가 들어오면 0으로 초기화
+        else if (EN)    Q_r <= Q;           //stall 신호가 들어오면 값 유지 -> stall
+        else            Q_r <= D;           
     end
 
     assign Q = Q_r;

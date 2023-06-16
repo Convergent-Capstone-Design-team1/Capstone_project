@@ -14,13 +14,9 @@ module TOPCPU
     //REGISTER_FILE initialization
     input   [4:0]   reg_addr            ,
     input   [31:0]  reg_init            ,
-    //MEMORY initilization
-    input   [31:0]  mem_init_addr       ,
-    input   [31:0]  mem_init_data       ,
-
+    //input signal from NPU
     input           acquire_npu         ,
     input   [31:0]  R_DATA              ,
-    input           mem_haz             ,
 
     // OUTPUT
     output          EN_NPU              ,
@@ -81,9 +77,7 @@ module TOPCPU
     wire    [1:0]   MEM_control;
     wire    [31:0]  R_DATA;
     wire    [31:0]  mem_pc;
-    wire    [31:0]  update_mem_addr;
-    wire    [31:0]  update_mem_data;
-
+ 
     //MEM_WB register
     wire    [70:0]  MEM_WB_D;
     wire    [70:0]  MEM_WB_Q;
@@ -94,6 +88,7 @@ module TOPCPU
 
     //fall_detected
     wire            clk_50;
+
     /*******************************/
     /*     Module Instatiation     */
     /*******************************/

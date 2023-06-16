@@ -88,48 +88,64 @@ module INITIAL_MODULE
     assign reg_addr = reg_addr_r;
 
     // Memory initilization
-    reg [4:0] mem_addr_r;
+    reg [5:0] mem_addr_r;
     always @ (posedge clk)
     begin
         if (rst_i) begin
-            mem_addr_r <= 5'b0;
+            mem_addr_r <= 6'b0;
         end
-        else if (mem_addr_r <= 5'd26) begin
+        else if (mem_addr_r <= 6'd63) begin
             case(mem_addr_r)
-                5'd0 : mem_init <= 9;
-                5'd1 : mem_init <= 8;
-                5'd2 : mem_init <= 7;
-                5'd3 : mem_init <= 6;
-                5'd4 : mem_init <= 5;
-                5'd5 : mem_init <= 4;
-                5'd6 : mem_init <= 3;
-                5'd7 : mem_init <= 2;
-                5'd8 : mem_init <= 1;
-                5'd9 : mem_init <= 1;
-                5'd10 : mem_init <= 2;
-                5'd11 : mem_init <= 3;
-                5'd12 : mem_init <= 4;
-                5'd13 : mem_init <= 5;
-                5'd14 : mem_init <= 6;
-                5'd15 : mem_init <= 7;
-                5'd16 : mem_init <= 8;
-                5'd17 : mem_init <= 9;
-                5'd18 : mem_init <= 0;
-                5'd19 : mem_init <= 0;
-                5'd20 : mem_init <= 0;
-                5'd21 : mem_init <= 0;
-                5'd22 : mem_init <= 0;
-                5'd23 : mem_init <= 0;
-                5'd24 : mem_init <= 0;
-                5'd25 : mem_init <= 0;
-                5'd26 : mem_init <= 0;
+                6'd0 : mem_init <= 4;
+                6'd1 : mem_init <= 7;
+                6'd2 : mem_init <= 2;
+                6'd3 : mem_init <= 4;
+                6'd4 : mem_init <= 1;
+                6'd5 : mem_init <= 8;
+                6'd6 : mem_init <= 4;
+                6'd7 : mem_init <= 2;
+                6'd8 : mem_init <= 6;
+                6'd9 : mem_init <= 9;
+                6'd10 : mem_init <= 3;
+                6'd11 : mem_init <= 1;
+                6'd12 : mem_init <= 4;
+                6'd13 : mem_init <= 2;
+                6'd14 : mem_init <= 5;
+                6'd15 : mem_init <= 8;
+                6'd16 : mem_init <= 5;
+                6'd17 : mem_init <= 2;
+                6'd18 : mem_init <= 6;
+                6'd19 : mem_init <= 9;
+                6'd20 : mem_init <= 2;
+                6'd21 : mem_init <= 4;
+                6'd22 : mem_init <= 8;
+                6'd23 : mem_init <= 1;
+                6'd24 : mem_init <= 4;
+                6'd25 : mem_init <= 7;
+                6'd26 : mem_init <= 9;
+                6'd27 : mem_init <= 4;
+                6'd28 : mem_init <= 3;
+                6'd29 : mem_init <= 6;
+                6'd30 : mem_init <= 1;
+                6'd31 : mem_init <= 9;
+                6'd32 : mem_init <= 4;
+                6'd33 : mem_init <= 7;
+                6'd34 : mem_init <= 2;
+                6'd35 : mem_init <= 5;
+                6'd36 : mem_init <= 3;
+                6'd37 : mem_init <= 8;
+                6'd38 : mem_init <= 2;
+                6'd39 : mem_init <= 9;
+                6'd40 : mem_init <= 1;
+                default : mem_init <= 0;
+
             endcase
             mem_addr_r <= mem_addr_r + 1;
         end
         else begin
-            mem_addr_r <= 5'b0;
+            mem_addr_r <= 6'b0;
         end
     end
-    assign mem_addr = {27'b0, mem_addr_r};
+    assign mem_addr = {26'b0, mem_addr_r};
 
 endmodule

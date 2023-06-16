@@ -1,3 +1,7 @@
+//Pipeline CPU를 test하기 위한 tb
+//FPGA에 올리는 것을 고려해 각 switch에 따라 동작하도록 함
+//TOPCPU와 INITIAL module을 instant해 intial module에서 나오는 초기값 주소와 데이터를 TOPCPU로 전송
+
 `timescale  1ns / 100ps 
 module tb_CPU();
 
@@ -18,8 +22,6 @@ module tb_CPU();
 	wire	[4:0]	reg_addr;
 	wire	[31:0]	reg_init;
 
-	integer i;
-	
   	TOPCPU CPU 
 	(
 		//INPUT	
@@ -50,7 +52,7 @@ module tb_CPU();
     	.reg_init(reg_init)	
 	);
 
-	
+	// clk generate
 	always #2.5 clk = ~clk;
 	
 	initial 

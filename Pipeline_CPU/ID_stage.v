@@ -1,9 +1,11 @@
+// ID Stage : Hazard detection, Control, ImmGen, Register file, ALU control, ID_EX flush
+
 module ID_STAGE
 (   
-    input           clk_50          ,
+    input           clk_50          ,       // Register file에서 위산 반전 clk 사용
     input           rst             ,
-    input   [4:0]   reg_addr        ,
-    input   [31:0]  reg_init        ,
+    input   [4:0]   reg_addr        ,       // Register file 초기화를 위한 address
+    input   [31:0]  reg_init        ,       // Register file 초기화를 위한 init data
 
     input   [31:0]  INST            ,
     input   [4:0]   WR              ,
@@ -25,7 +27,6 @@ module ID_STAGE
 );
     wire            flag;
     wire    [7:0]   control;
-    reg             en_npu_r;
 
     HAZARD_DETECTION HAZARD_DETECTION
     (   
@@ -98,7 +99,5 @@ module ID_STAGE
         //OUTPUT
         .id_ex_f_ctrl(f_id_ctrl)    
     );
-
-    assign EN_NPU = (ALU_control == 4'd8) ? 1'b1 : 1'b0;
-    
+ 
 endmodule

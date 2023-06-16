@@ -88,15 +88,16 @@ module ID_STAGE
         end
 
         // matr의 모든 register가 안정됨이 확정되었으므로 이제 읽기 시작합니다.
+        // npu_stalling은 matr 명령어의 3개의 인자를 받기 위해 사용
         if(npu_stalling3) begin                                     
-            matC_addr <= RD3;
-        end
+            matC_addr <= RD3;                                       // matC 주소 출력
+        end 
         else if(npu_stalling2) begin                                     
-            matB_addr <= RD3;
+            matB_addr <= RD3;                                       // matB 주소 출력
             npu_reg_addr <= INST[11:7];                             // third. matC의 위치정보를 확인합니다.
         end
         else if(npu_stalling1) begin
-            matA_addr <= RD3;
+            matA_addr <= RD3;                                       // matA 주소 출력
             npu_reg_addr <= INST[19:15];                            // second. matB의 위치정보를 확인합니다.
         end
         else if(npu_stall) begin
@@ -115,7 +116,7 @@ module ID_STAGE
         .RD(RD)                             ,
         .RS1(INST[19:15])                   ,
         .RS2(INST[24:20])                   ,
-        .mat_start(npu_stall || double_matr),
+        .mat_start(npu_stall || double_matr),                       // npu에서 matrix 연산이 시작되거나 
         .EN_NPU(EN_NPU)                     ,
         .mem_wr(mem_wr_en)                  ,
         .critical_addr(critical_addr)       ,

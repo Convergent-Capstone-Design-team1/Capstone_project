@@ -1,10 +1,15 @@
+// Control Unit
+// 명령어의 opcode를 받아 opcode에 따른 control signal을 설정해줌
+
+
 module CONTROL
 (
-	input			CtrlSrc		,
+	input			CtrlSrc		,		// Flush signal
 	input	[6:0] 	opcode  	,
 
 	output  [7:0] 	control 
 );
+
 	/***************************************************************************/
 	/*opcode[7] = ALUSrc   ,   opcode[6] = MemtoReg  ,    opcode[5] = RegWrite,*/
 	/*opcode[4] = MEMRead  ,   opcode[3] = MEMWrite  ,    opcode[2] = Branch,  */
@@ -24,6 +29,7 @@ module CONTROL
 		endcase
 	end
 
+	// Flush signal이 1이면 control signal을 모두 0으로 설정
 	assign control = CtrlSrc ? 8'b0 : control_r;
 
 endmodule

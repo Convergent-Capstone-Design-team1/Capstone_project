@@ -1,22 +1,34 @@
 module DATA_MEM
 (
-  input           clk_50    ,
+  input           clk_50    ,             // reference clk에 위상이 반전된 clock을 사용 -> setup time violation 문제 해결하기 위함
   input           rst       ,
   input           MEMRead   ,
   input           MEMWrite  ,  
   input   [31:0]  ADDR      ,
-  input   [31:0]  WD        ,
+  input   [31:0]  WD        ,             // Write Data
 
-  output  [31:0]  RD        
+  output  [31:0]  RD                      // Read Data
 
 );
 
-  wire    [9:0]   word_addr;
+  /**********************************************************/
+  generate
+    genvar  idx;
+    for (idx = 0; idx < 1024; idx = idx+1) begin: datamem
+	    wire [31:0] tmp;
+	    assign tmp = mem_cell[idx];
+    end
+  endgenerate
+  /**********************************************************/
+
+
+  wire    [9:0]   word_addr;              // mem_cell은 1024 (2^10)의 word를 가지므로 32bit의 pc값 중에서 10bit를 사용
   reg     [31:0]  mem_cell [0:1023];
 
-  assign word_addr = ADDR [11:2];
+  assign word_addr = ADDR [11:2];         // 32bit 명령어 체계를 가지므로 pc는 4byte씩 증가 -> 하위 2bit는 항상 00이기 때문에 [11:2]의 bit 사용
 
 /*
+  // matrix multiplication test data
   initial
   begin
     // Put your initial data 
@@ -50,9 +62,9 @@ module DATA_MEM
   end
  */ 
   
+  // Bubble sort test data
   initial
   begin
-    // Put your initial data 
     mem_cell[0] = 9;
     mem_cell[1] = 5;
     mem_cell[2] = 4;
@@ -65,15 +77,6 @@ module DATA_MEM
     mem_cell[9] = 1;
   end
   
-
-  generate
-    genvar  idx;
-    for (idx = 0; idx < 1024; idx = idx+1) begin: datamem
-	    wire [31:0] tmp;
-	    assign tmp = mem_cell[idx];
-    end
-  endgenerate
-
   /* write */
   always @ (posedge clk_50)
   begin
@@ -94,6 +97,5 @@ module DATA_MEM
   end
 
   assign RD = RD_r;
-
 
 endmodule

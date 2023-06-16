@@ -1,3 +1,5 @@
+// MEM stage : Data mem 
+
 module MEM_STAGE
 (
     input           clk_50              ,
@@ -14,8 +16,9 @@ module MEM_STAGE
     output  [31:0]  mem_pc_o            
 );
 
-    assign branch = MEM_control[0] & zero;
-    assign mem_pc_o = mem_pc;
+
+    assign branch = MEM_control[0] & zero;          // PC_MUX에 들어가는 select signal 계산
+    assign mem_pc_o = mem_pc;                       // mem stage의 pc값을 사용하도록 하기 위함 ex) BHT
 
     DATA_MEM DATA_MEM
     (   

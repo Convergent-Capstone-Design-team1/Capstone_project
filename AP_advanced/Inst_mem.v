@@ -10,7 +10,53 @@ module INST_MEM
    always @ (posedge clk_50)
    begin
       INST_r = 32'b0;
-      
+
+      case(ADDR)
+         0: INST_r = 32'h00000013;        //         addi x0, x0, 0
+         4: INST_r = 32'h00000013;        //         addi x0, x0, 0
+         8: INST_r = 32'h00000013;        //         addi x0, x0, 0
+         12: INST_r = 32'h00000013;       //         addi x0, x0, 0
+         16: INST_r = 32'h00000013;       //         addi x0, x0, 0
+         20: INST_r = 32'hff810113;       //         addi sp, sp, -8   #save s4, s4 on stack *
+         24: INST_r = 32'h01412223;       //         sw s4, 4(sp)      #int j *
+         28: INST_r = 32'h01312023;       //         sw s3, 0(sp)      #int i *
+         32: INST_r = 32'h00400993;       //         addi s3, zero, 4  #i = 1
+         36: INST_r = 32'h00000a13;       //         addi s4, zero, 0  #j = 0
+         40: INST_r = 32'h00000793;       //         addi a5, zero, 0     # A[][] start address
+         44: INST_r = 32'h02400813;       //         addi a6, zero, 36    # B[][] start address
+         48: INST_r = 32'h04800893;       //         addi a7, zero, 72    # C[][] start address
+         52: INST_r = 32'h00f818b3;       //         matr a7, a5, a6   # A X B = C 
+         56: INST_r = 32'h00000513;       //Loop 1:  addi a0, s1, 0   #download base addr of arry[] at a0 -> 0
+         60: INST_r = 32'h02800613;       //         addi a2, s2, 40     #download size of arry[](=n) at a2 -> 10 * 4  //028  02c 190
+         64: INST_r = 32'h00050293;       //  case 1 addi t0, a0, 0        #sorting MatA
+         //64: INST_r = 32'h04800293;       //  case 2 addi t0, zero, 72     #sorting MatC
+         68: INST_r = 32'h04c9d863;       //         bge s3, a2, Exit   #j is bigger than n or equal
+         72: INST_r = 32'h00000e33;       //         add t3, zero, zero #tmp reset
+         76: INST_r = 32'h41360e33;       //         sub t3, a2, s3     #tmp resigter t3 = n-i
+         80: INST_r = 32'h000a0f13;       //         addi t5, s4, 0     #copy of j
+         84: INST_r = 32'h03cf5863;       //Loop 2:  bge t5, t3, Exit1 #j is bigger than n-i or equal
+         88: INST_r = 32'h0002a503;       //         lw a0, 0(t0)      #t1 = arr[j] data
+         92: INST_r = 32'h0042a583;       //         lw a1, 4(t0)      #t2 = arr[j+1] data
+         96: INST_r = 32'h00428293;       //         addi t0, t0, 4    #t0 = arr[j+1] address
+         100: INST_r = 32'h02a5d463;      //         bge a1, a0, Exit2 #arry[j+1] data is bigger than arry[j] or equal
+         104: INST_r = 32'h00050f93;      //         addi t6, a0, 0     #swap, t6 is tmp register
+         108: INST_r = 32'h00058513;      //         addi a0, a1, 0
+         112: INST_r = 32'h000f8593;      //         addi a1, t6, 0
+         116: INST_r = 32'hfea2ae23;      //         sw a0, -4(t0)     #save memory
+         120: INST_r = 32'h00b2a023;      //         sw a1, 0(t0)
+         124: INST_r = 32'h004f0f13;      //         addi t5, t5, 4    #j++
+         128: INST_r = 32'hfc000ae3;      //         beq zero, zero, Loop2
+         132: INST_r = 32'h00498993;      //Exit1 :  addi s3, s3, 4           // i++
+         136: INST_r = 32'hfa0008e3;      //         beq zero, zero, Loop1
+         140: INST_r = 32'h004f0f13;      //Exit2:   addi t5, t5, 4           // j++
+         144: INST_r = 32'hfc0002e3;      //         beq zero, zero, Loop2
+         148: INST_r = 32'h00013983;      ///Exit :  lw s3, 0(sp)
+         152: INST_r = 32'h00413a03;      //         lw s4, 4(sp)
+         156: INST_r = 32'h00810113;      //         addi sp, sp, 8
+         160: INST_r = 32'h00a54533;      //         xor a0, a0, a0
+         default: INST_r = 32'h00000000;
+      endcase
+   /*
       case(ADDR)
          0: INST_r = 32'h00000013;        //         addi x0, x0, 0
          4: INST_r = 32'h00000013;        //         addi x0, x0, 0
@@ -26,10 +72,11 @@ module INST_MEM
          44: INST_r = 32'h02400813;       //         addi a6, zero, 36    # B[][] start address
          48: INST_r = 32'h04800893;       //         addi a7, zero, 72    # C[][] start address
          52: INST_r = 32'h00f818b3;       //         matr a7, a5, a6   # A X B = C
-         56: INST_r = 32'h00f818b3;       // double  matr a7, a5, a6   # A X B = C        
+         56: INST_r = 32'h010897B3;       // double  matr a7, a5, a6   # A X B = C        
          60: INST_r = 32'h00000513;       //Loop 1:  addi a0, s1, 0   #download base addr of arry[] at a0 -> 0
          64: INST_r = 32'h02400613;       //         addi a2, s2, 40     #download size of arry[](=n) at a2 -> 10 * 4  //028  02c 190
          68: INST_r = 32'h00F002B3;       //  case 1 add t0, zero, a5     #sorting MatA
+         //68: INST_r = 32'h011002B3;       //  case 2 add t0, zero, a7     #sorting MatC
          72: INST_r = 32'h04c9d863;       //         bge s3, a2, Exit   #j is bigger than n or equal
          76: INST_r = 32'h00000e33;       //         add t3, zero, zero #tmp reset
          80: INST_r = 32'hFFC60E13;       //         addi t3, a2, -4       <original : sub t3, a2, s3     #tmp resigter t3 = n-i>
@@ -56,7 +103,7 @@ module INST_MEM
          164: INST_r = 32'h00a54533;      //         xor a0, a0, a0
          default: INST_r = 32'h00000000;
       endcase
-      
+   */
    /*
       case(ADDR)
          0: INST_r = 32'h00000013;        //       addi x0, x0, 0
@@ -81,27 +128,27 @@ module INST_MEM
          76: INST_r = 32'h06d75263;       //       bge a4, a3, IPP      # j >= 3 -> j++
          80: INST_r = 32'h02d282b3;       //       mul t0, t0, a3       # i = 3*i,  here is MULT
          84: INST_r = 32'h00e28333;       //       add t1, t0, a4       # t1 = 3*i + j
-         88: INST_r = 32'h00231313;       //       slli t1, t1, 2     	# word =* 4
+         88: INST_r = 32'h00231313;       //       slli t1, t1, 2        # word =* 4
          92: INST_r = 32'h00c30333;       //       add t1, t1, a2       # C[i][j]s addr
          96: INST_r = 32'h00032023;       //       sw zero, 0(t1)       # sotre 0 for init   
          100: INST_r = 32'h00098793;      //       addi a5, s3, 0       # copy k to a5 
-         104: INST_r = 32'h04d7d863;      // L3:   bge a5, a3, JPP     	# k >= 3 -> k++
-         108: INST_r = 32'h00f283b3;      //       add t2, t0, a5    	# t2 = 3*i + k
+         104: INST_r = 32'h04d7d863;      // L3:   bge a5, a3, JPP        # k >= 3 -> k++
+         108: INST_r = 32'h00f283b3;      //       add t2, t0, a5       # t2 = 3*i + k
          112: INST_r = 32'h00239393;      //       slli t2, t2, 2       # word *= 4
-         116: INST_r = 32'h00a383b3;      //       add t2, t2, a0    	# A[i][k]s addr 
-         120: INST_r = 32'h0003aa83;      //       lw s5, 0(t2)      	# s5 = A[i][k]                   //stall
-         124: INST_r = 32'h02f68e33;      //       mul t3, a3, a5    	# t3 = 3*k, here is MULT   00a383b3;      //       add t2, t2, a0    	# A[i][k]s addr
-         128: INST_r = 32'h00ee0e33;      //       add t3, t3, a4    	# t3 = 3*k + j
-         132: INST_r = 32'h002e1e13;      //       slli t3, t3, 2    	# word *= 4  
-         136: INST_r = 32'h00be0e33;      //       add t3, t3, a1    	# B[k][j]s addr                   //stall
-         140: INST_r = 32'h000e2b03;      //       lw s6, 0(t3)      	# s6 = B[k][j]
-         144: INST_r = 32'h00e28eb3;      //       add t4, t0, a4    	# t4 = 3*i+j     
-         148: INST_r = 32'h002e9e93;      //       slli t4, t4, 2    	# word *= 4
-         152: INST_r = 32'h00ce8eb3;      //       add t4, t4, a2    	# C[i][j]s addr
-         156: INST_r = 32'h036a8f33;      //       mul t5, s5, s6    	# mult two matrixes, here is MULT   
-         160: INST_r = 32'h000eaf83;      //       lw t6, 0(t4)      	# get existing value there
-         164: INST_r = 32'h01ff0f33;      //       add t5, t5, t6    	# and add calculated + existing
-         168: INST_r = 32'h01eea023;      //       sw t5, 0(t4)      	# add values to array C
+         116: INST_r = 32'h00a383b3;      //       add t2, t2, a0       # A[i][k]s addr 
+         120: INST_r = 32'h0003aa83;      //       lw s5, 0(t2)         # s5 = A[i][k]                   //stall
+         124: INST_r = 32'h02f68e33;      //       mul t3, a3, a5       # t3 = 3*k, here is MULT   00a383b3;      //       add t2, t2, a0       # A[i][k]s addr
+         128: INST_r = 32'h00ee0e33;      //       add t3, t3, a4       # t3 = 3*k + j
+         132: INST_r = 32'h002e1e13;      //       slli t3, t3, 2       # word *= 4  
+         136: INST_r = 32'h00be0e33;      //       add t3, t3, a1       # B[k][j]s addr                   //stall
+         140: INST_r = 32'h000e2b03;      //       lw s6, 0(t3)         # s6 = B[k][j]
+         144: INST_r = 32'h00e28eb3;      //       add t4, t0, a4       # t4 = 3*i+j     
+         148: INST_r = 32'h002e9e93;      //       slli t4, t4, 2       # word *= 4
+         152: INST_r = 32'h00ce8eb3;      //       add t4, t4, a2       # C[i][j]s addr
+         156: INST_r = 32'h036a8f33;      //       mul t5, s5, s6       # mult two matrixes, here is MULT   
+         160: INST_r = 32'h000eaf83;      //       lw t6, 0(t4)         # get existing value there
+         164: INST_r = 32'h01ff0f33;      //       add t5, t5, t6       # and add calculated + existing
+         168: INST_r = 32'h01eea023;      //       sw t5, 0(t4)         # add values to array C
          172: INST_r = 32'h00000a63;      //       beq zero, zero, KPP  # k++
          176: INST_r = 32'h00148493;      // IPP:  addi s1, s1, 1
          180: INST_r = 32'hf80006e3;      //       beq zero, zero, L1

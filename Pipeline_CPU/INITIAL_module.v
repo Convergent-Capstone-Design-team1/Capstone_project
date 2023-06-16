@@ -1,3 +1,6 @@
+// FPGA에서 동작하도록 하기 위해 inital begin 사용없이 Register file, BTB, BHT의 메모리를 초기화 시켜주기 위한 inital moudle
+// Address counter를 사용하여 카운트 되는 주소에 맞춰 값이 들어가도록 구현
+
 module INITIAL_MODULE
 (
     input       clk             ,

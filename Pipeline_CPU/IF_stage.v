@@ -1,3 +1,5 @@
+// IF Stage : PC, PC Mux, Predictor, BHT, BTB, Inst mem 
+
 module IF_STAGE
 (   
     input           clk             ,

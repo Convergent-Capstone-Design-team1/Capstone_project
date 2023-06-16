@@ -1,3 +1,5 @@
+// IF_ID Register (65bit)
+
 module IF_ID
 #(
     parameter  W = 65

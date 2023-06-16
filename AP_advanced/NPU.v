@@ -25,12 +25,19 @@ module npu
     input   [31:0]  ADDR            ,
     input   [31:0]  WD              ,
 
-    output          race_haz        ,
     output  [31:0]  RD
-);
+);  
     ////// Shared memory part below //////
     reg         [data_size-1:0] mem_cell [mem_size-1:0];
     wire        [9:0]           word_addr = ADDR [11:2];
+
+    generate
+        genvar  idx;
+        for (idx = 0; idx < 27; idx = idx+1) begin: inside_npu
+            wire [31:0] tmp;
+            assign tmp = mem_cell[idx];
+        end
+    endgenerate
 
     /* write */
     always @ (posedge clk_50) begin
@@ -58,21 +65,18 @@ module npu
 
     assign RD = RD_r;
 
-    // hazard detection part
-    reg race = 0;
-
     ////// NPU operation part below //////
-    reg [5:0]              i = 6'b0;
-    reg [5:0]              j = 6'b0;
-    reg [5:0]              k = 6'b0;
+    reg [5:0]              i;
+    reg [5:0]              j;
+    reg [5:0]              k;
     reg                    ack;
 
-    reg [data_size-1:0] a1 = 32'b0;
-    reg [data_size-1:0] a2 = 32'b0;
-    reg [data_size-1:0] a3 = 32'b0;
-    reg [data_size-1:0] b1 = 32'b0;
-    reg [data_size-1:0] b2 = 32'b0;
-    reg [data_size-1:0] b3 = 32'b0;
+    reg [data_size-1:0] a1;
+    reg [data_size-1:0] a2;
+    reg [data_size-1:0] a3;
+    reg [data_size-1:0] b1;
+    reg [data_size-1:0] b2;
+    reg [data_size-1:0] b3;
 
     wire [data_size-1:0] c1;
     wire [data_size-1:0] c2;
@@ -87,35 +91,26 @@ module npu
     reg [mul_size-1:0] en_ab;
     reg [mem_size-1:0] ack_cnt;
 
-    generate
-        genvar  idx;
-        for (idx = 0; idx < 27; idx = idx+1) begin: inside_npu
-            wire [31:0] tmp;
-            assign tmp = mem_cell[idx];
-        end
-    endgenerate
-
-    always@(posedge rst) begin
-        a1 <= 32'b0;
-        a2 <= 32'b0;
-        a3 <= 32'b0;
-        b1 <= 32'b0;
-        b2 <= 32'b0;
-        b3 <= 32'b0;
-        i  <= 6'b0;
-    end
-
-    always@(posedge clk or posedge rst) begin
-
-        if(rst) begin
-            mem_cell[mem_addr-1] <= mem_init;
-        end
-
+    always@(posedge clk or posedge rst) 
+    begin
         en_ab[0] <= (en && (i < (mul_size))) ? 1'b1 : 1'b0;
         en_ab[1] <= (en && (en_ab[0])) ? 1'b1 : 1'b0;
         en_ab[2] <= (en && (en_ab[1])) ? 1'b1 : 1'b0;
 
-        if(en) begin
+        if(rst) begin
+            mem_cell[mem_addr-1] <= mem_init;
+            RD_r <= 0;
+            a1 <= 32'b0;
+            a2 <= 32'b0;
+            a3 <= 32'b0;
+            b1 <= 32'b0;
+            b2 <= 32'b0;
+            b3 <= 32'b0;
+            i  <= 6'b0;
+            j  <= 6'b0;
+            k  <= 6'b0;
+        end
+        else if(en) begin
             if(en_ab[0]) begin
                 a1 <= mem_cell[5'd0 * mul_size + (i-1) + src1_addr];
                 b1 <= mem_cell[(i-1) * mul_size + 5'd0 + src2_addr];
@@ -150,6 +145,10 @@ module npu
             i <= 6'd0;
         end
 
+    end
+
+    always@(posedge clk or posedge rst) 
+    begin
         if((ack_cnt == (mul_size-1))) begin
             mem_cell[rd_addr + 0] <= c1;
             mem_cell[rd_addr + 1] <= c2;
@@ -168,7 +167,8 @@ module npu
     end
 
     SYSTOLIC_ARRAY dut1
-    (
+    (   
+        //INPUT
         .clk(clk)       , 
         .rst(!en)       , 
         .a1(a1)         , 
@@ -177,6 +177,8 @@ module npu
         .b1(b1)         , 
         .b2(b2)         , 
         .b3(b3)         , 
+
+        //OUTPUT
         .c1(c1)         , 
         .c2(c2)         , 
         .c3(c3)         , 

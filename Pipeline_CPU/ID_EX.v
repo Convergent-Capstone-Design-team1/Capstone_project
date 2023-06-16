@@ -1,3 +1,5 @@
+// ID_EX Register (154bit)
+
 module ID_EX
 #(
     parameter  W = 154

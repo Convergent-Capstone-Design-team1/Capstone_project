@@ -20,7 +20,6 @@ module combined
 	wire clk_50_w;
 	wire mem_rd_w;
 	wire mem_wr_w;
-	wire race;
 
 	wire cycle1;
 	wire cycle2;
@@ -45,11 +44,8 @@ module combined
   		.bht_addr(bht_addr)         ,     
     	.reg_addr(reg_addr)         ,
     	.reg_init(reg_init)			,
-		.mem_init_addr(mem_addr)	,
-		.mem_init_data(mem_init)	,
 		.acquire_npu(back_to_cpu)	,
 		.R_DATA(data_w)				,
-		.mem_haz(race)				,
 
 		//OUTPUT
 		.EN_NPU(EN_NPU)				,
@@ -106,12 +102,14 @@ module combined
 		.ack(back_to_cpu)			,
 
 		//ports due to shared memory system
+		//INPUT
 		.clk_50(clk_50_w)			,
 		.MEMRead(mem_rd_w)			,
 		.MEMWrite(mem_wr_w)			,
 		.ADDR(addr_w)				,
 		.WD(wd_w)					,
-		.race_haz(race)				,
+
+		//OUTPUT
 		.RD(data_w)
 	);
 
