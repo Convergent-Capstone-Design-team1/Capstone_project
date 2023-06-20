@@ -17,9 +17,8 @@ module combined
     wire back_to_cpu;						// notice CPU that NPU has finished operations
     wire EN_NPU;
 	wire clk_50_w;							// delayed clk for memory
-	wire mem_rd_w;							// mem was separated before..	%%
+	wire mem_rd_w;							// CPU read/write data from NPU's memory
 	wire mem_wr_w;							
-	wire race;								// for hazard detection			%%
 
 	wire cycle1;							// delayed EN_NPU signals
 	wire cycle2;
@@ -110,9 +109,7 @@ module combined
 		.MEMWrite(mem_wr_w)			,
 		.ADDR(addr_w)				,
 		.WD(wd_w)					,
-		.race_haz(race)				,
 		.RD(data_w)
 	);
 
 endmodule
-

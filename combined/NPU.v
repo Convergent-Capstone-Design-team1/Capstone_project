@@ -25,7 +25,6 @@ module npu
     input   [31:0]  ADDR            ,
     input   [31:0]  WD              ,
 
-    output          race_haz        ,       // it should be Data-race-free.
     output  [31:0]  RD
 );
     ////// Shared memory part below //////
@@ -46,9 +45,6 @@ module npu
 
     reg [31:0]  RD_r;
     assign RD = RD_r;
-
-    // hazard detection part
-    reg race = 0;
 
     ////// NPU operation part below //////
     reg [5:0]              i = 6'b0;            // counting integers for operation
