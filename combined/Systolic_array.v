@@ -38,6 +38,12 @@ module SYSTOLIC_ARRAY
     wire    [data_size-1:0] b58;
     wire    [data_size-1:0] b69;
 
+    /* connect MACs with wires, place
+        1   2   3
+        4   5   6
+        7   8   9
+    */
+
     MAC MAC1
     (
         //INPUT

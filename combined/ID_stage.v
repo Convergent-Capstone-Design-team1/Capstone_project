@@ -18,14 +18,14 @@ module ID_STAGE
     input           mem_wr_en       ,
         
     output          stall           ,
-    output          double_matr     ,
+    output          double_matr     ,   // detection of double matrix(NPU is already ON)
     output  [31:0]  RD1             ,
     output  [31:0]  RD2             ,
     output  [31:0]  S_INST          ,
     output  [5:0]   f_id_ctrl       ,
     output  [3:0]   ALU_control     ,
     output          EN_NPU          ,
-    output  [9:0]   matA_addr       ,
+    output  [9:0]   matA_addr       ,   // pass matrix starting addrs to NPU
     output  [9:0]   matB_addr       ,
     output  [9:0]   matC_addr                
 );  
@@ -47,7 +47,7 @@ module ID_STAGE
                                         // 2. 이는, 바로 직전 명령어가 critical addr의 값을 reg에 썼을 경우 2cycle을 기다려야 하기 때문입니다.
 
     always @(posedge clk_50 or posedge rst) begin
-        if(rst) begin
+        if(rst) begin   
             EN_NPU <= 1'b0;
             critical_addr <= 0;
             double_matr_r <= 0;
@@ -56,7 +56,7 @@ module ID_STAGE
             matB_addr <= 0;
             matC_addr <= 0;
         end
-        else if(ack) begin
+        else if(ack) begin                              // when NPU finishes its operation
             EN_NPU <= 1'b0;
             critical_addr <= 0;
             npu_stall <= 0;

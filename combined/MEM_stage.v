@@ -1,4 +1,5 @@
 module MEM_STAGE
+// we'll use memory located in the NPU. so, MEMstage is simplified.
 (
     input   [2:0]   MEM_control         ,
     input           zero                ,

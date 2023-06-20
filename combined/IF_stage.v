@@ -108,7 +108,7 @@ module IF_STAGE
         .Q(double_matr_stall)
     );
 
-    assign PC_4 = double_matr_stall ? (pc - 32'd4) : (pc + 32'd4);
+    assign PC_4 = double_matr_stall ? (pc - 32'd4) : (pc + 32'd4);      // if double matr was found, pipeline is flushed, roll back the PC.
     
     PC_MUX PC_MUX
     (

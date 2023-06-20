@@ -2,9 +2,9 @@ module combined
 (
     input           clk				,
     input           rst				,
-    input           rst_switch		,
+    input           rst_switch		,		// FPGA buttons
     input           start_switch	,
-    input [39:0]    btb_init		,
+    input [39:0]    btb_init		,		// initial datas come from initial module
     input [7:0]     btb_addr		,
     input [1:0]     bht_init		,
     input [7:0]     bht_addr		,
@@ -14,21 +14,20 @@ module combined
 	input [31:0]	mem_init
 );
 	
-	wire double_matr;
-    wire back_to_cpu;
+    wire back_to_cpu;						// notice CPU that NPU has finished operations
     wire EN_NPU;
-	wire clk_50_w;
-	wire mem_rd_w;
-	wire mem_wr_w;
-	wire race;
+	wire clk_50_w;							// delayed clk for memory
+	wire mem_rd_w;							// mem was separated before..	%%
+	wire mem_wr_w;							
+	wire race;								// for hazard detection			%%
 
-	wire cycle1;
+	wire cycle1;							// delayed EN_NPU signals
 	wire cycle2;
 	wire cycle3;
-	wire [9:0] 	mat_src1;
+	wire [9:0] 	mat_src1;					// NPU refer to these mem addrs
 	wire [9:0] 	mat_src2;
 	wire [9:0] 	mat_rd;
-	wire [31:0] addr_w;
+	wire [31:0] addr_w;						// CPU read/write data from NPU's memory.
 	wire [31:0] wd_w;
 	wire [31:0] data_w;
 
@@ -95,7 +94,7 @@ module combined
 		//INPUT
 		.clk(clk)					,
 		.rst(rst_switch)			,
-		.en(cycle3 && EN_NPU)		,		// NPU is triggered by cycle3, not EN_NPU. 3 cycle delay enables to find out the mem addr to calculate.
+		.en(cycle3 && EN_NPU)		,		// NPU is triggered by cycle3, not EN_NPU. 3 cycle delay enables to find out the mem addr to calculate with.
 		.mem_addr(mem_addr)			,
 		.mem_init(mem_init)			,
 		.src1_addr(mat_src1[9:2])	,

@@ -1,17 +1,17 @@
 module npu
 #(
-    parameter data_size = 32        ,
+    parameter data_size = 32        ,       // we use 32-bit data for processing
     parameter mem_size = 50         ,       // memory size extendable
-    parameter mul_size = 3          ,
+    parameter mul_size = 3          ,       // matrix multiplication = (n x mul_size) * (mul_size x m)
     parameter mat_size = 9
 )
 (
     input           clk             ,
     input           rst             ,
     input           en              ,
-    input   [31:0]  mem_addr        ,
-    input   [31:0]  mem_init        ,
-    input   [7:0]   src1_addr       ,
+    input   [31:0]  mem_addr        ,       // initial values
+    input   [31:0]  mem_init        ,   
+    input   [7:0]   src1_addr       ,       // to multiply matrixes, get starting point from CPU.
     input   [7:0]   src2_addr       ,
     input   [7:0]   rd_addr         ,
     input           double_matr     ,
@@ -20,12 +20,12 @@ module npu
 
     // PORTs due to shared memory system
     input           clk_50          ,
-    input           MEMRead         ,
+    input           MEMRead         ,       // we get these calculated datas from CPU.
     input           MEMWrite        ,
     input   [31:0]  ADDR            ,
     input   [31:0]  WD              ,
 
-    output          race_haz        ,
+    output          race_haz        ,       // it should be Data-race-free.
     output  [31:0]  RD
 );
     ////// Shared memory part below //////
@@ -34,13 +34,13 @@ module npu
 
     always @ (posedge clk_50 or posedge rst) begin
         if(MEMWrite) begin
-            mem_cell[word_addr] <= WD;
+            mem_cell[word_addr] <= WD;      // write if MEMWrite
         end
         else if (MEMRead) begin
-            RD_r <= mem_cell[word_addr];
+            RD_r <= mem_cell[word_addr];    // or, read if MEMRead
         end
         else begin
-            RD_r <= 32'hz;
+            RD_r <= 32'hz;                  // neither, output is Z.
         end
     end
 
@@ -51,19 +51,19 @@ module npu
     reg race = 0;
 
     ////// NPU operation part below //////
-    reg [5:0]              i = 6'b0;
+    reg [5:0]              i = 6'b0;            // counting integers for operation
     reg [5:0]              j = 6'b0;
     reg [5:0]              k = 6'b0;
     reg                    ack;
 
-    reg [data_size-1:0] a1 = 32'b0;
+    reg [data_size-1:0] a1 = 32'b0;             // input datas for calculation
     reg [data_size-1:0] a2 = 32'b0;
     reg [data_size-1:0] a3 = 32'b0;
     reg [data_size-1:0] b1 = 32'b0;
     reg [data_size-1:0] b2 = 32'b0;
     reg [data_size-1:0] b3 = 32'b0;
 
-    wire [data_size-1:0] c1;
+    wire [data_size-1:0] c1;                    // multiplication output
     wire [data_size-1:0] c2;
     wire [data_size-1:0] c3;
     wire [data_size-1:0] c4;
@@ -73,10 +73,10 @@ module npu
     wire [data_size-1:0] c8;
     wire [data_size-1:0] c9;
 
-    reg [mul_size-1:0] en_ab;
-    reg [mem_size-1:0] ack_cnt;
+    reg [mul_size-1:0] en_ab;                   // whether enable MAC or not.
+    reg [mem_size-1:0] ack_cnt;                 // when does calculation end?
 
-    generate
+    generate                                    // observe inside the NPU memory
         genvar  idx;
         for (idx = 0; idx < 50; idx = idx+1) begin: inside_npu
             wire [31:0] tmp;
@@ -98,13 +98,13 @@ module npu
             i  <= 6'b0;
         end
 
-        en_ab[0] <= (en && (i < (mul_size))) ? 1'b1 : 1'b0;
-        en_ab[1] <= (en && (en_ab[0])) ? 1'b1 : 1'b0;
-        en_ab[2] <= (en && (en_ab[1])) ? 1'b1 : 1'b0;
+        en_ab[0] <= (en && (i < (mul_size))) ? 1'b1 : 1'b0;     // activate MAC 1
+        en_ab[1] <= (en && (en_ab[0])) ? 1'b1 : 1'b0;           // activate MAC 2,4
+        en_ab[2] <= (en && (en_ab[1])) ? 1'b1 : 1'b0;           // activate MAC 3,5,7
 
         if(en) begin
             if(en_ab[0]) begin
-                a1 <= mem_cell[5'd0 * mul_size + (i-1) + src1_addr];
+                a1 <= mem_cell[5'd0 * mul_size + (i-1) + src1_addr];    // approaching data with memory addr, counter
                 b1 <= mem_cell[(i-1) * mul_size + 5'd0 + src2_addr];
             end
             else begin
@@ -137,7 +137,7 @@ module npu
             i <= 6'd0;
         end
 
-        if((ack_cnt == (mul_size-1))) begin
+        if((ack_cnt == (mul_size-1))) begin             // calculation ended! update the memory
             mem_cell[rd_addr + 0] <= c1;
             mem_cell[rd_addr + 1] <= c2;
             mem_cell[rd_addr + 2] <= c3;
